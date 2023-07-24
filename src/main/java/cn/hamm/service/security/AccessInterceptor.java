@@ -1,12 +1,12 @@
 package cn.hamm.service.security;
 
-import cn.hamm.service.web.access.AccessService;
-import cn.hamm.service.web.permission.PermissionEntity;
-import cn.hamm.service.web.user.UserEntity;
-import cn.hamm.service.web.user.UserService;
-import cn.hamm.service.web.permission.PermissionService;
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.security.AbstractAccessInterceptor;
+import cn.hamm.service.web.access.AccessService;
+import cn.hamm.service.web.permission.PermissionEntity;
+import cn.hamm.service.web.permission.PermissionService;
+import cn.hamm.service.web.user.UserEntity;
+import cn.hamm.service.web.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

@@ -1,12 +1,12 @@
 package cn.hamm.service.web.user;
 
-import cn.hamm.service.exception.CustomResult;
-import cn.hamm.service.web.app.AppVo;
-import cn.hamm.airpower.root.RootService;
 import cn.hamm.airpower.result.Result;
+import cn.hamm.airpower.root.RootService;
 import cn.hamm.airpower.security.JwtUtil;
 import cn.hamm.airpower.security.PasswordUtil;
 import cn.hamm.airpower.util.EmailUtil;
+import cn.hamm.service.exception.CustomResult;
+import cn.hamm.service.web.app.AppVo;
 import cn.hutool.core.util.RandomUtil;
 import org.springframework.stereotype.Service;
 

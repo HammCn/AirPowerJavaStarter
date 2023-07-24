@@ -1,11 +1,11 @@
 package cn.hamm.service.web.access;
 
+import cn.hamm.airpower.result.Result;
+import cn.hamm.airpower.root.RootService;
+import cn.hamm.service.web.permission.PermissionEntity;
+import cn.hamm.service.web.permission.PermissionType;
 import cn.hamm.service.web.role.RoleEntity;
 import cn.hamm.service.web.user.UserEntity;
-import cn.hamm.service.web.permission.PermissionType;
-import cn.hamm.service.web.permission.PermissionEntity;
-import cn.hamm.airpower.root.RootService;
-import cn.hamm.airpower.result.Result;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

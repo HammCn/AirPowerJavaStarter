@@ -1,10 +1,10 @@
 package cn.hamm.service.web.user;
 
-import cn.hamm.service.web.role.RoleEntity;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Exclude;
 import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.service.base.BaseEntity;
+import cn.hamm.service.web.role.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

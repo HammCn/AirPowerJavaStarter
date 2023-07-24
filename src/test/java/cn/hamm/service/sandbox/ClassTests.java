@@ -1,9 +1,9 @@
 package cn.hamm.service.sandbox;
 
-import cn.hamm.service.web.user.UserEntity;
-import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.airpower.result.json.Json;
+import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.airpower.util.ReflectUtil;
+import cn.hamm.service.web.user.UserEntity;
 import org.junit.jupiter.api.Test;
 
 /**

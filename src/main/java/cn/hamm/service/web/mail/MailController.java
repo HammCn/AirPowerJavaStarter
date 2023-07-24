@@ -1,11 +1,11 @@
 package cn.hamm.service.web.mail;
 
+import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.result.json.Json;
+import cn.hamm.airpower.root.RootController;
+import cn.hamm.airpower.security.Permission;
 import cn.hamm.service.web.user.UserEntity;
 import cn.hamm.service.web.user.UserService;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.root.RootController;
-import cn.hamm.airpower.result.json.Json;
-import cn.hamm.airpower.security.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

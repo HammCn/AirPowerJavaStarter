@@ -1,9 +1,9 @@
 package cn.hamm.service.web.system;
 
 import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.result.json.JsonData;
+import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.security.Permission;
 import cn.hamm.airpower.util.ReflectUtil;
 import cn.hamm.service.exception.CustomResult;

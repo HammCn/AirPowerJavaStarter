@@ -1,16 +1,16 @@
 package cn.hamm.service.web.oauth2;
 
+import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.result.Result;
+import cn.hamm.airpower.result.json.JsonData;
+import cn.hamm.airpower.root.RootController;
+import cn.hamm.airpower.security.JwtUtil;
+import cn.hamm.airpower.security.Permission;
+import cn.hamm.service.web.app.AppEntity;
 import cn.hamm.service.web.app.AppService;
 import cn.hamm.service.web.app.AppVo;
 import cn.hamm.service.web.user.UserEntity;
 import cn.hamm.service.web.user.UserService;
-import cn.hamm.service.web.app.AppEntity;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.root.RootController;
-import cn.hamm.airpower.result.Result;
-import cn.hamm.airpower.result.json.JsonData;
-import cn.hamm.airpower.security.JwtUtil;
-import cn.hamm.airpower.security.Permission;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;

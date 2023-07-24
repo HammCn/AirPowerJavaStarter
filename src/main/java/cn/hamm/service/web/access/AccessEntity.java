@@ -1,7 +1,7 @@
 package cn.hamm.service.web.access;
 
-import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.root.RootEntity;
 import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,9 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * <h1>授权信息实体</h1>

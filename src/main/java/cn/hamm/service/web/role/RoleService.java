@@ -1,7 +1,7 @@
 package cn.hamm.service.web.role;
 
-import cn.hamm.airpower.root.RootService;
 import cn.hamm.airpower.result.Result;
+import cn.hamm.airpower.root.RootService;
 import org.springframework.stereotype.Service;
 
 /**

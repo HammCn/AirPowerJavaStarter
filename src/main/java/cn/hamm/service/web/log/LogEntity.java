@@ -1,8 +1,8 @@
 package cn.hamm.service.web.log;
 
-import cn.hamm.service.web.user.UserEntity;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.root.RootEntity;
+import cn.hamm.service.web.user.UserEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
