@@ -215,7 +215,7 @@ public class UserService extends RootService<UserEntity, UserRepository> {
         newUser.setPassword(PasswordUtil.encode(userVo.getPassword(), salt));
         add(newUser);
         //删掉使用过的邮箱验证码
-        removeEmailCodeCache(existUser.getEmail());
+        removeEmailCodeCache(userVo.getEmail());
     }
     /**
      * <h1>将验证码暂存到Redis</h1>
@@ -257,9 +257,6 @@ public class UserService extends RootService<UserEntity, UserRepository> {
     protected UserEntity beforeAdd(UserEntity entity) {
         UserEntity existUser = repository.getByEmail(entity.getEmail());
         Result.FORBIDDEN_EXIST.whenNotNull(existUser, "邮箱已经存在，请勿重复添加用户");
-        String salt = RandomUtil.randomString(4);
-        entity.setSalt(salt);
-        entity.setPassword(PasswordUtil.encode(entity.getPassword(), salt));
         return entity;
     }
 }

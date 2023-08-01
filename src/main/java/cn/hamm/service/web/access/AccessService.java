@@ -3,7 +3,6 @@ package cn.hamm.service.web.access;
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.root.RootService;
 import cn.hamm.service.web.permission.PermissionEntity;
-import cn.hamm.service.web.permission.PermissionType;
 import cn.hamm.service.web.role.RoleEntity;
 import cn.hamm.service.web.user.UserEntity;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ public class AccessService extends RootService<AccessEntity, AccessRepository> {
      */
     public boolean checkAccess(UserEntity user, PermissionEntity permission) {
         Result.FORBIDDEN.whenNull(permission, "此接口不提供对外访问权限!");
-        Result.FORBIDDEN.whenNotEquals(PermissionType.API.getValue(), permission.getType(), "你没有请求此接口的权限!");
         if (user.getIsSystem()) {
             // 用户是超级管理员
             return true;

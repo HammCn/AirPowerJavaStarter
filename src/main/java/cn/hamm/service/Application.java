@@ -1,5 +1,7 @@
 package cn.hamm.service;
 
+import cn.hamm.airpower.config.GlobalConfig;
+import cn.hamm.airpower.security.PasswordUtil;
 import cn.hamm.service.web.app.AppEntity;
 import cn.hamm.service.web.app.AppService;
 import cn.hamm.service.web.permission.PermissionService;
@@ -27,6 +29,7 @@ import java.util.List;
 @ComponentScan({"cn.hamm.service", "cn.hamm.airpower"})
 public class Application {
     public static void main(String[] args) {
+        GlobalConfig.isCacheEnabled = false;
         SpringApplication.run(Application.class, args);
         initDataSource();
         initDatabase();
@@ -48,11 +51,12 @@ public class Application {
                 .setRemark("超级管理员角色组,请勿数据库暴力直接删除"));
         List<RoleEntity> roleList = new ArrayList<>();
         roleList.add(firstRole);
-
+        String salt = RandomUtil.randomString(4);
         userService.add(new UserEntity()
                 .setNickname("Hamm")
                 .setEmail("admin@hamm.cn")
-                .setPassword("12345678")
+                .setPassword(PasswordUtil.encode("12345678", salt))
+                .setSalt(salt)
                 .setIsSystem(true)
                 .setId(1L)
                 .setRoleList(roleList)

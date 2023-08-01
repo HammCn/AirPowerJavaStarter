@@ -56,6 +56,7 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
      */
     @Description("父级ID")
     @Column(columnDefinition = "bigint UNSIGNED default 0 comment '父级ID'")
+    @Search(Search.Mode.EQUALS)
     private Long parentId;
 
     /**

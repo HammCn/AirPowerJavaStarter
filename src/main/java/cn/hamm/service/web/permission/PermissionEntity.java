@@ -2,6 +2,7 @@ package cn.hamm.service.web.permission;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.service.base.BaseTreeEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -11,7 +12,9 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * <h1>权限实体</h1>
@@ -36,19 +39,16 @@ public class PermissionEntity extends BaseTreeEntity<PermissionEntity> {
     private String identity;
 
     /**
-     * <h1>权限类型</h1>
-     *
-     * @see PermissionType
-     */
-    @Description("权限类型")
-    @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '权限类型'")
-    private Integer type;
-
-    /**
      * <h1>系统权限</h1>
      */
     @Description("系统权限")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '系统权限'")
     private Boolean isSystem;
 
+    /**
+     * <h1>子菜单</h1>
+     */
+    @Transient
+    private List<PermissionEntity> children;
 }
