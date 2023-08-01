@@ -34,14 +34,6 @@ import java.util.List;
 @Description("用户")
 public class UserEntity extends BaseEntity<UserEntity> {
     /**
-     * <h1>用户的手机号(唯一)</h1>
-     */
-    @Column(columnDefinition = "varchar(255) default '' comment '手机号'", unique = true)
-    @Exclude(filters = {WhenGetDetail.class})
-    @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入phone字段")
-    private String phone;
-
-    /**
      * <h1>邮箱(唯一)</h1>
      */
     @Description("邮箱")
