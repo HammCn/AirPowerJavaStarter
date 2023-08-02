@@ -4,6 +4,8 @@ import cn.hamm.airpower.config.GlobalConfig;
 import cn.hamm.airpower.security.PasswordUtil;
 import cn.hamm.service.web.app.AppEntity;
 import cn.hamm.service.web.app.AppService;
+import cn.hamm.service.web.menu.MenuEntity;
+import cn.hamm.service.web.menu.MenuService;
 import cn.hamm.service.web.permission.PermissionService;
 import cn.hamm.service.web.role.RoleEntity;
 import cn.hamm.service.web.role.RoleService;
@@ -71,6 +73,34 @@ public class Application {
         appService.add(new AppEntity().setAppKey("abcd").setAppName("基础服务").setAppSecret(RandomUtil.randomString(32).toUpperCase()));
 
         unitService.add(new UnitEntity().setId(1L).setName("斤"));
+
+        initMenu();
+    }
+
+    private static void initMenu(){
+        MenuEntity homeMenu = new MenuEntity().setName("首页").setOrderNo(99).setPath("/console").setComponent("/console/index/index").setParentId(0L);
+        menuService.add(homeMenu);
+
+        MenuEntity userMenu = new MenuEntity().setName("人事管理").setOrderNo(88).setParentId(0L);
+        userMenu = menuService.add(userMenu);
+
+        MenuEntity userSubMenu;
+        userSubMenu = new MenuEntity().setName("用户管理").setPath("/console/user/list").setParentId(userMenu.getId());
+        menuService.add(userSubMenu);
+
+        userSubMenu = new MenuEntity().setName("角色管理").setPath("/console/role/list").setParentId(userMenu.getId());
+        menuService.add(userSubMenu);
+
+
+        MenuEntity sysMenu = new MenuEntity().setName("系统设置").setOrderNo(77).setParentId(0L);
+        sysMenu = menuService.add(sysMenu);
+
+        MenuEntity sysSubMenu;
+        sysSubMenu = new MenuEntity().setName("权限管理").setPath("/console/permission/list").setParentId(sysMenu.getId());
+        menuService.add(sysSubMenu);
+
+        sysSubMenu = new MenuEntity().setName("菜单管理").setPath("/console/menu/list").setParentId(sysMenu.getId());
+        menuService.add(sysSubMenu);
     }
 
     private static UserService userService;
@@ -78,6 +108,7 @@ public class Application {
     private static PermissionService permissionService;
     private static AppService appService;
     private static UnitService unitService;
+    private static MenuService menuService;
 
     @Autowired
     private void setDatastore(
@@ -85,13 +116,15 @@ public class Application {
             RoleService roleService,
             PermissionService permissionService,
             AppService appService,
-            UnitService unitService
+            UnitService unitService,
+            MenuService menuService
     ) {
         Application.userService = userService;
         Application.roleService = roleService;
         Application.permissionService = permissionService;
         Application.appService = appService;
         Application.unitService = unitService;
+        Application.menuService = menuService;
     }
 
 }

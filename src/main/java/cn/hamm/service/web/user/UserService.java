@@ -1,5 +1,7 @@
 package cn.hamm.service.web.user;
 
+import cn.hamm.airpower.model.Sort;
+import cn.hamm.airpower.query.QueryRequest;
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.root.RootService;
 import cn.hamm.airpower.security.JwtUtil;
@@ -7,9 +9,16 @@ import cn.hamm.airpower.security.PasswordUtil;
 import cn.hamm.airpower.util.EmailUtil;
 import cn.hamm.service.exception.CustomResult;
 import cn.hamm.service.web.app.AppVo;
+import cn.hamm.service.web.menu.MenuEntity;
+import cn.hamm.service.web.menu.MenuService;
+import cn.hamm.service.web.role.RoleEntity;
 import cn.hutool.core.util.RandomUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,6 +52,37 @@ public class UserService extends RootService<UserEntity, UserRepository> {
      * <h1>Cookie缓存</h1>
      */
     private static final int CACHE_COOKIE_EXPIRE_SECOND = 86400;
+
+    @Autowired
+    MenuService menuService;
+
+    public List<MenuEntity> getMyMenuList() {
+        Long userId = getCurrentUserId();
+        UserEntity userEntity = getById(userId);
+        if (userEntity.getIsSystem()) {
+            return menuService.getList(new QueryRequest<MenuEntity>().setSort(new Sort().setField("orderNo")));
+        }
+        List<MenuEntity> menuList = new ArrayList<>();
+        for (int i = 0; i < userEntity.getRoleList().size(); i++) {
+            RoleEntity roleEntity = userEntity.getRoleList().get(i);
+            if(roleEntity.getIsSystem()){
+                return menuService.getList(new QueryRequest<MenuEntity>().setSort(new Sort().setField("orderNo")));
+            }
+            roleEntity.getMenuList().forEach(menuItem -> {
+                boolean isExist = false;
+                for (MenuEntity existItem : menuList) {
+                    if (menuItem.getId().equals(existItem.getId())) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (!isExist) {
+                    menuList.add(menuItem);
+                }
+            });
+        }
+        return list2TreeList(menuList);
+    }
 
     /**
      * <h1>修改密码</h1>
@@ -217,6 +257,7 @@ public class UserService extends RootService<UserEntity, UserRepository> {
         //删掉使用过的邮箱验证码
         removeEmailCodeCache(userVo.getEmail());
     }
+
     /**
      * <h1>将验证码暂存到Redis</h1>
      *
@@ -257,6 +298,11 @@ public class UserService extends RootService<UserEntity, UserRepository> {
     protected UserEntity beforeAdd(UserEntity entity) {
         UserEntity existUser = repository.getByEmail(entity.getEmail());
         Result.FORBIDDEN_EXIST.whenNotNull(existUser, "邮箱已经存在，请勿重复添加用户");
+        if (!StringUtils.hasLength(entity.getPassword())) {
+            // 创建时没有设置密码的话 随机一个密码
+            entity.setPassword("123123");
+            entity.setSalt(RandomUtil.randomString(4));
+        }
         return entity;
     }
 }

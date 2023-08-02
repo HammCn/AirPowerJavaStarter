@@ -13,7 +13,9 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * <h1>实体树基类</h1>
@@ -68,6 +70,18 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
     @Override
     public E setParentId(Long parentId) {
         this.parentId = parentId;
+        return (E) this;
+    }
+
+    /**
+     * <h1>子菜单</h1>
+     */
+    @Transient
+    private List<E> children;
+
+    @Override
+    public E setChildren(List<E> children) {
+        this.children = children;
         return (E) this;
     }
 }

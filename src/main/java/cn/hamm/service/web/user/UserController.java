@@ -45,8 +45,16 @@ public class UserController extends RootEntityController<UserService, UserVo> {
     @PostMapping("updateMyInfo")
     public Json updateMyInfo(@RequestBody @Validated({UserEntity.WhenUpdateMyInfo.class}) UserEntity userEntity, Long userId) {
         userEntity.setId(userId);
+        userEntity.setRoleList(null);
         service.update(userEntity);
         return json("资料修改成功");
+    }
+
+    @Description("获取我的菜单")
+    @Permission(authorize = false)
+    @PostMapping("getMyMenuList")
+    public JsonData getMyMenuList() {
+        return jsonData(service.getMyMenuList());
     }
 
     @Description("修改我的密码")

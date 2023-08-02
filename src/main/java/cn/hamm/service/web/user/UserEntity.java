@@ -1,8 +1,8 @@
 package cn.hamm.service.web.user;
 
 import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Exclude;
 import cn.hamm.airpower.annotation.Payload;
+import cn.hamm.airpower.annotation.Search;
 import cn.hamm.service.base.BaseEntity;
 import cn.hamm.service.web.role.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,6 +41,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
     @NotBlank(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class}, message = "邮箱不能为空")
     @Email(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class}, message = "邮箱格式不正确")
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入email字段")
+    @Search()
     private String email;
 
     /**
@@ -58,6 +59,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
      */
     @Column(columnDefinition = "varchar(255) default '' comment '昵称'")
     @NotBlank(groups = {WhenUpdate.class, WhenAdd.class, WhenUpdateMyInfo.class}, message = "昵称不能为空")
+    @Search()
     private String nickname;
 
     /**
@@ -66,6 +68,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '是否系统用户'")
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入isSystem字段")
+    @Search(Search.Mode.EQUALS)
     private Boolean isSystem;
 
     /**
@@ -78,8 +81,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
     /**
      * <h1>角色列表</h1>
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @Payload
     private List<RoleEntity> roleList;
 
@@ -103,5 +105,4 @@ public class UserEntity extends BaseEntity<UserEntity> {
 
     public interface WhenGetMyInfo {
     }
-
 }

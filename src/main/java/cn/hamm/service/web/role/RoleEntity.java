@@ -2,7 +2,9 @@ package cn.hamm.service.web.role;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Exclude;
+import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.service.base.BaseEntity;
+import cn.hamm.service.web.menu.MenuEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,11 +14,10 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
+import java.util.List;
 
 /**
  * <h1>角色实体</h1>
@@ -51,4 +52,11 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
     @Null(groups = {WhenUpdate.class, WhenAdd.class}, message = "是否系统角色这是个只读字段")
     @Exclude(filters = {WhenPayLoad.class})
     private Boolean isSystem;
+
+    /**
+     * <h1>角色的菜单列表</h1>
+     */
+    @ManyToMany
+    @Payload
+    private List<MenuEntity> menuList;
 }
