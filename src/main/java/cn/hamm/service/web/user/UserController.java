@@ -32,7 +32,7 @@ public class UserController extends RootEntityController<UserService, UserVo> {
     @Autowired
     AppService appService;
 
-    @Description("获取我的个人信息")
+    @Description("获取我的信息")
     @Permission(authorize = false)
     @PostMapping("getMyInfo")
     @ResponseFilter(UserEntity.WhenGetMyInfo.class)
@@ -40,7 +40,7 @@ public class UserController extends RootEntityController<UserService, UserVo> {
         return jsonData(service.getById(userId));
     }
 
-    @Description("修改我的个人信息")
+    @Description("修改我的信息")
     @Permission(authorize = false)
     @PostMapping("updateMyInfo")
     public Json updateMyInfo(@RequestBody @Validated({UserEntity.WhenUpdateMyInfo.class}) UserEntity userEntity, Long userId) {
@@ -55,6 +55,13 @@ public class UserController extends RootEntityController<UserService, UserVo> {
     @PostMapping("getMyMenuList")
     public JsonData getMyMenuList() {
         return jsonData(service.getMyMenuList());
+    }
+
+    @Description("获取我的权限")
+    @Permission(authorize = false)
+    @PostMapping("getMyPermissionList")
+    public JsonData getMyPermissionList() {
+        return jsonData(service.getMyPermissionList());
     }
 
     @Description("修改我的密码")
@@ -74,7 +81,7 @@ public class UserController extends RootEntityController<UserService, UserVo> {
         return json("密码重置成功");
     }
 
-    @Description("用户注册")
+    @Description("注册账号")
     @Permission(authorize = false, login = false)
     @PostMapping("register")
     public Json register(@RequestBody @Validated({UserEntity.WhenRegister.class}) UserVo userVo) {
@@ -82,7 +89,7 @@ public class UserController extends RootEntityController<UserService, UserVo> {
         return json("注册成功");
     }
 
-    @Description("用户登录")
+    @Description("登录账号")
     @Permission(authorize = false, login = false)
     @PostMapping("login")
     public JsonData login(@RequestBody @Validated({UserEntity.WhenLogin.class}) UserVo userVo) {

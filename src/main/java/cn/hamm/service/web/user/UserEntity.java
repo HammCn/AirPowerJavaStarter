@@ -19,6 +19,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <h1>用户实体</h1>
@@ -85,7 +86,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
     @ManyToMany(fetch = FetchType.EAGER)
     @Payload
     @Exclude(filters = {WhenPayLoad.class})
-    private List<RoleEntity> roleList;
+    private Set<RoleEntity> roleList;
 
     public interface WhenLogin {
     }

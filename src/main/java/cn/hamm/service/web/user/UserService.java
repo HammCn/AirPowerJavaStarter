@@ -11,6 +11,8 @@ import cn.hamm.service.exception.CustomResult;
 import cn.hamm.service.web.app.AppVo;
 import cn.hamm.service.web.menu.MenuEntity;
 import cn.hamm.service.web.menu.MenuService;
+import cn.hamm.service.web.permission.PermissionEntity;
+import cn.hamm.service.web.permission.PermissionService;
 import cn.hamm.service.web.role.RoleEntity;
 import cn.hutool.core.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,14 @@ public class UserService extends RootService<UserEntity, UserRepository> {
     @Autowired
     MenuService menuService;
 
+    @Autowired
+    PermissionService permissionService;
+
+    /**
+     * <h1>获取登录用户的菜单列表</h1>
+     *
+     * @return 菜单树列表
+     */
     public List<MenuEntity> getMyMenuList() {
         Long userId = getCurrentUserId();
         UserEntity userEntity = getById(userId);
@@ -63,8 +73,7 @@ public class UserService extends RootService<UserEntity, UserRepository> {
             return menuService.getList(new QueryRequest<MenuEntity>().setSort(new Sort().setField("orderNo")));
         }
         List<MenuEntity> menuList = new ArrayList<>();
-        for (int i = 0; i < userEntity.getRoleList().size(); i++) {
-            RoleEntity roleEntity = userEntity.getRoleList().get(i);
+        for (RoleEntity roleEntity : userEntity.getRoleList()) {
             if (roleEntity.getIsSystem()) {
                 return menuService.getList(new QueryRequest<MenuEntity>().setSort(new Sort().setField("orderNo")));
             }
@@ -82,6 +91,38 @@ public class UserService extends RootService<UserEntity, UserRepository> {
             });
         }
         return list2TreeList(menuList);
+    }
+
+    /**
+     * <h1>获取登录用户的权限列表</h1>
+     *
+     * @return 权限列表
+     */
+    public List<PermissionEntity> getMyPermissionList() {
+        Long userId = getCurrentUserId();
+        UserEntity userEntity = getById(userId);
+        if (userEntity.getIsSystem()) {
+            return permissionService.getList(null);
+        }
+        List<PermissionEntity> permissionList = new ArrayList<>();
+        for (RoleEntity roleEntity : userEntity.getRoleList()) {
+            if (roleEntity.getIsSystem()) {
+                return permissionService.getList(null);
+            }
+            roleEntity.getPermissionList().forEach(permissionItem -> {
+                boolean isExist = false;
+                for (PermissionEntity existItem : permissionList) {
+                    if (permissionItem.getId().equals(existItem.getId())) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (!isExist) {
+                    permissionList.add(permissionItem);
+                }
+            });
+        }
+        return permissionList;
     }
 
     /**

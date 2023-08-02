@@ -20,7 +20,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <h1>入口类</h1>
@@ -51,7 +53,7 @@ public class Application {
                 .setName("超级管理员")
                 .setIsSystem(true)
                 .setRemark("超级管理员角色组,请勿数据库暴力直接删除"));
-        List<RoleEntity> roleList = new ArrayList<>();
+        Set<RoleEntity> roleList = new HashSet<>();
         roleList.add(firstRole);
         String salt = RandomUtil.randomString(4);
         userService.add(new UserEntity()

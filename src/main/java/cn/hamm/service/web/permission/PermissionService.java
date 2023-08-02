@@ -56,7 +56,7 @@ public class PermissionService extends RootService<PermissionEntity, PermissionR
                 PermissionEntity apiPermission = new PermissionEntity()
                         .setIdentity(identity)
                         .setParentId(modulePermission.getId())
-                        .setName(api.get("name").toString())
+                        .setName(module.get("name").toString() + "_" + api.get("name").toString())
                         .setIsSystem(true)
                         .setRemark("");
                 try {

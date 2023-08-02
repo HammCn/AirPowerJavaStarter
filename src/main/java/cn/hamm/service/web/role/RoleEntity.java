@@ -5,6 +5,7 @@ import cn.hamm.airpower.annotation.Exclude;
 import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.service.base.BaseEntity;
 import cn.hamm.service.web.menu.MenuEntity;
+import cn.hamm.service.web.permission.PermissionEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +17,10 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <h1>角色实体</h1>
@@ -56,9 +59,31 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
     /**
      * <h1>角色的菜单列表</h1>
      */
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @Payload
     @OrderBy("orderNo DESC")
     @Exclude(filters = {WhenPayLoad.class})
-    private List<MenuEntity> menuList;
+    @NotNull(groups = {WhenAuthorizeMenu.class}, message = "请传入授权的菜单列表")
+    private Set<MenuEntity> menuList;
+
+    /**
+     * <h1>角色的权限列表</h1>
+     */
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Payload
+    @Exclude(filters = {WhenPayLoad.class})
+    @NotNull(groups = {WhenAuthorizeMenu.class}, message = "请传入授权的权限列表")
+    private Set<PermissionEntity> permissionList;
+
+    /**
+     * <h1>当授权菜单时</h1>
+     */
+    public interface WhenAuthorizeMenu {
+    }
+
+    /**
+     * <h1>当授权权限时</h1>
+     */
+    public interface WhenAuthorizePermission {
+    }
 }

@@ -2,9 +2,9 @@ package cn.hamm.service.security;
 
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.security.AbstractAccessInterceptor;
-import cn.hamm.service.web.access.AccessService;
 import cn.hamm.service.web.permission.PermissionEntity;
 import cn.hamm.service.web.permission.PermissionService;
+import cn.hamm.service.web.role.RoleEntity;
 import cn.hamm.service.web.user.UserEntity;
 import cn.hamm.service.web.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,6 @@ public class AccessInterceptor extends AbstractAccessInterceptor {
     private UserService userService;
 
     @Autowired
-    private AccessService accessService;
-
-    @Autowired
     private PermissionService permissionService;
 
     @Override
@@ -34,7 +31,21 @@ public class AccessInterceptor extends AbstractAccessInterceptor {
     @Override
     public boolean checkAccess(Long userId, String permissionIdentity) {
         UserEntity existUser = userService.getById(userId);
-        PermissionEntity permission = permissionService.getPermissionByIdentity(permissionIdentity);
-        return accessService.checkAccess(existUser, permission);
+        if (existUser.getIsSystem()) {
+            return true;
+        }
+        PermissionEntity needPermission = permissionService.getPermissionByIdentity(permissionIdentity);
+        for (RoleEntity role : existUser.getRoleList()) {
+            if (role.getIsSystem()) {
+                return true;
+            }
+            for (PermissionEntity permission : role.getPermissionList()) {
+                if (needPermission.getId().equals(permission.getId())) {
+                    return true;
+                }
+            }
+        }
+        Result.FORBIDDEN.show("你无权访问 " + needPermission.getName() + "(" + needPermission.getIdentity() + ")");
+        return false;
     }
 }
