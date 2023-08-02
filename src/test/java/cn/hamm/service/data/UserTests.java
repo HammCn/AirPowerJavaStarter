@@ -1,7 +1,7 @@
 package cn.hamm.service.data;
 
-import cn.hamm.service.web.user.UserEntity;
-import cn.hamm.service.web.user.UserVo;
+import cn.hamm.service.module.hr.user.UserEntity;
+import cn.hamm.service.module.hr.user.UserVo;
 import org.junit.jupiter.api.Test;
 
 /**

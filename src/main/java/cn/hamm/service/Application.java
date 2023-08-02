@@ -2,26 +2,24 @@ package cn.hamm.service;
 
 import cn.hamm.airpower.config.GlobalConfig;
 import cn.hamm.airpower.security.PasswordUtil;
-import cn.hamm.service.web.app.AppEntity;
-import cn.hamm.service.web.app.AppService;
-import cn.hamm.service.web.menu.MenuEntity;
-import cn.hamm.service.web.menu.MenuService;
-import cn.hamm.service.web.permission.PermissionService;
-import cn.hamm.service.web.role.RoleEntity;
-import cn.hamm.service.web.role.RoleService;
-import cn.hamm.service.web.unit.UnitEntity;
-import cn.hamm.service.web.unit.UnitService;
-import cn.hamm.service.web.user.UserEntity;
-import cn.hamm.service.web.user.UserService;
+import cn.hamm.service.module.system.app.AppEntity;
+import cn.hamm.service.module.system.app.AppService;
+import cn.hamm.service.module.system.menu.MenuEntity;
+import cn.hamm.service.module.system.menu.MenuService;
+import cn.hamm.service.module.system.permission.PermissionService;
+import cn.hamm.service.module.hr.role.RoleEntity;
+import cn.hamm.service.module.hr.role.RoleService;
+import cn.hamm.service.module.basic.unit.UnitEntity;
+import cn.hamm.service.module.basic.unit.UnitService;
+import cn.hamm.service.module.hr.user.UserEntity;
+import cn.hamm.service.module.hr.user.UserService;
 import cn.hutool.core.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
