@@ -5,6 +5,7 @@ import cn.hamm.airpower.query.QueryRequest;
 import cn.hamm.airpower.result.json.JsonData;
 import cn.hamm.airpower.root.RootEntityController;
 import cn.hamm.airpower.security.Permission;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MenuController extends RootEntityController<MenuService, MenuEntity> {
     @Permission(authorize = false)
     @Override
-    public JsonData getList(QueryRequest<MenuEntity> queryRequest) {
+    public JsonData getList(@RequestBody QueryRequest<MenuEntity> queryRequest) {
         return super.getList(queryRequest);
     }
 }

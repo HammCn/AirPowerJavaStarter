@@ -1,9 +1,11 @@
 package cn.hamm.service.module.system.menu;
 
+import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.query.QueryRequest;
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.root.RootService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +28,9 @@ public class MenuService extends RootService<MenuEntity, MenuRepository> {
     @Override
     protected QueryRequest<MenuEntity> beforeGetList(QueryRequest<MenuEntity> queryRequest) {
         MenuEntity filter = queryRequest.getFilter();
+        if(Objects.isNull(queryRequest.getSort())){
+            queryRequest.setSort(new Sort().setField("orderNo"));
+        }
         if (Objects.isNull(filter.getParentId())) {
             filter.setParentId(0L);
         }
