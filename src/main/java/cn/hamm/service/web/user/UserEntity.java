@@ -1,6 +1,7 @@
 package cn.hamm.service.web.user;
 
 import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.annotation.Exclude;
 import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.airpower.annotation.Search;
 import cn.hamm.service.base.BaseEntity;
@@ -81,8 +82,9 @@ public class UserEntity extends BaseEntity<UserEntity> {
     /**
      * <h1>角色列表</h1>
      */
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @Payload
+    @Exclude(filters = {WhenPayLoad.class})
     private List<RoleEntity> roleList;
 
     public interface WhenLogin {

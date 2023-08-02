@@ -58,5 +58,7 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
      */
     @ManyToMany
     @Payload
+    @OrderBy("orderNo DESC")
+    @Exclude(filters = {WhenPayLoad.class})
     private List<MenuEntity> menuList;
 }

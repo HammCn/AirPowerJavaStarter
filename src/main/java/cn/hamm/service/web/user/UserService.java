@@ -65,7 +65,7 @@ public class UserService extends RootService<UserEntity, UserRepository> {
         List<MenuEntity> menuList = new ArrayList<>();
         for (int i = 0; i < userEntity.getRoleList().size(); i++) {
             RoleEntity roleEntity = userEntity.getRoleList().get(i);
-            if(roleEntity.getIsSystem()){
+            if (roleEntity.getIsSystem()) {
                 return menuService.getList(new QueryRequest<MenuEntity>().setSort(new Sort().setField("orderNo")));
             }
             roleEntity.getMenuList().forEach(menuItem -> {
@@ -300,8 +300,9 @@ public class UserService extends RootService<UserEntity, UserRepository> {
         Result.FORBIDDEN_EXIST.whenNotNull(existUser, "邮箱已经存在，请勿重复添加用户");
         if (!StringUtils.hasLength(entity.getPassword())) {
             // 创建时没有设置密码的话 随机一个密码
-            entity.setPassword("123123");
-            entity.setSalt(RandomUtil.randomString(4));
+            String salt = RandomUtil.randomString(4);
+            entity.setPassword(PasswordUtil.encode("123123", salt));
+            entity.setSalt(salt);
         }
         return entity;
     }
