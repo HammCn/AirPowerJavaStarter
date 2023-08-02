@@ -9,9 +9,9 @@
         <relativePath/>
     </parent>
     <groupId>cn.hamm</groupId>
-    <artifactId>service</artifactId>
+    <artifactId>AirPowerJavaDemo</artifactId>
     <version>1.0.0</version>
-    <name>Service</name>
+    <name>AirPowerJavaDemo</name>
     <description>Project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
