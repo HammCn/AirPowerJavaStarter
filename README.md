@@ -1,3 +1,3 @@
-## 项目说明
+## AirPower Java Demo
 
-一个简单的SpringBoot+JPA+Redis快速开发项目
+这是 ```AirPower``` 的宿主项目， 依赖仓库地址：https://github.com/HammCn/AirPower4J
