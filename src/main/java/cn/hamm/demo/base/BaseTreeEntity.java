@@ -40,6 +40,18 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
     @Length(max = 200, message = "名称最多允许{max}个字符")
     @NotBlank(groups = {WhenUpdate.class, WhenAdd.class}, message = "名称不能为空")
     private String name;
+    /**
+     * <h1>父级ID</h1>
+     */
+    @Description("父级ID")
+    @Column(columnDefinition = "bigint UNSIGNED default 0 comment '父级ID'")
+    @Search(Search.Mode.EQUALS)
+    private Long parentId;
+    /**
+     * <h1>子菜单</h1>
+     */
+    @Transient
+    private List<E> children;
 
     /**
      * <h1>设置名称</h1>
@@ -54,14 +66,6 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
     }
 
     /**
-     * <h1>父级ID</h1>
-     */
-    @Description("父级ID")
-    @Column(columnDefinition = "bigint UNSIGNED default 0 comment '父级ID'")
-    @Search(Search.Mode.EQUALS)
-    private Long parentId;
-
-    /**
      * <h1>设置父级ID</h1>
      *
      * @param parentId 父级ID
@@ -72,12 +76,6 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
         this.parentId = parentId;
         return (E) this;
     }
-
-    /**
-     * <h1>子菜单</h1>
-     */
-    @Transient
-    private List<E> children;
 
     @Override
     public E setChildren(List<E> children) {

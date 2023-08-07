@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  */
 public class UserTests {
     @Test
-    void userCopyDemo(){
+    void userCopyDemo() {
         UserEntity userEntity = new UserEntity().setId(1L).setNickname("Hamm");
         UserVo userVo = userEntity.copyTo(UserVo.class);
         System.out.println("OK");

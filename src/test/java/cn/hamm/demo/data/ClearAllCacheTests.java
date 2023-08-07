@@ -15,7 +15,7 @@ class ClearAllCacheTests extends BaseTests {
     RedisUtil redisUtil;
 
     @Test
-    void clearAllCache(){
+    void clearAllCache() {
         printLine();
         print("开始移除所有缓存...");
         redisUtil.clearAll();

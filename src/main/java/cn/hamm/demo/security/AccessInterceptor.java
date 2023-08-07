@@ -2,11 +2,11 @@ package cn.hamm.demo.security;
 
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.security.AbstractAccessInterceptor;
-import cn.hamm.demo.module.system.permission.PermissionEntity;
-import cn.hamm.demo.module.system.permission.PermissionService;
 import cn.hamm.demo.module.hr.role.RoleEntity;
 import cn.hamm.demo.module.hr.user.UserEntity;
 import cn.hamm.demo.module.hr.user.UserService;
+import cn.hamm.demo.module.system.permission.PermissionEntity;
+import cn.hamm.demo.module.system.permission.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

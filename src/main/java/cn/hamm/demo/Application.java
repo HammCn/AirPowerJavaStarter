@@ -2,17 +2,17 @@ package cn.hamm.demo;
 
 import cn.hamm.airpower.config.GlobalConfig;
 import cn.hamm.airpower.security.PasswordUtil;
+import cn.hamm.demo.module.basic.unit.UnitEntity;
+import cn.hamm.demo.module.basic.unit.UnitService;
+import cn.hamm.demo.module.hr.role.RoleEntity;
+import cn.hamm.demo.module.hr.role.RoleService;
+import cn.hamm.demo.module.hr.user.UserEntity;
+import cn.hamm.demo.module.hr.user.UserService;
 import cn.hamm.demo.module.system.app.AppEntity;
 import cn.hamm.demo.module.system.app.AppService;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.menu.MenuService;
 import cn.hamm.demo.module.system.permission.PermissionService;
-import cn.hamm.demo.module.hr.role.RoleEntity;
-import cn.hamm.demo.module.hr.role.RoleService;
-import cn.hamm.demo.module.basic.unit.UnitEntity;
-import cn.hamm.demo.module.basic.unit.UnitService;
-import cn.hamm.demo.module.hr.user.UserEntity;
-import cn.hamm.demo.module.hr.user.UserService;
 import cn.hutool.core.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -30,6 +30,13 @@ import java.util.Set;
 @EnableAutoConfiguration
 @ComponentScan({"cn.hamm.demo", "cn.hamm.airpower"})
 public class Application {
+    private static UserService userService;
+    private static RoleService roleService;
+    private static PermissionService permissionService;
+    private static AppService appService;
+    private static UnitService unitService;
+    private static MenuService menuService;
+
     public static void main(String[] args) {
         GlobalConfig.isCacheEnabled = false;
         SpringApplication.run(Application.class, args);
@@ -77,7 +84,7 @@ public class Application {
         initMenu();
     }
 
-    private static void initMenu(){
+    private static void initMenu() {
         MenuEntity homeMenu = new MenuEntity().setName("首页").setOrderNo(99).setPath("/console").setComponent("/console/index/index").setParentId(0L);
         menuService.add(homeMenu);
 
@@ -102,13 +109,6 @@ public class Application {
         sysSubMenu = new MenuEntity().setName("菜单管理").setPath("/console/menu/list").setParentId(sysMenu.getId());
         menuService.add(sysSubMenu);
     }
-
-    private static UserService userService;
-    private static RoleService roleService;
-    private static PermissionService permissionService;
-    private static AppService appService;
-    private static UnitService unitService;
-    private static MenuService menuService;
 
     @Autowired
     private void setDatastore(

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
  */
 class MailTests {
     @Test
-    void send(){
+    void send() {
         EmailUtil.sendEmail("majhamm@qq.com", "这是标题", "这是详细内容");
     }
 }

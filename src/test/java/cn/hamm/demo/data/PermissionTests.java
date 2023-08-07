@@ -9,7 +9,7 @@ import java.util.Map;
 public class PermissionTests {
 
     @Test
-    void getApiList(){
+    void getApiList() {
         List<Map<String, Object>> appModuleList = ReflectUtil.getApiTreeList("cn.hamm");
         System.out.println(1);
     }
