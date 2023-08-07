@@ -53,8 +53,4 @@ public class SupplierEntity extends BaseEntity<SupplierEntity> {
     @Description("手机号")
     @Column(columnDefinition = "varchar(255) default '' comment '手机号'")
     private String phone;
-
-    @Description("供应能力指标")
-    @Column(columnDefinition = "int default 0 comment '供应能力指标'")
-    private Integer supplyAvg;
 }
