@@ -98,8 +98,14 @@ public class Application {
         userSubMenu = new MenuEntity().setName("角色管理").setPath("/console/role/list").setParentId(userMenu.getId());
         menuService.add(userSubMenu);
 
+        MenuEntity sourceMenu = new MenuEntity().setName("渠道管理").setOrderNo(77).setParentId(0L);
+        sourceMenu = menuService.add(sourceMenu);
 
-        MenuEntity sysMenu = new MenuEntity().setName("系统设置").setOrderNo(77).setParentId(0L);
+        MenuEntity sourceSubMenu;
+        sourceSubMenu = new MenuEntity().setName("供应商管理").setPath("/console/supplier/list").setParentId(sourceMenu.getId());
+        menuService.add(sourceSubMenu);
+
+        MenuEntity sysMenu = new MenuEntity().setName("系统设置").setOrderNo(2).setParentId(0L);
         sysMenu = menuService.add(sysMenu);
 
         MenuEntity sysSubMenu;
