@@ -40,7 +40,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
      */
     @Description("邮箱")
     @Column(columnDefinition = "varchar(255) default '' comment '邮箱'", unique = true)
-    @NotBlank(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class}, message = "邮箱不能为空")
+    @NotBlank(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class, WhenAdd.class}, message = "邮箱不能为空")
     @Email(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class}, message = "邮箱格式不正确")
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入email字段")
     @Search()
