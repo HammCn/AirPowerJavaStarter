@@ -64,7 +64,7 @@ public class Application {
         userService.add(new UserEntity()
                 .setNickname("Hamm")
                 .setEmail("admin@hamm.cn")
-                .setPassword(PasswordUtil.encode("12345678", salt))
+                .setPassword(PasswordUtil.encode("Aa123456", salt))
                 .setSalt(salt)
                 .setIsSystem(true)
                 .setId(1L)

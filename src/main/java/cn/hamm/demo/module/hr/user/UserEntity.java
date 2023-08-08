@@ -4,6 +4,7 @@ import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Exclude;
 import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.validate.password.Password;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.hr.role.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -53,6 +54,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
     @Column(columnDefinition = "varchar(255) default '' comment '密码'")
     @NotBlank(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class}, message = "密码不能为空")
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入password字段")
+    @Password(message = "密码要求6-16位且至少包含大小写字母和数字")
     private String password;
 
     /**

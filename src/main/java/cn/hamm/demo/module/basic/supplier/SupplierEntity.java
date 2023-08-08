@@ -1,6 +1,7 @@
 package cn.hamm.demo.module.basic.supplier;
 
 import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.validate.phone.MobilePhone;
 import cn.hamm.demo.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,5 +53,6 @@ public class SupplierEntity extends BaseEntity<SupplierEntity> {
 
     @Description("手机号")
     @Column(columnDefinition = "varchar(255) default '' comment '手机号'")
+    @MobilePhone
     private String phone;
 }
