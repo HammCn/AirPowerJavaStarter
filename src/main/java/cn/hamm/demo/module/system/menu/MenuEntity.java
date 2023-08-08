@@ -12,6 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 /**
  * <h1>权限实体</h1>
@@ -31,6 +32,7 @@ public class MenuEntity extends BaseTreeEntity<MenuEntity> {
      * <h1>菜单路径</h1>
      */
     @Description("菜单路径")
+    @NotBlank(groups = {WhenUpdate.class, WhenAdd.class}, message = "菜单路径不能为空")
     @Column(columnDefinition = "varchar(255) default '' comment '菜单路径'")
     private String path;
 
