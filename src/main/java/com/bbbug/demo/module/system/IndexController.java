@@ -22,9 +22,6 @@ public class IndexController extends RootController {
 
     @GetMapping("")
     public String index() {
-        websocketUtil.sendToAll("Hi guys helloooooo");
-        websocketUtil.sendToUser(1L, "hello 1");
-        websocketUtil.sendToUser(2L, "hello 2");
         return "<h1>Hello World!</h1>";
     }
 }
