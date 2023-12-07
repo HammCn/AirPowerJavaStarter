@@ -26,4 +26,4 @@ spring:
     pass: 123456
 #应用配置
 application:
-  loginUrl: "https://hamm.cn/login"
+  loginUrl: "https://service.hamm.cn/login"
