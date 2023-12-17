@@ -11,14 +11,14 @@ spring:
       suffix: .html
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
   data:
     redis:
       host: 127.0.0.1
       port: 6379
-      password: 123456
+      password:
 
   mqtt:
     host: md4.cn
