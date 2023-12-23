@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootConfiguration
 class ApplicationTests {
     @Test
-    void main() {
+    void testInit() {
         System.out.println("Hello AirPower!");
     }
 

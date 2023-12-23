@@ -7,6 +7,7 @@ import cn.hamm.airpower.security.AccessConfig;
 import cn.hamm.airpower.security.AccessUtil;
 import cn.hamm.airpower.util.ReflectUtil;
 import com.bbbug.demo.base.BaseService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -30,6 +31,7 @@ import java.util.Objects;
  * @author Hamm
  */
 @Service
+@Slf4j
 public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> {
     /**
      * <h2>通过标识获取一个权限</h2>
@@ -124,7 +126,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return permissionList;
     }
@@ -136,7 +138,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
         QueryRequest<PermissionEntity> queryRequest = new QueryRequest<>();
         queryRequest.setFilter(new PermissionEntity().setParentId(id));
         List<PermissionEntity> children = getList(queryRequest);
-        Result.FORBIDDEN_DELETE.when(children.size() > 0, "含有子权限,无法删除!");
+        Result.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子权限,无法删除!");
     }
 
     @Override
