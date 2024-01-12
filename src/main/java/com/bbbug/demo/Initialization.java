@@ -56,9 +56,8 @@ public class Initialization {
         customerService.add(new CustomerEntity().setCode("CUS01").setName("重庆解放碑AppleStore"));
     }
 
-    @SuppressWarnings("AlibabaMethodTooLong")
     private static void initMenu() {
-        MenuEntity exist = menuService.getByIdMaybeNull(1L);
+        MenuEntity exist = menuService.getMaybeNull(1L);
         if (Objects.nonNull(exist)) {
             return;
         }
@@ -107,7 +106,7 @@ public class Initialization {
 
     private static void initUserAndRole() {
         // 初始化角色
-        RoleEntity firstRole = roleService.getByIdMaybeNull(1L);
+        RoleEntity firstRole = roleService.getMaybeNull(1L);
         if (Objects.nonNull(firstRole)) {
             return;
         }
@@ -118,7 +117,7 @@ public class Initialization {
                 .setRemark("超级管理员角色组,请勿数据库暴力直接删除"));
 
         // 初始化用户
-        UserEntity userEntity = userService.getByIdMaybeNull(1L);
+        UserEntity userEntity = userService.getMaybeNull(1L);
         if (Objects.nonNull(userEntity)) {
             return;
         }

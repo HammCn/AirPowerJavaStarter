@@ -42,7 +42,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @PostMapping("getMyInfo")
     @Filter(UserEntity.WhenGetMyInfo.class)
     public JsonData getMyInfo(Long userId) {
-        return jsonData(service.getById(userId));
+        return jsonData(service.get(userId));
     }
 
     @Description("修改我的信息")
@@ -118,7 +118,6 @@ public class UserController extends BaseController<UserEntity, UserService, User
      */
     private JsonData doLogin(UserLoginType userLoginType, UserEntity userEntity, HttpServletResponse response) {
         String accessToken = "";
-        //noinspection EnhancedSwitchMigration
         switch (userLoginType) {
             case VIA_ACCOUNT_PASSWORD:
                 accessToken = service.login(userEntity);
