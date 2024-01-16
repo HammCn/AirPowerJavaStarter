@@ -1,4 +1,4 @@
-package com.bbbug.demo.exception;
+package com.bbbug.demo.common.exception;
 
 import cn.hamm.airpower.result.IResult;
 import lombok.Getter;

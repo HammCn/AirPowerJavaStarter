@@ -8,7 +8,7 @@ import cn.hamm.airpower.security.SecurityUtil;
 import cn.hamm.airpower.util.EmailUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.bbbug.demo.base.BaseService;
-import com.bbbug.demo.exception.CustomResult;
+import com.bbbug.demo.common.exception.CustomResult;
 import com.bbbug.demo.module.role.RoleEntity;
 import com.bbbug.demo.module.system.app.AppEntity;
 import com.bbbug.demo.module.system.menu.MenuEntity;

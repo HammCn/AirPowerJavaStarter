@@ -1,7 +1,7 @@
 package com.bbbug.demo;
 
 import cn.hamm.airpower.security.AccessResolver;
-import com.bbbug.demo.security.AccessInterceptor;
+import com.bbbug.demo.common.security.AccessInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

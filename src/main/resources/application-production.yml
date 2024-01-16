@@ -11,7 +11,7 @@ spring:
       suffix: .html
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-      show-sql: false
+    show-sql: false
     hibernate:
       ddl-auto: create-drop
   data:
@@ -20,11 +20,11 @@ spring:
       port: 6379
       password:
 
+
+
+airpower:
   mqtt:
-    host: 127.0.0.1
-    port: 1883
     user: root
     pass: 123456
-#应用配置
-application:
+app:
   loginUrl: "https://service.hamm.cn/login"

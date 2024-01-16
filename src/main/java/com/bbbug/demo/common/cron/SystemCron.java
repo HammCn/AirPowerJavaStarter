@@ -1,6 +1,7 @@
-package com.bbbug.demo.cron;
+package com.bbbug.demo.common.cron;
 
 import cn.hamm.airpower.config.GlobalConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +12,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SystemCron {
+    @Autowired
+    private GlobalConfig globalConfig;
 
     @Scheduled(cron = "59 59 23 * * *")
     void softShutdownService() {
-        GlobalConfig.isServiceRunning = false;
+        globalConfig.setServiceRunning(false);
     }
 
     @Scheduled(cron = "0 0 0 * * *")
     void resetCodeRuleBaseNumber() {
-        GlobalConfig.isServiceRunning = true;
+        globalConfig.setServiceRunning(true);
     }
 }

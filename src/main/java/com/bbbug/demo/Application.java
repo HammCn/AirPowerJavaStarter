@@ -1,6 +1,5 @@
 package com.bbbug.demo;
 
-import cn.hamm.airpower.config.GlobalConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,7 +17,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @EnableScheduling
 public class Application {
     public static void main(String[] args) {
-        GlobalConfig.isCacheEnabled = false;
         SpringApplication.run(Application.class, args);
         Initialization.run();
         System.out.println("---------------------------------");

@@ -12,11 +12,6 @@ spring:
       host: 127.0.0.1
       port: 6379
       password:
-  influxdb:
-    url: http://127.0.0.1:8086
-    token: airpower
-    org: airpower
-    bucket: airpower
   web:
     resources:
       add-mappings: false
@@ -24,6 +19,11 @@ spring:
     view:
       suffix: .html
       prefix: /
-
+app:
+  influxdb:
+    url: http://127.0.0.1:8086
+    token: airpower
+    org: airpower
+    bucket: airpower
 
 
