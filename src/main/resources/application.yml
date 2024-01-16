@@ -4,7 +4,12 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/service?allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: false
     generate-ddl: true
   data:
@@ -19,6 +24,8 @@ spring:
     view:
       suffix: .html
       prefix: /
+airpower:
+  mqtt:
 app:
   influxdb:
     url: http://127.0.0.1:8086

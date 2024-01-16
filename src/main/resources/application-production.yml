@@ -1,27 +1,11 @@
-server:
-  port: 8080
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/service?allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: service
     password: service
-  mvc:
-    view:
-      suffix: .html
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: false
     hibernate:
       ddl-auto: create-drop
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      password:
-
-
-
 airpower:
   mqtt:
     user: root
