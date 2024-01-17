@@ -41,7 +41,7 @@ public class Initialization {
     private static SupplierService supplierService;
 
     public static void run() {
-        permissionService.forceReloadAllPermissions();
+        permissionService.initPermission();
         initUserAndRole();
         initUnitAndMaterial();
         initMenu();
