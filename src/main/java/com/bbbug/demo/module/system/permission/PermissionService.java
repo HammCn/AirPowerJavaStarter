@@ -62,7 +62,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                    ClassUtils.convertClassNameToResourcePath(packageName) + "/**/*.class";
+                    ClassUtils.convertClassNameToResourcePath(packageName) + "/**/*Controller.class";
             Resource[] resources = resourcePatternResolver.getResources(pattern);
             MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
@@ -90,6 +90,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                     permissionEntity = add(permissionEntity);
                 } else {
                     permissionEntity.setName(customClassName)
+                            .setIdentity(identity)
                             .setIsSystem(true);
                     permissionEntity = update(permissionEntity);
                 }
@@ -105,7 +106,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 Method[] methods = clazz.getMethods();
                 for (Method method : methods) {
                     String customMethodName = ReflectUtil.getDescription(method);
-                    PostMapping postMappingMethod = method.getAnnotation(PostMapping.class);
+                    PostMapping postMappingMethod = ReflectUtil.getPostMapping(method);
 
                     AccessConfig accessConfig = AccessUtil.getWhatNeedAccess(clazz, method);
                     if (!accessConfig.login || !accessConfig.authorize) {
@@ -119,13 +120,14 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                         PermissionEntity subPermission = getPermissionByIdentity(subIdentity);
                         if (Objects.isNull(subPermission)) {
                             subPermission = new PermissionEntity()
-                                    .setName(customMethodName)
+                                    .setName(customClassName + "_" + customMethodName)
                                     .setIdentity(subIdentity)
                                     .setIsSystem(true)
                                     .setParentId(permissionEntity.getId());
                             add(subPermission);
                         } else {
-                            subPermission.setName(customMethodName)
+                            subPermission.setName(customClassName + "_" + customMethodName)
+                                    .setIdentity(subIdentity)
                                     .setIsSystem(true)
                                     .setParentId(permissionEntity.getId());
                             update(subPermission);
