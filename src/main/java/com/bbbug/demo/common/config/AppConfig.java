@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Hamm
  */
+@SuppressWarnings("unused")
 @Component
 @Data
 @Accessors(chain = true)

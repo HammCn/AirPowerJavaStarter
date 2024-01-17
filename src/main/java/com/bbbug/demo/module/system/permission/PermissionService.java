@@ -43,6 +43,14 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
         return repository.getByIdentity(identity);
     }
 
+    @Override
+    protected List<PermissionEntity> afterGetList(List<PermissionEntity> list) {
+        for (PermissionEntity item : list) {
+            item.excludeBaseData();
+        }
+        return list;
+    }
+
     /**
      * <h2>强制重载所有权限</h2>
      */
@@ -140,25 +148,5 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
         List<PermissionEntity> children = getList(queryRequest);
         Result.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子权限,无法删除!");
         deleteById(id);
-    }
-
-    @Override
-    protected QueryRequest<PermissionEntity> beforeGetList(QueryRequest<PermissionEntity> queryRequest) {
-        PermissionEntity filter = queryRequest.getFilter();
-        if (Objects.isNull(filter.getParentId())) {
-            filter.setParentId(0L);
-        }
-        return queryRequest.setFilter(filter);
-    }
-
-    @Override
-    protected List<PermissionEntity> afterGetList(List<PermissionEntity> list) {
-        for (PermissionEntity item : list) {
-            QueryRequest<PermissionEntity> queryRequest = new QueryRequest<>();
-            queryRequest.setFilter(new PermissionEntity().setParentId(item.getId()));
-            item.setChildren(this.getList(queryRequest));
-            item.excludeBaseData();
-        }
-        return list;
     }
 }
