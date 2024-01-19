@@ -19,6 +19,7 @@ import java.util.Set;
 
 /**
  * <h1>初始化</h1>
+ *
  * @author hamm
  */
 @Component
@@ -48,7 +49,7 @@ public class Initialization {
             initUserAndRole();
         }
     }
-    
+
     private void initUserAndRole() {
         // 初始化角色
         RoleEntity firstRole = roleService.getMaybeNull(1L);
