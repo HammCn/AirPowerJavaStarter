@@ -24,6 +24,11 @@ public class AppConfig {
     private String loginUrl;
 
     /**
+     * 初始化数据
+     */
+    private boolean initData = false;
+
+    /**
      * Influx配置
      */
     private InfluxConfig influxdb = new InfluxConfig();
