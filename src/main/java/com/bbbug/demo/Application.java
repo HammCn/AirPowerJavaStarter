@@ -32,5 +32,4 @@ public class Application {
     private void init(Initialization initialization) {
         Application.initialization = initialization;
     }
-
 }
