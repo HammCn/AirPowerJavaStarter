@@ -12,3 +12,4 @@ airpower:
     pass: 123456
 app:
   loginUrl: "http://localhost:3000/login"
+  init-data: true

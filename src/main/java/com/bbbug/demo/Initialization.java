@@ -40,9 +40,9 @@ public class Initialization {
 
     public void run() {
         if (appConfig.isInitData()) {
+            initUserAndRole();
             permissionService.initPermission();
             menuService.initMenu();
-            initUserAndRole();
         }
     }
 

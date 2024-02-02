@@ -44,6 +44,12 @@ public class LogEntity extends BaseEntity<LogEntity> {
     private Integer version;
 
     /**
+     * <h2>客户端平台</h2>
+     */
+    @Column(columnDefinition = "varchar(255) default '' comment '客户端平台'")
+    private String platform;
+
+    /**
      * <h2>用户ID</h2>
      */
     @Column(columnDefinition = "bigint UNSIGNED comment '用户ID'")

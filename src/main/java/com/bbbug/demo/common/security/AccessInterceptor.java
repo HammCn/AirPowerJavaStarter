@@ -6,6 +6,7 @@ import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.security.AbstractAccessInterceptor;
 import cn.hamm.airpower.security.AccessUtil;
 import cn.hamm.airpower.security.SecurityUtil;
+import com.bbbug.demo.common.config.AppConfig;
 import com.bbbug.demo.module.role.RoleEntity;
 import com.bbbug.demo.module.system.log.LogEntity;
 import com.bbbug.demo.module.system.log.LogService;
@@ -17,7 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import java.lang.reflect.Method;
@@ -43,6 +43,9 @@ public class AccessInterceptor extends AbstractAccessInterceptor {
 
     @Autowired
     private GlobalConfig globalConfig;
+
+    @Autowired
+    private AppConfig appConfig;
 
     /**
      * <h2>验证指定的用户是否有指定权限标识的权限</h2>
@@ -81,33 +84,23 @@ public class AccessInterceptor extends AbstractAccessInterceptor {
         Method method = handlerMethod.getMethod();
         String accessToken = request.getHeader(globalConfig.getAuthorizeHeader());
         Long userId = null;
-        if (StringUtils.hasLength(accessToken)) {
-            try {
-                userId = securityUtil.getUserIdFromAccessToken(accessToken);
-            } catch (Exception ignored) {
-
-            }
-        }
-        Integer appVersion = null;
+        int appVersion = -1;
+        String platform = "";
         try {
-            appVersion = request.getIntHeader(globalConfig.getAppVersionHeader());
-            if (appVersion <= 0) {
-                appVersion = null;
-            }
+            userId = securityUtil.getUserIdFromAccessToken(accessToken);
+            appVersion = request.getIntHeader(appConfig.getAppVersionHeader());
+            platform = request.getHeader(appConfig.getAppPlatformVersion());
         } catch (Exception ignored) {
 
         }
-        String action = AccessUtil.getPermissionIdentity(clazz, method);
-        PermissionEntity permissionEntity = permissionService.getPermissionByIdentity(action);
+        String identity = AccessUtil.getPermissionIdentity(clazz, method);
+        PermissionEntity permissionEntity = permissionService.getPermissionByIdentity(identity);
         if (Objects.nonNull(permissionEntity)) {
-            action = permissionEntity.getName();
+            logService.add(new LogEntity().setIp(RequestUtil.getIpAddress(request))
+                    .setAction(permissionEntity.getName())
+                    .setPlatform(platform)
+                    .setVersion(Math.max(1, appVersion))
+                    .setUserId(userId));
         }
-        LogEntity logEntity = new LogEntity();
-        logEntity.setIp(RequestUtil.getIpAddress(request))
-                .setAction(action)
-                .setVersion(appVersion)
-                .setUserId(userId)
-        ;
-        logService.add(logEntity);
     }
 }

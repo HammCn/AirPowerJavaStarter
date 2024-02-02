@@ -4,7 +4,6 @@ import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Exclude;
 import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.airpower.annotation.Search;
-import cn.hamm.airpower.validate.password.Password;
 import com.bbbug.demo.base.BaseEntity;
 import com.bbbug.demo.module.role.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.Set;
 
@@ -54,7 +54,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
     @Column(columnDefinition = "varchar(255) default '' comment '密码'")
     @NotBlank(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class}, message = "密码不能为空")
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入password字段")
-    @Password(message = "密码要求6-16位且至少包含大小写字母和数字")
+    @Length(min = 6, message = "密码至少6位长度")
     private String password;
 
     /**
@@ -90,20 +90,23 @@ public class UserEntity extends BaseEntity<UserEntity> {
     private Set<RoleEntity> roleList;
 
     /**
-     * <h2>登录使用的App秘钥</h2>
+     * <h2>登录使用的AppKey</h2>
      */
+    @Transient
     private String appKey;
 
     /**
      * <h2>邮箱验证码</h2>
      */
     @NotBlank(groups = {WhenRegister.class, WhenUpdateMyPassword.class, WhenResetMyPassword.class}, message = "邮箱验证码不能为空")
+    @Transient
     private String code;
 
     /**
      * <h2>修改密码时使用的原始密码</h2>
      */
     @NotBlank(groups = {WhenUpdateMyPassword.class}, message = "原始密码不能为空")
+    @Transient
     private String oldPassword;
 
     /**
