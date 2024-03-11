@@ -12,3 +12,4 @@ airpower:
     pass: 123456
 app:
   loginUrl: "https://service.hamm.cn/login"
+  init-data: true
