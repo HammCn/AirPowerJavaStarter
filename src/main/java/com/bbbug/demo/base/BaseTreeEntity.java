@@ -22,6 +22,7 @@ import java.util.List;
  *
  * @author Hamm
  */
+@SuppressWarnings("unchecked")
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @MappedSuperclass
@@ -59,7 +60,6 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
      * @param name 名称
      * @return 实例
      */
-    @SuppressWarnings("unchecked")
     @Override
     public E setName(String name) {
         this.name = name;
@@ -72,14 +72,12 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
      * @param parentId 父级ID
      * @return 实例
      */
-    @SuppressWarnings("unchecked")
     @Override
     public E setParentId(Long parentId) {
         this.parentId = parentId;
         return (E) this;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public E setChildren(List<E> children) {
         this.children = children;

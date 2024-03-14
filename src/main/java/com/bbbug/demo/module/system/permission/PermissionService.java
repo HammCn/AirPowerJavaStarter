@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -69,11 +68,10 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
     /**
      * 初始化所有权限
      */
-    @SuppressWarnings({"AlibabaMethodTooLong", "UnusedReturnValue"})
-    public List<PermissionEntity> initPermission() {
+    @SuppressWarnings("AlibabaMethodTooLong")
+    public void initPermission() {
         String packageName = "com.bbbug.demo";
         // 遍历所有接口
-        List<PermissionEntity> permissionList = new ArrayList<>();
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
@@ -198,6 +196,5 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        return permissionList;
     }
 }
