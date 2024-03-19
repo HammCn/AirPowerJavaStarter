@@ -7,8 +7,8 @@
         <artifactId>airpower</artifactId>
         <version>1.1.10</version>
     </parent>
-    <groupId>com.bbbug</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>cn.hamm</groupId>
+    <artifactId>airpower-java-starter</artifactId>
     <version>1.0.0</version>
     <name>airpower-java-starter</name>
     <description>airpower-java-starter</description>
@@ -26,7 +26,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springboot.version}</version>
                 <configuration>
-                    <mainClass>com.bbbug.demo.Application</mainClass>
+                    <mainClass>cn.hamm.demo.Application</mainClass>
                 </configuration>
                 <executions>
                     <execution>
