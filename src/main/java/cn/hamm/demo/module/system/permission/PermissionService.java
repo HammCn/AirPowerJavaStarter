@@ -47,14 +47,13 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
     }
 
     @Override
-    public void delete(Long id) {
+    protected void beforeDelete(long id) {
         PermissionEntity entity = get(id);
         Result.FORBIDDEN_DELETE.when(entity.getIsSystem(), "系统内置权限无法被删除!");
         QueryRequest<PermissionEntity> queryRequest = new QueryRequest<>();
         queryRequest.setFilter(new PermissionEntity().setParentId(id));
         List<PermissionEntity> children = getList(queryRequest);
         Result.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子权限,无法删除!");
-        deleteById(id);
     }
 
     @Override
@@ -100,13 +99,16 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                             .setName(customClassName)
                             .setIdentity(identity)
                             .setIsSystem(true);
-                    permissionEntity = add(permissionEntity);
+                    long permissionId = add(permissionEntity);
+                    permissionEntity.setId(permissionId);
                 } else {
                     permissionEntity.setName(customClassName)
                             .setIdentity(identity)
                             .setIsSystem(true);
-                    permissionEntity = update(permissionEntity);
+                    update(permissionEntity);
                 }
+
+                permissionEntity = get(permissionEntity.getId());
 
                 // 读取类的RequestMapping
                 RequestMapping requestMappingClass = clazz.getAnnotation(RequestMapping.class);

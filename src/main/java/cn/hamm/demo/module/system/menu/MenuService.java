@@ -16,13 +16,13 @@ import java.util.Objects;
  */
 @Service
 public class MenuService extends BaseService<MenuEntity, MenuRepository> {
+
     @Override
-    public void delete(Long id) {
+    protected void beforeDelete(long id) {
         QueryRequest<MenuEntity> queryRequest = new QueryRequest<>();
         queryRequest.setFilter(new MenuEntity().setParentId(id));
         List<MenuEntity> children = getList(queryRequest);
         Result.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子菜单,无法删除!");
-        deleteById(id);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
 
         // 人事管理
         MenuEntity userMenu = new MenuEntity().setName("人事管理").setOrderNo(88).setParentId(0L);
-        userMenu = add(userMenu);
+        userMenu = get(add(userMenu));
 
         MenuEntity userSubMenu;
         userSubMenu = new MenuEntity().setName("用户管理").setPath("/console/user/list").setParentId(userMenu.getId());
@@ -65,7 +65,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
 
         // 渠道管理
         MenuEntity sourceMenu = new MenuEntity().setName("渠道管理").setOrderNo(77).setParentId(0L);
-        sourceMenu = add(sourceMenu);
+        sourceMenu = get(add(sourceMenu));
 
         MenuEntity sourceSubMenu;
 
@@ -74,7 +74,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
 
         // 系统设置
         MenuEntity sysMenu = new MenuEntity().setName("系统设置").setOrderNo(2).setParentId(0L);
-        sysMenu = add(sysMenu);
+        sysMenu = get(add(sysMenu));
 
         MenuEntity sysSubMenu;
 

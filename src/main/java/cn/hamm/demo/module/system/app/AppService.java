@@ -33,17 +33,17 @@ public class AppService extends BaseService<AppEntity, AppRepository> {
      */
     public String resetSecretById(Long id) {
         String newSecret = RandomUtil.randomString(32).toUpperCase();
-        AppEntity entity = getById(id);
+        AppEntity entity = get(id);
         entity.setAppSecret(newSecret);
         update(entity);
         return newSecret;
     }
 
     @Override
-    protected AppEntity beforeSaveToDatabase(AppEntity entity) {
-        if (Objects.isNull(entity.getAppSecret())) {
-            entity.setAppSecret(RandomUtil.randomString(32).toUpperCase());
+    protected AppEntity beforeSaveToDatabase(AppEntity app) {
+        if (Objects.isNull(app.getAppSecret())) {
+            app.setAppSecret(RandomUtil.randomString(32).toUpperCase());
         }
-        return entity;
+        return app;
     }
 }

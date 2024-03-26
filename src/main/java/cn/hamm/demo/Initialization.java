@@ -52,11 +52,12 @@ public class Initialization {
         if (Objects.nonNull(firstRole)) {
             return;
         }
-        firstRole = roleService.add(new RoleEntity()
+        long roleId = roleService.add(new RoleEntity()
                 .setName("超级管理员")
                 .setCode("ROOT")
                 .setIsSystem(true)
                 .setRemark("超级管理员角色组,请勿数据库暴力直接删除"));
+        firstRole = roleService.get(roleId);
 
         // 初始化用户
         UserEntity userEntity = userService.getMaybeNull(1L);
