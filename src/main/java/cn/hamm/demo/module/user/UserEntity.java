@@ -66,15 +66,6 @@ public class UserEntity extends BaseEntity<UserEntity> {
     private String nickname;
 
     /**
-     * <h2>是否系统用户</h2>
-     */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '是否系统用户'")
-    @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入isSystem字段")
-    @Search(Search.Mode.EQUALS)
-    private Boolean isSystem;
-
-    /**
      * <h2>密码盐</h2>
      */
     @JsonIgnore
@@ -137,5 +128,14 @@ public class UserEntity extends BaseEntity<UserEntity> {
     }
 
     public interface WhenGetMyInfo {
+    }
+
+    /**
+     * <h2>获取是否超级管理员</h2>
+     *
+     * @return 结果
+     */
+    public final boolean isRootUser() {
+        return this.getId() == 1L;
     }
 }

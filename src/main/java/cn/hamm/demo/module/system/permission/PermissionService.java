@@ -68,8 +68,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
      * 初始化所有权限
      */
     @SuppressWarnings("AlibabaMethodTooLong")
-    public void initPermission() {
-        String packageName = "cn.hamm.demo";
+    public final void loadPermission(String packageName) {
         // 遍历所有接口
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();

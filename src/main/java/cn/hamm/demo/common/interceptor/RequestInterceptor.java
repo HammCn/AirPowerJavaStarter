@@ -1,9 +1,10 @@
-package cn.hamm.demo.common.security;
+package cn.hamm.demo.common.interceptor;
 
+import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.config.GlobalConfig;
+import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.request.RequestUtil;
 import cn.hamm.airpower.result.Result;
-import cn.hamm.airpower.security.AbstractAccessInterceptor;
 import cn.hamm.airpower.security.AccessUtil;
 import cn.hamm.airpower.security.SecurityUtil;
 import cn.hamm.demo.common.config.AppConfig;
@@ -15,11 +16,11 @@ import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.system.permission.PermissionService;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
+import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.method.HandlerMethod;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -29,7 +30,8 @@ import java.util.Objects;
  *
  * @author Hamm
  */
-public class AccessInterceptor extends AbstractAccessInterceptor {
+@Component
+public class RequestInterceptor extends AbstractRequestInterceptor {
     @Autowired
     private UserService userService;
 
@@ -59,14 +61,11 @@ public class AccessInterceptor extends AbstractAccessInterceptor {
     @Override
     public boolean checkPermissionAccess(Long userId, String permissionIdentity, HttpServletRequest request) {
         UserEntity existUser = userService.get(userId);
-        if (existUser.getIsSystem()) {
+        if (existUser.isRootUser()) {
             return true;
         }
         PermissionEntity needPermission = permissionService.getPermissionByIdentity(permissionIdentity);
         for (RoleEntity role : existUser.getRoleList()) {
-            if (role.getIsSystem()) {
-                return true;
-            }
             for (PermissionEntity permission : role.getPermissionList()) {
                 if (needPermission.getId().equals(permission.getId())) {
                     return true;
@@ -78,30 +77,34 @@ public class AccessInterceptor extends AbstractAccessInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object object, Exception ex) {
-        HandlerMethod handlerMethod = (HandlerMethod) object;
-        //取出控制器和方法
-        Class<?> clazz = handlerMethod.getBeanType();
-        Method method = handlerMethod.getMethod();
+    protected void beforeHandleRequest(HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
         String accessToken = request.getHeader(globalConfig.getAuthorizeHeader());
         Long userId = null;
-        int appVersion = -1;
+        int appVersion = request.getIntHeader(Constant.APP_VERSION_HEADER);
         String platform = "";
+        String action = request.getRequestURI();
         try {
             userId = securityUtil.getUserIdFromAccessToken(accessToken);
-            appVersion = request.getIntHeader(Constant.APP_VERSION_HEADER);
             platform = request.getHeader(Constant.APP_PLATFORM_HEADER);
+            Description description = method.getAnnotation(Description.class);
+            if (Objects.nonNull(description) && !StrUtil.isAllBlank(description.value())) {
+                action = description.value() + "(" + action + ")";
+            }
         } catch (Exception ignored) {
-
         }
         String identity = AccessUtil.getPermissionIdentity(clazz, method);
         PermissionEntity permissionEntity = permissionService.getPermissionByIdentity(identity);
         if (Objects.nonNull(permissionEntity)) {
-            logService.add(new LogEntity().setIp(RequestUtil.getIpAddress(request))
-                    .setAction(permissionEntity.getName())
-                    .setPlatform(platform)
-                    .setVersion(Math.max(1, appVersion))
-                    .setUserId(userId));
+            action = permissionEntity.getName();
         }
+        long logId = logService.add(new LogEntity()
+                .setIp(RequestUtil.getIpAddress(request))
+                .setAction(action)
+                .setPlatform(platform)
+                .setRequest(getRequestBody(request))
+                .setVersion(Math.max(1, appVersion))
+                .setUserId(userId)
+        );
+        setShareData("logId", logId);
     }
 }

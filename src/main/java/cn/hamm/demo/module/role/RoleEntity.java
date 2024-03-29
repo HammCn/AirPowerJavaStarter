@@ -6,11 +6,9 @@ import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,16 +50,6 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
     @Column(columnDefinition = "varchar(255) default '' comment '角色编码'", unique = true)
     @NotNull(groups = {WhenUpdate.class, WhenAdd.class}, message = "编码不能为空")
     private String code;
-
-    /**
-     * <h2>是否系统角色</h2>
-     */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Description("是否系统角色")
-    @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '是否系统角色'")
-    @Null(groups = {WhenUpdate.class, WhenAdd.class}, message = "是否系统角色这是个只读字段")
-    @Exclude(filters = {WhenPayLoad.class})
-    private Boolean isSystem;
 
     /**
      * <h2>角色的菜单列表</h2>

@@ -44,7 +44,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
     }
 
 
-    public final void initMenu() {
+    public final void loadMenu() {
         MenuEntity exist = getMaybeNull(1L);
         if (Objects.nonNull(exist)) {
             return;
