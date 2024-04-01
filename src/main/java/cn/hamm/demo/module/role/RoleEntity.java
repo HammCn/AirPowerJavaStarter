@@ -44,14 +44,6 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
     private String name;
 
     /**
-     * <h2>角色编码</h2>
-     */
-    @Description("角色编码")
-    @Column(columnDefinition = "varchar(255) default '' comment '角色编码'", unique = true)
-    @NotNull(groups = {WhenUpdate.class, WhenAdd.class}, message = "编码不能为空")
-    private String code;
-
-    /**
      * <h2>角色的菜单列表</h2>
      */
     @ManyToMany(fetch = FetchType.EAGER)
