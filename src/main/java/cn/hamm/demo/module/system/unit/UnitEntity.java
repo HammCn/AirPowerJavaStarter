@@ -7,13 +7,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * <h1>单位实体</h1>
@@ -24,10 +20,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @Accessors(chain = true)
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@DynamicInsert
-@DynamicUpdate
 @Table(name = "unit")
 @Description("单位")
 public class UnitEntity extends BaseEntity<UnitEntity> {

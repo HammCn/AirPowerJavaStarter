@@ -9,13 +9,9 @@ import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Set;
 
@@ -28,10 +24,6 @@ import java.util.Set;
 @Accessors(chain = true)
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@DynamicInsert
-@DynamicUpdate
 @Table(name = "role")
 @Description("角色")
 public class RoleEntity extends BaseEntity<RoleEntity> {
