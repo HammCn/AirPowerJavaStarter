@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("user")
 @Description("用户")
-public class UserController extends BaseController<UserEntity, UserService, UserRepository> {
+public class UserController extends BaseController<UserEntity, UserService, UserRepository> implements IUserAction {
     @Autowired
     private AppService appService;
 
@@ -43,7 +43,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("获取我的信息")
     @Permission(authorize = false)
     @PostMapping("getMyInfo")
-    @Filter(UserEntity.WhenGetMyInfo.class)
+    @Filter(WhenGetMyInfo.class)
     public JsonData getMyInfo(Long userId) {
         return jsonData(service.get(userId));
     }
@@ -51,7 +51,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("修改我的信息")
     @Permission(authorize = false)
     @PostMapping("updateMyInfo")
-    public Json updateMyInfo(@RequestBody @Validated({UserEntity.WhenUpdateMyInfo.class}) UserEntity userEntity, Long userId) {
+    public Json updateMyInfo(@RequestBody @Validated(WhenUpdateMyInfo.class) UserEntity userEntity, Long userId) {
         userEntity.setId(userId);
         userEntity.setRoleList(null);
         service.update(userEntity);
@@ -75,7 +75,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("修改我的密码")
     @Permission(authorize = false)
     @PostMapping("updateMyPassword")
-    public Json updateMyPassword(@RequestBody @Validated({UserEntity.WhenUpdateMyPassword.class}) UserEntity userEntity, Long userId) {
+    public Json updateMyPassword(@RequestBody @Validated(WhenUpdateMyPassword.class) UserEntity userEntity, Long userId) {
         userEntity.setId(userId);
         service.modifyUserPassword(userEntity);
         return json("密码修改成功");
@@ -84,7 +84,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("找回密码")
     @Permission(login = false)
     @PostMapping("resetMyPassword")
-    public Json resetMyPassword(@RequestBody @Validated(UserEntity.WhenResetMyPassword.class) UserEntity userEntity) {
+    public Json resetMyPassword(@RequestBody @Validated(WhenResetMyPassword.class) UserEntity userEntity) {
         service.resetMyPassword(userEntity);
         return json("密码重置成功");
     }
@@ -92,7 +92,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("注册账号")
     @Permission(login = false)
     @PostMapping("register")
-    public Json register(@RequestBody @Validated({UserEntity.WhenRegister.class}) UserEntity userEntity) {
+    public Json register(@RequestBody @Validated(WhenRegister.class) UserEntity userEntity) {
         service.register(userEntity);
         return json("注册成功");
     }
@@ -100,14 +100,14 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("账号密码登录")
     @Permission(login = false)
     @PostMapping("login")
-    public JsonData login(@RequestBody @Validated({UserEntity.WhenLogin.class}) UserEntity userEntity, HttpServletResponse httpServletResponse) {
+    public JsonData login(@RequestBody @Validated(WhenLogin.class) UserEntity userEntity, HttpServletResponse httpServletResponse) {
         return doLogin(UserLoginType.VIA_ACCOUNT_PASSWORD, userEntity, httpServletResponse);
     }
 
     @Description("邮箱验证码登录")
     @Permission(login = false)
     @PostMapping("loginViaEmail")
-    public JsonData loginViaEmail(@RequestBody @Validated({UserEntity.WhenLoginViaEmail.class}) UserEntity userEntity, HttpServletResponse httpServletResponse) {
+    public JsonData loginViaEmail(@RequestBody @Validated(WhenLoginViaEmail.class) UserEntity userEntity, HttpServletResponse httpServletResponse) {
         return doLogin(UserLoginType.VIA_EMAIL_CODE, userEntity, httpServletResponse);
     }
 

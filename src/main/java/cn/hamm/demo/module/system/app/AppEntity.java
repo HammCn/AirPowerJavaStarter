@@ -30,7 +30,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Table(name = "app")
 @Description("应用")
-public class AppEntity extends BaseEntity<AppEntity> {
+public class AppEntity extends BaseEntity<AppEntity> implements IAppAction {
     /**
      * <h2>应用Key</h2>
      */
@@ -77,17 +77,5 @@ public class AppEntity extends BaseEntity<AppEntity> {
      */
     @Transient
     private String cookie;
-
-    public interface WhenCode2AccessToken {
-    }
-
-    public interface WhenAccessToken {
-    }
-
-    public interface WhenGetByAppKey {
-    }
-
-    public interface WhenResetSecret {
-    }
 
 }

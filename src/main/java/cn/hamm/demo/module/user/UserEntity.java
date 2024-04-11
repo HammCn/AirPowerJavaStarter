@@ -34,7 +34,7 @@ import java.util.Set;
 @DynamicUpdate
 @Table(name = "user")
 @Description("用户")
-public class UserEntity extends BaseEntity<UserEntity> {
+public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     /**
      * <h2>邮箱(唯一)</h2>
      */
@@ -99,36 +99,6 @@ public class UserEntity extends BaseEntity<UserEntity> {
     @NotBlank(groups = {WhenUpdateMyPassword.class}, message = "原始密码不能为空")
     @Transient
     private String oldPassword;
-
-    /**
-     * ID+密码 邮箱+密码登录
-     */
-    public interface WhenLogin {
-    }
-
-    /**
-     * 邮箱+验证码登录
-     */
-    public interface WhenLoginViaEmail {
-    }
-
-    public interface WhenRegister {
-    }
-
-    public interface WhenResetMyPassword {
-    }
-
-    public interface WhenUpdateMyPassword {
-    }
-
-    public interface WhenUpdateMyInfo {
-    }
-
-    public interface WhenSendEmail {
-    }
-
-    public interface WhenGetMyInfo {
-    }
 
     /**
      * <h2>获取是否超级管理员</h2>

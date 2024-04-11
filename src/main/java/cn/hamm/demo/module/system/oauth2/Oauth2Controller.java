@@ -10,6 +10,7 @@ import cn.hamm.airpower.security.SecurityUtil;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.module.system.app.AppEntity;
 import cn.hamm.demo.module.system.app.AppService;
+import cn.hamm.demo.module.system.app.IAppAction;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
 import cn.hutool.core.util.RandomUtil;
@@ -36,7 +37,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("oauth2")
 @Slf4j
-public class Oauth2Controller extends RootController {
+public class Oauth2Controller extends RootController implements IAppAction {
     @Autowired
     private UserService userService;
 
@@ -110,7 +111,7 @@ public class Oauth2Controller extends RootController {
     @Description("Code换取AccessToken")
     @Permission(login = false)
     @PostMapping("accessToken")
-    public JsonData accessToken(@RequestBody @Validated({AppEntity.WhenCode2AccessToken.class}) AppEntity appEntity) {
+    public JsonData accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) AppEntity appEntity) {
         String code = appEntity.getCode();
         Long userId = userService.getUserIdByOauthAppKeyAndCode(appEntity.getAppKey(), code);
         AppEntity existApp = appService.getByAppKey(appEntity.getAppKey());

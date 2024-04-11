@@ -30,7 +30,7 @@ import java.util.Set;
 @DynamicUpdate
 @Table(name = "role")
 @Description("角色")
-public class RoleEntity extends BaseEntity<RoleEntity> {
+public class RoleEntity extends BaseEntity<RoleEntity> implements IRoleAction {
     /**
      * <h2>角色名称</h2>
      */
@@ -58,15 +58,4 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
     @NotNull(groups = {WhenAuthorizeMenu.class}, message = "请传入授权的权限列表")
     private Set<PermissionEntity> permissionList;
 
-    /**
-     * <h2>当授权菜单时</h2>
-     */
-    public interface WhenAuthorizeMenu {
-    }
-
-    /**
-     * <h2>当授权权限时</h2>
-     */
-    public interface WhenAuthorizePermission {
-    }
 }
