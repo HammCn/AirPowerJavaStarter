@@ -31,17 +31,12 @@ import java.util.Set;
 @Table(name = "role")
 @Description("角色")
 public class RoleEntity extends BaseEntity<RoleEntity> implements IRoleAction {
-    /**
-     * <h2>角色名称</h2>
-     */
     @Description("角色名称")
     @Column(columnDefinition = "varchar(255) default '' comment '角色名称'", unique = true)
     @NotBlank(groups = {WhenUpdate.class, WhenAdd.class}, message = "角色名称不能为空")
     private String name;
 
-    /**
-     * <h2>角色的菜单列表</h2>
-     */
+    @Description("角色的菜单列表")
     @ManyToMany(fetch = FetchType.EAGER)
     @Payload
     @OrderBy("orderNo DESC")
@@ -49,9 +44,7 @@ public class RoleEntity extends BaseEntity<RoleEntity> implements IRoleAction {
     @NotNull(groups = {WhenAuthorizeMenu.class}, message = "请传入授权的菜单列表")
     private Set<MenuEntity> menuList;
 
-    /**
-     * <h2>角色的权限列表</h2>
-     */
+    @Description("角色的权限列表")
     @ManyToMany(fetch = FetchType.EAGER)
     @Payload
     @Exclude(filters = {WhenPayLoad.class})

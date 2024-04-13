@@ -27,9 +27,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "unit")
 @Description("单位")
 public class UnitEntity extends BaseEntity<UnitEntity> {
-    /**
-     * <h2>单位名称</h2>
-     */
     @Description("单位名称")
     @Search(Search.Mode.EQUALS)
     @Column(columnDefinition = "varchar(255) default '' comment '单位名称'", unique = true)

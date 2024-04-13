@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-
 /**
  * <h1>Service</h1>
  *
@@ -37,7 +36,7 @@ import java.util.Objects;
 @Slf4j
 public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> {
     /**
-     * 通过标识获取一个权限
+     * <h2>通过标识获取一个权限</h2>
      *
      * @param identity 权限标识
      * @return 权限
@@ -65,7 +64,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
     }
 
     /**
-     * 初始化所有权限
+     * <h2>初始化所有权限</h2>
      */
     @SuppressWarnings("AlibabaMethodTooLong")
     public final void loadPermission(String packageName) {

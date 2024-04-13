@@ -35,9 +35,6 @@ import java.util.Set;
 @Table(name = "user")
 @Description("用户")
 public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
-    /**
-     * <h2>邮箱(唯一)</h2>
-     */
     @Description("邮箱")
     @Column(columnDefinition = "varchar(255) default '' comment '邮箱'", unique = true)
     @NotBlank(groups = {WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class, WhenAdd.class}, message = "邮箱不能为空")
@@ -46,9 +43,6 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @Search()
     private String email;
 
-    /**
-     * <h2>用户的密码(不返回给前端)</h2>
-     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Description("密码")
     @Column(columnDefinition = "varchar(255) default '' comment '密码'")
@@ -57,45 +51,33 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @Length(min = 6, message = "密码至少6位长度")
     private String password;
 
-    /**
-     * <h2>用户昵称</h2>
-     */
+    @Description("用户昵称")
     @Column(columnDefinition = "varchar(255) default '' comment '昵称'")
     @NotBlank(groups = {WhenUpdate.class, WhenAdd.class, WhenUpdateMyInfo.class}, message = "昵称不能为空")
     @Search()
     private String nickname;
 
-    /**
-     * <h2>密码盐</h2>
-     */
+    @Description("密码盐")
     @JsonIgnore
     @Column(columnDefinition = "varchar(255) default '' comment '密码盐'")
     private String salt;
 
-    /**
-     * <h2>角色列表</h2>
-     */
+    @Description("角色列表")
     @ManyToMany(fetch = FetchType.EAGER)
     @Payload
     @Exclude(filters = {WhenPayLoad.class})
     private Set<RoleEntity> roleList;
 
-    /**
-     * <h2>登录使用的AppKey</h2>
-     */
+    @Description("登录使用的AppKey")
     @Transient
     private String appKey;
 
-    /**
-     * <h2>邮箱验证码</h2>
-     */
+    @Description("邮箱验证码")
     @NotBlank(groups = {WhenRegister.class, WhenUpdateMyPassword.class, WhenResetMyPassword.class}, message = "邮箱验证码不能为空")
     @Transient
     private String code;
 
-    /**
-     * <h2>修改密码时使用的原始密码</h2>
-     */
+    @Description("原始密码")
     @NotBlank(groups = {WhenUpdateMyPassword.class}, message = "原始密码不能为空")
     @Transient
     private String oldPassword;

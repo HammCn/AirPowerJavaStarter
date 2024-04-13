@@ -30,25 +30,17 @@ import java.util.List;
 @Table(name = "permission")
 @Description("权限")
 public class PermissionEntity extends BaseTreeEntity<PermissionEntity> {
-    /**
-     * <h2>权限标识</h2>
-     */
     @Description("权限标识")
     @Column(columnDefinition = "varchar(255) default '' comment '权限标识'", unique = true)
     @NotBlank(groups = {WhenUpdate.class, WhenAdd.class}, message = "权限标识不能为空")
     private String identity;
 
-    /**
-     * <h2>系统权限</h2>
-     */
     @Description("系统权限")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '系统权限'")
     private Boolean isSystem;
 
-    /**
-     * <h2>子菜单</h2>
-     */
+    @Description("子菜单")
     @Transient
     private List<PermissionEntity> children;
 }

@@ -1,6 +1,5 @@
 package cn.hamm.demo.common.interceptor;
 
-
 import cn.hamm.airpower.interceptor.ResponseBodyInterceptor;
 import cn.hamm.demo.module.system.log.LogEntity;
 import cn.hamm.demo.module.system.log.LogService;

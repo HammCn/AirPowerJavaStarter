@@ -16,7 +16,6 @@ import java.util.Objects;
  */
 @Service
 public class MenuService extends BaseService<MenuEntity, MenuRepository> {
-
     @Override
     protected void beforeDelete(long id) {
         QueryRequest<MenuEntity> queryRequest = new QueryRequest<>();

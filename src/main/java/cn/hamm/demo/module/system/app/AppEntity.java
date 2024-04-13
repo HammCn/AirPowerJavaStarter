@@ -31,16 +31,12 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "app")
 @Description("应用")
 public class AppEntity extends BaseEntity<AppEntity> implements IAppAction {
-    /**
-     * <h2>应用Key</h2>
-     */
+    @Description("应用Key")
     @Column(columnDefinition = "varchar(255) default '' comment 'AppKey'", unique = true)
     @NotBlank(groups = {WhenAdd.class, WhenUpdate.class, WhenCode2AccessToken.class}, message = "AppKey必须填写")
     private String appKey;
 
-    /**
-     * <h2>应用密钥</h2>
-     */
+    @Description("应用密钥")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(columnDefinition = "varchar(255) default '' comment 'AppSecret'", unique = true)
     @Null(groups = {WhenAdd.class, WhenUpdate.class}, message = "请不要传入AppSecret")
@@ -48,33 +44,23 @@ public class AppEntity extends BaseEntity<AppEntity> implements IAppAction {
     @Exclude(filters = {WhenGetDetail.class})
     private String appSecret;
 
-    /**
-     * <h2>应用名称</h2>
-     */
+    @Description("应用名称")
     @Search
     @Column(columnDefinition = "varchar(255) default '' comment '应用名称'")
     @NotBlank(groups = {WhenAdd.class, WhenUpdate.class}, message = "应用名称必须填写")
     private String appName;
 
-    /**
-     * <h2>应用地址</h2>
-     */
+    @Description("应用地址")
     @Column(columnDefinition = "varchar(255) default '' comment '应用地址'")
     @NotBlank(groups = {WhenAdd.class, WhenUpdate.class}, message = "应用地址必须填写")
     private String url;
 
-    /**
-     * <h2>临时code</h2>
-     */
     @Description("临时码")
-    @NotBlank(groups = {WhenCode2AccessToken.class})
-    @NotBlank(groups = {WhenAccessToken.class}, message = "Code不能为空")
+    @NotBlank(groups = {WhenCode2AccessToken.class}, message = "Code不能为空")
     @Transient
     private String code;
 
-    /**
-     * <h2>Cookie</h2>
-     */
+    @Description("Cookie")
     @Transient
     private String cookie;
 

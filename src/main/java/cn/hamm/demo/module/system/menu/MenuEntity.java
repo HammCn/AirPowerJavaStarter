@@ -27,31 +27,19 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "menu")
 @Description("菜单")
 public class MenuEntity extends BaseTreeEntity<MenuEntity> {
-    /**
-     * <h2>菜单路径</h2>
-     */
     @Description("菜单路径")
     @NotBlank(groups = {WhenUpdate.class, WhenAdd.class}, message = "菜单路径不能为空")
     @Column(columnDefinition = "varchar(255) default '' comment '菜单路径'")
     private String path;
 
-    /**
-     * <h2>组件路径</h2>
-     */
     @Description("组件路径")
     @Column(columnDefinition = "varchar(255) default '' comment '组件路径'")
     private String component;
 
-    /**
-     * <h2>菜单图标</h2>
-     */
     @Description("菜单图标")
     @Column(columnDefinition = "varchar(255) default '' comment '菜单图标'")
     private String icon;
 
-    /**
-     * <h2>排序号</h2>
-     */
     @Description("排序号")
     @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '排序号'")
     @Exclude(filters = {WhenPayLoad.class})

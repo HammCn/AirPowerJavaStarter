@@ -5,11 +5,10 @@ import cn.hamm.airpower.root.RootEntity;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 
-
 /**
- * <h1>应用实体基类</h1>
+ * <h1>Entity</h1>
  *
- * @author hamm
+ * @author Hamm
  */
 @MappedSuperclass
 @Getter

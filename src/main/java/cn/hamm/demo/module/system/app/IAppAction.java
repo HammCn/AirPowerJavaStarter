@@ -6,16 +6,22 @@ package cn.hamm.demo.module.system.app;
  * @author Hamm
  */
 public interface IAppAction {
+    /**
+     * <h2>Code换AccessToken</h2>
+     */
 
     interface WhenCode2AccessToken {
     }
 
-    interface WhenAccessToken {
-    }
-
+    /**
+     * <h2>应用Key查询应用</h2>
+     */
     interface WhenGetByAppKey {
     }
 
+    /**
+     * <h2>重置密钥</h2>
+     */
     interface WhenResetSecret {
     }
 }

@@ -31,37 +31,30 @@ import java.util.Objects;
  */
 @Service
 public class UserService extends BaseService<UserEntity, UserRepository> {
-    @Autowired
-    private SecurityUtil securityUtil;
-
-    @Autowired
-    private TreeUtil treeUtil;
-
     /**
      * <h2>邮箱验证码key</h2>
      */
     private static final String REDIS_EMAIL_CODE_KEY = "email_code_";
-
     /**
      * <h2>OAUTH存储的key前缀</h2>
      */
     private static final String OAUTH_CODE_KEY = "oauth_code_";
-
     /**
      * <h2>COOKIE前缀</h2>
      */
     private static final String COOKIE_CODE_KEY = "cookie_code_";
-
     /**
      * <h3>Code缓存 包含了 Oauth2的 Code 和 验证码的 Code</h3>
      */
     private static final int CACHE_CODE_EXPIRE_SECOND = 300;
-
     /**
      * <h2>Cookie缓存</h2>
      */
     private static final int CACHE_COOKIE_EXPIRE_SECOND = 86400;
-
+    @Autowired
+    private SecurityUtil securityUtil;
+    @Autowired
+    private TreeUtil treeUtil;
     @Autowired
     private MenuService menuService;
 
@@ -129,23 +122,23 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
      * <h2>修改密码</h2>
      *
-     * @param userEntity vo
+     * @param user 用户信息
      */
-    public void modifyUserPassword(UserEntity userEntity) {
-        UserEntity existUser = get(userEntity.getId());
+    public void modifyUserPassword(UserEntity user) {
+        UserEntity existUser = get(user.getId());
         String code = getEmailCode(existUser.getEmail());
-        Result.PARAM_INVALID.whenNotEquals(code, userEntity.getCode(), "验证码输入错误");
-        String oldPassword = userEntity.getOldPassword();
+        Result.PARAM_INVALID.whenNotEquals(code, user.getCode(), "验证码输入错误");
+        String oldPassword = user.getOldPassword();
         Result.PARAM_INVALID.whenNotEqualsIgnoreCase(
                 PasswordUtil.encode(oldPassword, existUser.getSalt()),
                 existUser.getPassword(),
                 "原密码输入错误，修改密码失败"
         );
         String salt = RandomUtil.randomString(4);
-        userEntity.setSalt(salt);
-        userEntity.setPassword(PasswordUtil.encode(userEntity.getPassword(), salt));
+        user.setSalt(salt);
+        user.setPassword(PasswordUtil.encode(user.getPassword(), salt));
         removeEmailCodeCache(existUser.getEmail());
-        update(userEntity);
+        update(user);
     }
 
     /**
