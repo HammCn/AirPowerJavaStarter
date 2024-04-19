@@ -7,6 +7,7 @@ import cn.hamm.airpower.security.Permission;
 import cn.hamm.demo.module.user.IUserAction;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ public class MailController extends RootController implements IUserAction {
     @Description("发送邮件")
     @Permission(login = false)
     @PostMapping("send")
-    public Json send(@RequestBody @Validated(WhenSendEmail.class) UserEntity userEntity) {
+    public Json send(@RequestBody @Validated(WhenSendEmail.class) UserEntity userEntity) throws MessagingException {
         userService.sendMail(userEntity.getEmail());
         return json("发送成功");
     }

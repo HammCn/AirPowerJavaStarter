@@ -1,13 +1,13 @@
 package cn.hamm.demo;
 
 import cn.hamm.airpower.security.PasswordUtil;
+import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.module.role.RoleService;
 import cn.hamm.demo.module.system.menu.MenuService;
 import cn.hamm.demo.module.system.permission.PermissionService;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
-import cn.hutool.core.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;

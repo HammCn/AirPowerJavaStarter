@@ -16,11 +16,11 @@ import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.system.permission.PermissionService;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
-import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -87,7 +87,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             userId = securityUtil.getUserIdFromAccessToken(accessToken);
             platform = request.getHeader(Constant.APP_PLATFORM_HEADER);
             Description description = method.getAnnotation(Description.class);
-            if (Objects.nonNull(description) && !StrUtil.isAllBlank(description.value())) {
+            if (Objects.nonNull(description) && StringUtils.hasText(description.value())) {
                 action = description.value() + "(" + action + ")";
             }
         } catch (Exception ignored) {

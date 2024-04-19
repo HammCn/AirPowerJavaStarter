@@ -8,14 +8,14 @@ import cn.hamm.airpower.result.json.JsonData;
 import cn.hamm.airpower.security.CookieUtil;
 import cn.hamm.airpower.security.Permission;
 import cn.hamm.airpower.security.SecurityUtil;
+import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.system.app.AppEntity;
 import cn.hamm.demo.module.system.app.AppService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -143,12 +143,12 @@ public class UserController extends BaseController<UserEntity, UserService, User
         Long userId = securityUtil.getUserIdFromAccessToken(accessToken);
 
         // 存储Cookies
-        String cookieString = RandomUtil.randomString(32);
+        String cookieString = RandomUtil.randomString();
         service.saveCookie(userId, cookieString);
         response.addCookie(cookieUtil.getAuthorizeCookie(cookieString));
 
         String appKey = userEntity.getAppKey();
-        if (StrUtil.isAllBlank(appKey)) {
+        if (!StringUtils.hasText(appKey)) {
             return jsonData(accessToken, "登录成功,请存储你的访问凭证");
         }
 
@@ -157,7 +157,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         Result.PARAM_INVALID.whenNull(appEntity, "登录失败,错误的应用ID");
 
         // 生成临时身份令牌code
-        String code = RandomUtil.randomString(32);
+        String code = RandomUtil.randomString();
         appEntity.setCode(code);
 
         // 缓存临时身份令牌code

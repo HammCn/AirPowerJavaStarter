@@ -6,6 +6,7 @@ import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.security.PasswordUtil;
 import cn.hamm.airpower.security.SecurityUtil;
 import cn.hamm.airpower.util.EmailUtil;
+import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.airpower.util.TreeUtil;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.common.exception.CustomResult;
@@ -15,7 +16,7 @@ import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.menu.MenuService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.system.permission.PermissionService;
-import cn.hutool.core.util.RandomUtil;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -51,15 +52,21 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * <h2>Cookie缓存</h2>
      */
     private static final int CACHE_COOKIE_EXPIRE_SECOND = 86400;
+
     @Autowired
     private SecurityUtil securityUtil;
+
     @Autowired
     private TreeUtil treeUtil;
+
     @Autowired
     private MenuService menuService;
 
     @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    private EmailUtil emailUtil;
 
     /**
      * <h2>获取登录用户的菜单列表</h2>
@@ -172,11 +179,11 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      *
      * @param email 邮箱
      */
-    public void sendMail(String email) {
+    public void sendMail(String email) throws MessagingException {
         CustomResult.EMAIL_SEND_BUSY.when(hasEmailCodeInRedis(email));
         String code = RandomUtil.randomNumbers(6);
         setCodeToRedis(email, code);
-        EmailUtil.sendCode(email, "你收到一个邮箱验证码", code);
+        emailUtil.sendCode(email, "你收到一个邮箱验证码", code, "DEMO");
     }
 
     /**

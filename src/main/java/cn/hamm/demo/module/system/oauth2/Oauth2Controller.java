@@ -7,19 +7,19 @@ import cn.hamm.airpower.result.json.JsonData;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.security.Permission;
 import cn.hamm.airpower.security.SecurityUtil;
+import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.module.system.app.AppEntity;
 import cn.hamm.demo.module.system.app.AppService;
 import cn.hamm.demo.module.system.app.IAppAction;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -59,7 +59,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
             HttpServletResponse response
     ) {
         String appKey = request.getParameter("appKey");
-        if (StrUtil.isAllBlank(appKey)) {
+        if (!StringUtils.hasText(appKey)) {
             return showError("Invalid appKey!");
         }
         AppEntity appEntity;
@@ -69,7 +69,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
             return showError("App(" + appKey + ") not found!");
         }
         String redirectUri = request.getParameter("redirectUri");
-        if (StrUtil.isAllBlank(redirectUri)) {
+        if (!StringUtils.hasText(redirectUri)) {
             return showError("RedirectUri missing!");
         }
         Cookie[] cookies = request.getCookies();
@@ -84,7 +84,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
                 break;
             }
         }
-        if (StrUtil.isAllBlank(cookieString)) {
+        if (!StringUtils.hasText(cookieString)) {
             // 没有cookie
             return redirectLogin(response, appKey, redirectUri);
         }
@@ -94,7 +94,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
             return redirectLogin(response, appKey, redirectUri);
         }
         UserEntity userEntity = userService.get(userId);
-        String code = RandomUtil.randomString(32);
+        String code = RandomUtil.randomString();
         appEntity.setCode(code).setAppKey(appKey);
         userService.saveOauthCode(userEntity.getId(), appEntity);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
