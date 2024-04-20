@@ -1,4 +1,8 @@
 spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
   datasource:
     url: jdbc:mysql://localhost:3306/airpower?allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: your_database_username
@@ -9,16 +13,16 @@ spring:
       port: your_redis_port_default_6379
       password: your_redis_password
   mail:
-    host: your_email_host
-    port: your_email_port
+    host: smtp.exmail.qq.com
+    port: 465
     username: your_email@your_domain.com
-    password: your_password
+    password: your_email_password
 airpower:
   mqtt:
     host: your_mqtt_host_default_127.0.0.1
     port: your_mqtt_port_default_1883
     user: your_mqtt_username
     pass: your_mqtt_password
-
+  enable-document: true
 app:
-  loginUrl: "https://service.hamm.cn/login"
+  loginUrl: "http://localhost:3000/login"

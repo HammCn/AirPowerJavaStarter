@@ -21,14 +21,4 @@ public class AppConfig {
      * <h2>登录地址 用于Oauth2</h2>
      */
     private String loginUrl;
-
-    /**
-     * <h2>初始化数据</h2>
-     */
-    private boolean initData = false;
-
-    /**
-     * <h2>Influx配置</h2>
-     */
-    private InfluxConfig influxdb = new InfluxConfig();
 }
