@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * <h1>Tree Entity</h1>
  *
- * @author Hamm
+ * @author Hamm.cn
  */
 @MappedSuperclass
 @Getter

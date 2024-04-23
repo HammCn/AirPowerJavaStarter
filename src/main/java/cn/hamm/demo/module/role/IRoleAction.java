@@ -3,7 +3,7 @@ package cn.hamm.demo.module.role;
 /**
  * <h1>角色行为</h1>
  *
- * @author Hamm
+ * @author Hamm.cn
  */
 public interface IRoleAction {
     /**

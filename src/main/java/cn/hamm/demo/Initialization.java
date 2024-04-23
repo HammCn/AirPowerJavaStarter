@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * <h1>初始化</h1>
  *
- * @author hamm
+ * @author Hamm.cn
  */
 @Component
 public class Initialization implements CommandLineRunner {

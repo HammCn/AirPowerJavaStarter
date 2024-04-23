@@ -8,7 +8,7 @@ import lombok.Getter;
 /**
  * <h1>Entity</h1>
  *
- * @author Hamm
+ * @author Hamm.cn
  */
 @MappedSuperclass
 @Getter

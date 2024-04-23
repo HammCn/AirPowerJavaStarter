@@ -3,7 +3,7 @@ package cn.hamm.demo.module.user;
 /**
  * <h1>用户行为</h1>
  *
- * @author Hamm
+ * @author Hamm.cn
  */
 public interface IUserAction {
 

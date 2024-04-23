@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 /**
  * <h1>Repository</h1>
  *
- * @author Hamm
+ * @author Hamm.cn
  */
 @Repository
 public interface MenuRepository extends BaseRepository<MenuEntity> {

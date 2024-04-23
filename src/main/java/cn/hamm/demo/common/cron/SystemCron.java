@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * <h1>系统定时任务</h1>
  *
- * @author hamm
+ * @author Hamm.cn
  */
 @Component
 public class SystemCron {

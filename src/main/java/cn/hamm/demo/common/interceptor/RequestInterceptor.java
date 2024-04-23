@@ -28,7 +28,7 @@ import java.util.Objects;
 /**
  * <h1>权限拦截器</h1>
  *
- * @author Hamm
+ * @author Hamm.cn
  */
 @Component
 public class RequestInterceptor extends AbstractRequestInterceptor {
