@@ -10,6 +10,7 @@ import cn.hamm.airpower.security.AccessUtil;
 import cn.hamm.airpower.util.ReflectUtil;
 import cn.hamm.demo.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -56,7 +57,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
     }
 
     @Override
-    protected List<PermissionEntity> afterGetList(List<PermissionEntity> list) {
+    protected List<PermissionEntity> afterGetList(@NotNull List<PermissionEntity> list) {
         for (PermissionEntity item : list) {
             item.excludeBaseData();
         }
@@ -170,6 +171,9 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
 
                     PostMapping postMapping = ReflectUtil.getAnnotation(PostMapping.class, method);
                     RequestMapping requestMapping = ReflectUtil.getAnnotation(RequestMapping.class, method);
+                    if (Objects.isNull(postMapping) && Objects.isNull(requestMapping)) {
+                        continue;
+                    }
                     if (Objects.nonNull(postMapping) && postMapping.value().length > 0) {
                         subIdentity += postMapping.value()[0];
                     }

@@ -14,6 +14,7 @@ import cn.hamm.demo.module.system.app.AppEntity;
 import cn.hamm.demo.module.system.app.AppService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -126,7 +127,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
      * @param response      响应的请求
      * @return JsonData
      */
-    private JsonData doLogin(UserLoginType userLoginType, UserEntity userEntity, HttpServletResponse response) {
+    private JsonData doLogin(@NotNull UserLoginType userLoginType, UserEntity userEntity, HttpServletResponse response) {
         String accessToken = "";
         switch (userLoginType) {
             case VIA_ACCOUNT_PASSWORD:

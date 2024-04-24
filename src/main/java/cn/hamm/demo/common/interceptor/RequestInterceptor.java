@@ -18,6 +18,7 @@ import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -77,7 +78,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
     }
 
     @Override
-    protected void beforeHandleRequest(HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
+    protected void beforeHandleRequest(@NotNull HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
         String accessToken = request.getHeader(globalConfig.getAuthorizeHeader());
         Long userId = null;
         int appVersion = request.getIntHeader(Constant.APP_VERSION_HEADER);

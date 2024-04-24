@@ -17,6 +17,7 @@ import cn.hamm.demo.module.system.menu.MenuService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.system.permission.PermissionService;
 import jakarta.mail.MessagingException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -131,7 +132,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      *
      * @param user 用户信息
      */
-    public void modifyUserPassword(UserEntity user) {
+    public void modifyUserPassword(@NotNull UserEntity user) {
         UserEntity existUser = get(user.getId());
         String code = getEmailCode(existUser.getEmail());
         Result.PARAM_INVALID.whenNotEquals(code, user.getCode(), "验证码输入错误");
@@ -162,7 +163,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      *
      * @param userEntity 用户实体
      */
-    public void resetMyPassword(UserEntity userEntity) {
+    public void resetMyPassword(@NotNull UserEntity userEntity) {
         String code = getEmailCode(userEntity.getEmail());
         Result.PARAM_INVALID.whenNotEqualsIgnoreCase(code, userEntity.getCode(), "邮箱验证码不一致");
         UserEntity existUser = repository.getByEmail(userEntity.getEmail());
@@ -192,7 +193,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param userId    用户ID
      * @param appEntity 保存的应用信息
      */
-    public void saveOauthCode(Long userId, AppEntity appEntity) {
+    public void saveOauthCode(Long userId, @NotNull AppEntity appEntity) {
         redisUtil.set(getAppCodeKey(appEntity.getAppKey(), appEntity.getCode()), userId, CACHE_CODE_EXPIRE_SECOND);
     }
 
@@ -260,7 +261,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param userEntity 用户实体
      * @return AccessToken
      */
-    public String login(UserEntity userEntity) {
+    public String login(@NotNull UserEntity userEntity) {
         UserEntity existUser = null;
         if (Objects.nonNull(userEntity.getId())) {
             // ID登录
@@ -285,7 +286,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param userEntity 用户实体
      * @return AccessToken
      */
-    public String loginViaEmail(UserEntity userEntity) {
+    public String loginViaEmail(@NotNull UserEntity userEntity) {
         String code = getEmailCode(userEntity.getEmail());
         Result.PARAM_INVALID.whenNotEquals(code, userEntity.getCode(), "邮箱验证码不正确");
         UserEntity existUser = repository.getByEmail(userEntity.getEmail());
@@ -298,7 +299,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      *
      * @param userEntity 用户实体
      */
-    public void register(UserEntity userEntity) {
+    public void register(@NotNull UserEntity userEntity) {
         // 获取发送的验证码
         String code = getEmailCode(userEntity.getEmail());
         Result.PARAM_INVALID.whenNotEquals(code, userEntity.getCode(), "邮箱验证码不正确");
@@ -354,7 +355,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     @Override
-    protected UserEntity beforeAdd(UserEntity user) {
+    protected UserEntity beforeAdd(@NotNull UserEntity user) {
         UserEntity existUser = repository.getByEmail(user.getEmail());
         Result.FORBIDDEN_EXIST.whenNotNull(existUser, "邮箱已经存在，请勿重复添加用户");
         if (!StringUtils.hasLength(user.getPassword())) {
