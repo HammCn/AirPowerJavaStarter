@@ -1,7 +1,7 @@
 package cn.hamm.demo.base;
 
+import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.root.RootEntityController;
-import cn.hamm.airpower.security.Permission;
 
 /**
  * <h1>Controller</h1>

@@ -1,7 +1,7 @@
 package cn.hamm.demo.module.role;
 
 import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.result.json.Json;
+import cn.hamm.airpower.model.json.Json;
 import cn.hamm.demo.base.BaseController;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

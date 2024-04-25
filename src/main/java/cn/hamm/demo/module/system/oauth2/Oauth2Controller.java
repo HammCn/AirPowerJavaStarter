@@ -2,7 +2,7 @@ package cn.hamm.demo.module.system.oauth2;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.config.CookieConfig;
-import cn.hamm.airpower.result.Result;
+import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.result.json.JsonData;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.security.Permission;
@@ -47,13 +47,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
     private AppService appService;
 
     @Autowired
-    private SecurityUtil securityUtil;
-
-    @Autowired
     private AppConfig appConfig;
-
-    @Autowired
-    private CookieConfig cookieConfig;
 
     @GetMapping("authorize")
     public ModelAndView index(
@@ -81,7 +75,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
         }
         String cookieString = null;
         for (Cookie c : cookies) {
-            if (cookieConfig.getAuthCookieName().equals(c.getName())) {
+            if (A.getAuthCookieName().equals(c.getName())) {
                 cookieString = c.getValue();
                 break;
             }

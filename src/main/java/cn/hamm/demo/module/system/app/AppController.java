@@ -1,10 +1,10 @@
 package cn.hamm.demo.module.system.app;
 
 import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.response.Filter;
-import cn.hamm.airpower.result.json.JsonData;
+import cn.hamm.airpower.annotation.Filter;
+import cn.hamm.airpower.annotation.Permission;
+import cn.hamm.airpower.model.json.JsonData;
 import cn.hamm.airpower.root.RootEntity;
-import cn.hamm.airpower.security.Permission;
 import cn.hamm.demo.base.BaseController;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

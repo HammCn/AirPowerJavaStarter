@@ -1,7 +1,7 @@
 package cn.hamm.demo.module.system.status;
 
 import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.result.Result;
+import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.result.json.JsonData;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.security.Permission;

@@ -1,7 +1,6 @@
 package cn.hamm.demo;
 
-import cn.hamm.airpower.security.PasswordUtil;
-import cn.hamm.airpower.util.RandomUtil;
+import cn.hamm.airpower.util.AirUtil;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.user.UserEntity;
 import org.springframework.boot.CommandLineRunner;
@@ -23,11 +22,11 @@ public class Initialization implements CommandLineRunner {
         if (Objects.nonNull(userEntity)) {
             return;
         }
-        String salt = RandomUtil.randomString(4);
+        String salt = AirUtil.getRandomUtil().randomString(4);
         Services.getUserService().add(new UserEntity()
                 .setNickname("Hamm")
                 .setEmail("admin@hamm.cn")
-                .setPassword(PasswordUtil.encode("Aa123456", salt))
+                .setPassword(AirUtil.getPasswordUtil().encode("Aa123456", salt))
                 .setSalt(salt)
                 .setRemark("超级管理员,请勿数据库暴力直接删除"));
         System.out.println("---------------------------------");
