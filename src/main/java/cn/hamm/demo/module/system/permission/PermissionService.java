@@ -56,7 +56,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
     }
 
     @Override
-    protected List<PermissionEntity> afterGetList(@NotNull List<PermissionEntity> list) {
+    protected @NotNull List<PermissionEntity> afterGetList(@NotNull List<PermissionEntity> list) {
         for (PermissionEntity item : list) {
             item.excludeBaseData();
         }

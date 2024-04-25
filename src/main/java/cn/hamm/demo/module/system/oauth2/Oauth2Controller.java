@@ -1,13 +1,12 @@
 package cn.hamm.demo.module.system.oauth2;
 
 import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.config.CookieConfig;
+import cn.hamm.airpower.annotation.Permission;
+import cn.hamm.airpower.config.AirConfig;
 import cn.hamm.airpower.enums.Result;
-import cn.hamm.airpower.result.json.JsonData;
+import cn.hamm.airpower.model.json.JsonData;
 import cn.hamm.airpower.root.RootController;
-import cn.hamm.airpower.security.Permission;
-import cn.hamm.airpower.security.SecurityUtil;
-import cn.hamm.airpower.util.RandomUtil;
+import cn.hamm.airpower.util.AirUtil;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.module.system.app.AppEntity;
 import cn.hamm.demo.module.system.app.AppService;
@@ -75,7 +74,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
         }
         String cookieString = null;
         for (Cookie c : cookies) {
-            if (A.getAuthCookieName().equals(c.getName())) {
+            if (AirConfig.getCookieConfig().getAuthCookieName().equals(c.getName())) {
                 cookieString = c.getValue();
                 break;
             }
@@ -90,7 +89,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
             return redirectLogin(response, appKey, redirectUri);
         }
         UserEntity userEntity = userService.get(userId);
-        String code = RandomUtil.randomString();
+        String code = AirUtil.getRandomUtil().randomString();
         appEntity.setCode(code).setAppKey(appKey);
         userService.saveOauthCode(userEntity.getId(), appEntity);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
@@ -113,7 +112,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
         AppEntity existApp = appService.getByAppKey(appEntity.getAppKey());
         Result.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), appEntity.getAppSecret(), "应用秘钥错误");
         userService.removeOauthCode(existApp.getAppKey(), code);
-        String accessToken = securityUtil.createAccessToken(userId);
+        String accessToken = AirUtil.getSecurityUtil().createAccessToken(userId);
         return new JsonData(accessToken);
     }
 

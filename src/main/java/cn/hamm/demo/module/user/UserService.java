@@ -341,7 +341,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     @Override
-    protected UserEntity beforeAdd(@NotNull UserEntity user) {
+    protected @NotNull UserEntity beforeAdd(@NotNull UserEntity user) {
         UserEntity existUser = repository.getByEmail(user.getEmail());
         Result.FORBIDDEN_EXIST.whenNotNull(existUser, "邮箱已经存在，请勿重复添加用户");
         if (!StringUtils.hasLength(user.getPassword())) {
