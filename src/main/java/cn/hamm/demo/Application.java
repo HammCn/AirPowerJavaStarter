@@ -1,8 +1,7 @@
 package cn.hamm.demo;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
@@ -11,8 +10,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
  *
  * @author Hamm.cn
  */
-@EnableAutoConfiguration
-@ComponentScan({"cn.hamm.airpower", "cn.hamm.demo"})
+@SpringBootApplication
 @EnableWebSocket
 @EnableScheduling
 public class Application {

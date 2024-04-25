@@ -7,6 +7,7 @@ import cn.hamm.airpower.request.RequestUtil;
 import cn.hamm.airpower.result.Result;
 import cn.hamm.airpower.security.AccessUtil;
 import cn.hamm.airpower.security.SecurityUtil;
+import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.common.config.Constant;
 import cn.hamm.demo.module.role.RoleEntity;
@@ -61,11 +62,11 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
      */
     @Override
     public boolean checkPermissionAccess(Long userId, String permissionIdentity, HttpServletRequest request) {
-        UserEntity existUser = userService.get(userId);
+        UserEntity existUser = Services.getUserService().get(userId);
         if (existUser.isRootUser()) {
             return true;
         }
-        PermissionEntity needPermission = permissionService.getPermissionByIdentity(permissionIdentity);
+        PermissionEntity needPermission = Services.getPermissionService().getPermissionByIdentity(permissionIdentity);
         for (RoleEntity role : existUser.getRoleList()) {
             for (PermissionEntity permission : role.getPermissionList()) {
                 if (needPermission.getId().equals(permission.getId())) {
