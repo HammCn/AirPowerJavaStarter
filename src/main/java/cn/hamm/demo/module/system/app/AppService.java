@@ -43,9 +43,9 @@ public class AppService extends BaseService<AppEntity, AppRepository> {
 
     @Override
     protected @NotNull AppEntity beforeSaveToDatabase(@NotNull AppEntity app) {
-        if (Objects.isNull(app.getAppSecret())) {
-            app.setAppSecret(AirUtil.getRandomUtil().randomString().toUpperCase());
-        }
-        return app;
+        return app.setAppSecret(Objects.requireNonNullElse(
+                app.getAppSecret(),
+                AirUtil.getRandomUtil().randomString().toUpperCase()
+        ));
     }
 }

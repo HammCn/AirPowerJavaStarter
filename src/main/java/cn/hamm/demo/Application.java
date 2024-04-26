@@ -18,7 +18,6 @@ public class Application {
         SpringApplication.run(Application.class, args);
         System.out.println("---------------------------------");
         System.out.println("   Hi Guy, Service is running!   ");
-        System.out.println("   URL:  http://127.0.0.1:8080   ");
         System.out.println("---------------------------------");
     }
 }

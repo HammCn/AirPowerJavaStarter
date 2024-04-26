@@ -5,7 +5,7 @@ package cn.hamm.demo.common.config;
  *
  * @author Hamm.cn
  */
-public class Constant {
+public class AppConstant {
     /**
      * <h2>版本号key</h2>
      */

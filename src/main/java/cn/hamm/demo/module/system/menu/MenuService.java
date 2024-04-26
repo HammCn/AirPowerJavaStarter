@@ -3,6 +3,7 @@ package cn.hamm.demo.module.system.menu;
 import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.model.query.QueryRequest;
+import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.demo.base.BaseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -28,18 +29,17 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
     @Override
     protected <T extends QueryRequest<MenuEntity>> @NotNull T beforeGetList(@NotNull T sourceRequestData) {
         MenuEntity filter = sourceRequestData.getFilter();
-        if (Objects.isNull(sourceRequestData.getSort())) {
-            sourceRequestData.setSort(new Sort().setField("orderNo"));
-        }
+        sourceRequestData.setSort(Objects.requireNonNullElse(
+                sourceRequestData.getSort(),
+                new Sort().setField("orderNo")
+        ));
         sourceRequestData.setFilter(filter);
         return sourceRequestData;
     }
 
     @Override
     protected @NotNull List<MenuEntity> afterGetList(@NotNull List<MenuEntity> list) {
-        for (MenuEntity item : list) {
-            item.excludeBaseData();
-        }
+        list.forEach(RootEntity::excludeBaseData);
         return list;
     }
 

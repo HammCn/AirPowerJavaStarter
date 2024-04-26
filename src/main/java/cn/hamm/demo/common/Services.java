@@ -52,13 +52,4 @@ public class Services {
         Services.permissionService = permissionService;
         Services.menuService = menuService;
     }
-
-    /**
-     * <h2>获取当前的环境变量名称</h2>
-     *
-     * @return 当前的环境变量名称
-     */
-    public static String getCurrentEnvironment() {
-        return environment.getActiveProfiles()[0];
-    }
 }

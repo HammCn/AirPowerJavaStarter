@@ -1,12 +1,14 @@
 package cn.hamm.demo.module.system.permission;
 
 import cn.hamm.airpower.annotation.Extends;
+import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.enums.Api;
 import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.model.Access;
 import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.root.RootEntityController;
 import cn.hamm.airpower.util.AirUtil;
+import cn.hamm.demo.Application;
 import cn.hamm.demo.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +37,10 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> {
+
+    public static final String CONTROLLER_CLASS_PATH = "/**/*Controller.class";
+    public static final String CONTROLLER_SUFFIX = "Controller";
+
     /**
      * <h2>通过标识获取一个权限</h2>
      *
@@ -67,12 +73,12 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
      * <h2>初始化所有权限</h2>
      */
     @SuppressWarnings("AlibabaMethodTooLong")
-    public final void loadPermission(String packageName) {
+    public final void loadPermission() {
         // 遍历所有接口
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                    ClassUtils.convertClassNameToResourcePath(packageName) + "/**/*Controller.class";
+                    ClassUtils.convertClassNameToResourcePath(Application.class.getPackageName()) + CONTROLLER_CLASS_PATH;
             Resource[] resources = resourcePatternResolver.getResources(pattern);
             MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
@@ -90,7 +96,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 }
 
                 String customClassName = AirUtil.getReflectUtil().getDescription(clazz);
-                String identity = clazz.getSimpleName().replaceAll("Controller", "");
+                String identity = clazz.getSimpleName().replaceAll(CONTROLLER_SUFFIX, Constant.EMPTY_STRING);
                 PermissionEntity permissionEntity = getPermissionByIdentity(identity);
                 if (Objects.isNull(permissionEntity)) {
                     permissionEntity = new PermissionEntity()
@@ -110,7 +116,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
 
                 // 读取类的RequestMapping
                 RequestMapping requestMappingClass = clazz.getAnnotation(RequestMapping.class);
-                String pathClass = "";
+                String pathClass = Constant.EMPTY_STRING;
                 if (Objects.nonNull(requestMappingClass) && requestMappingClass.value().length > 0) {
                     // 标了RequestMapping
                     pathClass = requestMappingClass.value()[0];
@@ -121,52 +127,18 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                     Extends extendsApi = clazz.getAnnotation(Extends.class);
                     if (Objects.nonNull(extendsApi)) {
                         List<Api> apis = Arrays.asList(extendsApi.exclude());
-                        switch (method.getName()) {
-                            case "add":
-                                if (apis.contains(Api.Add)) {
-                                    continue;
-                                }
-                                break;
-                            case "delete":
-                                if (apis.contains(Api.Delete)) {
-                                    continue;
-                                }
-                                break;
-                            case "disable":
-                                if (apis.contains(Api.Disable)) {
-                                    continue;
-                                }
-                                break;
-                            case "enable":
-                                if (apis.contains(Api.Enable)) {
-                                    continue;
-                                }
-                                break;
-                            case "getDetail":
-                                if (apis.contains(Api.GetDetail)) {
-                                    continue;
-                                }
-                                break;
-                            case "getList":
-                                if (apis.contains(Api.GetList)) {
-                                    continue;
-                                }
-                                break;
-                            case "getPage":
-                                if (apis.contains(Api.GetPage)) {
-                                    continue;
-                                }
-                                break;
-                            case "update":
-                                if (apis.contains(Api.Update)) {
-                                    continue;
-                                }
-                                break;
-                            default:
+                        Api current;
+                        try {
+                            current = Api.valueOf(method.getName());
+                        } catch (Exception ignored) {
+                            continue;
+                        }
+                        if (apis.contains(current)) {
+                            continue;
                         }
                     }
                     String customMethodName = AirUtil.getReflectUtil().getDescription(method);
-                    String subIdentity = (!"".equalsIgnoreCase(pathClass) ? (pathClass + "_") : "");
+                    String subIdentity = (!Constant.EMPTY_STRING.equalsIgnoreCase(pathClass) ? (pathClass + Constant.UNDERLINE) : Constant.EMPTY_STRING);
 
                     PostMapping postMapping = AirUtil.getReflectUtil().getAnnotation(PostMapping.class, method);
                     RequestMapping requestMapping = AirUtil.getReflectUtil().getAnnotation(RequestMapping.class, method);
@@ -187,13 +159,13 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                     PermissionEntity subPermission = getPermissionByIdentity(subIdentity);
                     if (Objects.isNull(subPermission)) {
                         subPermission = new PermissionEntity()
-                                .setName(customClassName + "-" + customMethodName)
+                                .setName(customClassName + Constant.LINE + customMethodName)
                                 .setIdentity(subIdentity)
                                 .setIsSystem(true)
                                 .setParentId(permissionEntity.getId());
                         add(subPermission);
                     } else {
-                        subPermission.setName(customClassName + "-" + customMethodName)
+                        subPermission.setName(customClassName + Constant.LINE + customMethodName)
                                 .setIdentity(subIdentity)
                                 .setIsSystem(true)
                                 .setParentId(permissionEntity.getId());

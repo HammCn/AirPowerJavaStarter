@@ -6,6 +6,7 @@ import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.model.json.JsonData;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.AirUtil;
+import cn.hamm.demo.Application;
 import cn.hamm.demo.common.exception.CustomResult;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -67,10 +68,9 @@ public class StatusController extends RootController {
         List<Map<String, Object>> resultList = new ArrayList<>();
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-            String enumPackage = "cn.hamm";
             String resourcePattern = "/**/*.class";
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                    ClassUtils.convertClassNameToResourcePath(enumPackage) + resourcePattern;
+                    ClassUtils.convertClassNameToResourcePath(Application.class.getPackageName()) + resourcePattern;
             Resource[] resources = resourcePatternResolver.getResources(pattern);
             MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 

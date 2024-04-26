@@ -36,11 +36,11 @@ public class Initialization implements CommandLineRunner {
     public void run(String... args) {
         // 开始加载数据，请注意，以下数据请确保不会重复加载！！！
         loadUser();
-        Services.getPermissionService().loadPermission("cn.hamm.demo");
+        Services.getPermissionService().loadPermission();
         Services.getMenuService().loadMenu();
         // 所有数据检查完毕
         String[] localEnvList = {"hamm"};
-        if (Arrays.stream(localEnvList).toList().contains(Services.getCurrentEnvironment())) {
+        if (Arrays.stream(localEnvList).toList().contains(AirUtil.getCurrentEnvironment())) {
             // 其他需要在本地初始化的数据
         }
     }
