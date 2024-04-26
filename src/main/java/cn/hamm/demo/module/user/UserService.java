@@ -1,5 +1,6 @@
 package cn.hamm.demo.module.user;
 
+import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.model.query.QueryRequest;
@@ -321,7 +322,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      */
     private String getEmailCode(String email) {
         Object code = AirUtil.getRedisUtil().get(REDIS_EMAIL_CODE_KEY + email);
-        return Objects.isNull(code) ? "" : code.toString();
+        return Objects.isNull(code) ? Constant.EMPTY_STRING : code.toString();
     }
 
     /**

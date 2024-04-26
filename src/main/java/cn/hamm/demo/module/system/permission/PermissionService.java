@@ -38,8 +38,8 @@ import java.util.Objects;
 @Slf4j
 public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> {
 
-    public static final String CONTROLLER_CLASS_PATH = "/**/*Controller.class";
-    public static final String CONTROLLER_SUFFIX = "Controller";
+    private static final String CONTROLLER_CLASS_PATH = "/**/*Controller.class";
+    private static final String CONTROLLER_SUFFIX = "Controller";
 
     /**
      * <h2>通过标识获取一个权限</h2>
