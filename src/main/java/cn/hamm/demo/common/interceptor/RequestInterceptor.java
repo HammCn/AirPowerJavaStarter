@@ -8,6 +8,7 @@ import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.util.AirUtil;
 import cn.hamm.demo.common.Services;
+import cn.hamm.demo.common.annotation.DisableLog;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.common.config.AppConstant;
 import cn.hamm.demo.module.role.RoleEntity;
@@ -80,6 +81,10 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
 
     @Override
     protected void beforeHandleRequest(@NotNull HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
+        DisableLog disableLog = AirUtil.getReflectUtil().getAnnotation(DisableLog.class, method);
+        if (Objects.nonNull(disableLog)) {
+            return;
+        }
         String accessToken = request.getHeader(AirConfig.getGlobalConfig().getAuthorizeHeader());
         Long userId = null;
         int appVersion = request.getIntHeader(AppConstant.APP_VERSION_HEADER);

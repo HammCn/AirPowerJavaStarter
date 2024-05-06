@@ -3,6 +3,7 @@ package cn.hamm.demo.module.system.oauth2;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.config.AirConfig;
+import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.model.json.JsonData;
 import cn.hamm.airpower.root.RootController;
@@ -43,7 +44,6 @@ public class Oauth2Controller extends RootController implements IAppAction {
     private static final String REDIRECT_URI = "redirectUri";
     private static final String REDIRECT_URI_MISSING = "RedirectUri missing!";
     private static final String INVALID_APP_KEY = "Invalid appKey!";
-    private static final String ERROR = "error";
     private static final String APP_KEY = "appKey";
     @Autowired
     private UserService userService;
@@ -139,8 +139,8 @@ public class Oauth2Controller extends RootController implements IAppAction {
      * @return 错误页面
      */
     private @NotNull ModelAndView showError(String error) {
-        ModelAndView view = new ModelAndView(ERROR);
-        view.getModel().put(ERROR, error);
+        ModelAndView view = new ModelAndView(Constant.ERROR);
+        view.getModel().put(Constant.ERROR, error);
         return view;
     }
 

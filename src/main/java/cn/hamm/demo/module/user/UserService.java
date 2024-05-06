@@ -34,26 +34,32 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * <h2>密码盐的长度</h2>
      */
     public static final int PASSWORD_SALT_LENGTH = 4;
+
     /**
      * <h2>邮箱验证码key</h2>
      */
     private static final String REDIS_EMAIL_CODE_KEY = "email_code_";
+
     /**
      * <h2>OAUTH存储的key前缀</h2>
      */
     private static final String OAUTH_CODE_KEY = "oauth_code_";
+
     /**
      * <h2>COOKIE前缀</h2>
      */
     private static final String COOKIE_CODE_KEY = "cookie_code_";
+
     /**
-     * <h3>Code缓存 包含了 Oauth2的 Code 和 验证码的 Code</h3>
+     * <h2>Code缓存 包含了 Oauth2的 Code 和 验证码的 Code</h2>
      */
     private static final int CACHE_CODE_EXPIRE_SECOND = Constant.SECOND_PER_MINUTE * 5;
+
     /**
      * <h2>Cookie缓存</h2>
      */
     private static final int CACHE_COOKIE_EXPIRE_SECOND = Constant.SECOND_PER_DAY;
+
     @Autowired
     private MenuService menuService;
 

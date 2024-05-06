@@ -1,6 +1,7 @@
 package cn.hamm.demo.module.wechat;
 
 import cn.hamm.airpower.annotation.Permission;
+import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.root.RootController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,6 @@ public class WechatController extends RootController {
     @RequestMapping(value = "init", produces = "text/html")
     @ResponseBody
     public String init() {
-        return "success";
+        return Constant.SUCCESS;
     }
 }

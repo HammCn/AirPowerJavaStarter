@@ -2,6 +2,7 @@ package cn.hamm.demo.base;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.interfaces.ITree;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -53,6 +54,11 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
     @Override
     public E setChildren(List<E> children) {
         this.children = children;
+        return (E) this;
+    }
+
+    public E setRootTree() {
+        this.parentId = Constant.ZERO_LONG;
         return (E) this;
     }
 }

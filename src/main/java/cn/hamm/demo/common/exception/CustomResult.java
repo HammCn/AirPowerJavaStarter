@@ -19,12 +19,13 @@ public enum CustomResult implements IResult {
 
     ;
 
+    private static final int BASE_CUSTOM_CODE = 10000000;
     private final int code;
     private final String message;
 
     @Contract(pure = true)
     CustomResult(int code, String message) {
-        this.code = code + 10000000;
+        this.code = code + BASE_CUSTOM_CODE;
         this.message = message;
     }
 }
