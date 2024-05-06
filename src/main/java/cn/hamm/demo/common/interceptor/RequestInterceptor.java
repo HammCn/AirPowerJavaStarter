@@ -3,6 +3,7 @@ package cn.hamm.demo.common.interceptor;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.config.AirConfig;
 import cn.hamm.airpower.config.Constant;
+import cn.hamm.airpower.config.MessageConstant;
 import cn.hamm.airpower.enums.Result;
 import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.util.AirUtil;
@@ -33,6 +34,8 @@ import java.util.Objects;
  */
 @Component
 public class RequestInterceptor extends AbstractRequestInterceptor {
+    public static final String LOG_ID = "logId";
+
     @Autowired
     private UserService userService;
 
@@ -68,7 +71,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             }
         }
         Result.FORBIDDEN.show(String.format(
-                "你无权访问 %s (%s)",
+                "你无权访问 " + MessageConstant.MESSAGE_AND_DESCRIPTION,
                 needPermission.getName(),
                 needPermission.getIdentity()
         ));
@@ -87,7 +90,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             platform = request.getHeader(AppConstant.APP_PLATFORM_HEADER);
             Description description = method.getAnnotation(Description.class);
             if (Objects.nonNull(description) && StringUtils.hasText(description.value())) {
-                action = String.format("%s(%s)", description.value(), action);
+                action = String.format(MessageConstant.MESSAGE_AND_DESCRIPTION, description.value(), action);
             }
         } catch (Exception ignored) {
         }
@@ -104,6 +107,6 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
                 .setVersion(Math.max(1, appVersion))
                 .setUserId(userId)
         );
-        setShareData("logId", logId);
+        setShareData(LOG_ID, logId);
     }
 }

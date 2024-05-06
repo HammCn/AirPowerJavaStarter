@@ -23,7 +23,7 @@ public class ResponseInterceptor extends ResponseBodyInterceptor {
 
     @Override
     protected Object beforeResponseFinished(Object body, ServerHttpRequest request, ServerHttpResponse response) {
-        Object logId = getShareData("logId");
+        Object logId = getShareData(RequestInterceptor.LOG_ID);
         if (Objects.isNull(logId)) {
             return body;
         }
