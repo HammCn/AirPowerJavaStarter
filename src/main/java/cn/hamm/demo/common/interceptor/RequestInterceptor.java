@@ -34,7 +34,7 @@ import java.util.Objects;
  */
 @Component
 public class RequestInterceptor extends AbstractRequestInterceptor {
-    public static final String LOG_ID = "logId";
+    static final String LOG_ID = "logId";
 
     @Autowired
     private UserService userService;

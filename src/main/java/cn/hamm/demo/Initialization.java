@@ -3,6 +3,7 @@ package cn.hamm.demo;
 import cn.hamm.airpower.util.AirUtil;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.user.UserEntity;
+import cn.hamm.demo.module.user.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ public class Initialization implements CommandLineRunner {
         if (Objects.nonNull(userEntity)) {
             return;
         }
-        String salt = AirUtil.getRandomUtil().randomString(4);
+        String salt = AirUtil.getRandomUtil().randomString(UserService.PASSWORD_SALT_LENGTH);
         Services.getUserService().add(new UserEntity()
                 .setNickname("Hamm")
                 .setEmail("admin@hamm.cn")

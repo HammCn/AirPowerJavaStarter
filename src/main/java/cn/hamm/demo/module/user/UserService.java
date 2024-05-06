@@ -31,6 +31,10 @@ import java.util.Objects;
 @Service
 public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
+     * <h2>密码盐的长度</h2>
+     */
+    public static final int PASSWORD_SALT_LENGTH = 4;
+    /**
      * <h2>邮箱验证码key</h2>
      */
     private static final String REDIS_EMAIL_CODE_KEY = "email_code_";
@@ -50,12 +54,6 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * <h2>Cookie缓存</h2>
      */
     private static final int CACHE_COOKIE_EXPIRE_SECOND = Constant.SECOND_PER_DAY;
-
-    /**
-     * <h2>密码盐的长度</h2>
-     */
-    public static final int PASSWORD_SALT_LENGTH = 4;
-
     @Autowired
     private MenuService menuService;
 
@@ -135,7 +133,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
                 existUser.getPassword(),
                 "原密码输入错误，修改密码失败"
         );
-        String salt = AirUtil.getRandomUtil().randomString(PASSWORD_SALT_LENGTH);
+        String salt = AirUtil.getRandomUtil().randomString();
         user.setSalt(salt);
         user.setPassword(AirUtil.getPasswordUtil().encode(user.getPassword(), salt));
         removeEmailCodeCache(existUser.getEmail());

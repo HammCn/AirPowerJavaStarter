@@ -39,6 +39,12 @@ import java.util.Objects;
 public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> {
 
     /**
+     * <h2>控制器字节码文件路径</h2>
+     */
+    private static final String CONTROLLER_CLASS_PATH = "/**/*" + Constant.CONTROLLER_SUFFIX + ".class";
+
+
+    /**
      * <h2>通过标识获取一个权限</h2>
      *
      * @param identity 权限标识
@@ -75,7 +81,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                    ClassUtils.convertClassNameToResourcePath(Application.class.getPackageName()) + Constant.CONTROLLER_CLASS_PATH;
+                    ClassUtils.convertClassNameToResourcePath(Application.class.getPackageName()) + CONTROLLER_CLASS_PATH;
             Resource[] resources = resourcePatternResolver.getResources(pattern);
             MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
 
