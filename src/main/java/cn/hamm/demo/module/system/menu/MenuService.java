@@ -18,6 +18,11 @@ import java.util.Objects;
  */
 @Service
 public class MenuService extends BaseService<MenuEntity, MenuRepository> {
+    /**
+     * <h2>排序字段</h2>
+     */
+    public static final String ORDER_FIELD_NAME = "orderNo";
+
     @Override
     protected void beforeDelete(long id) {
         QueryRequest<MenuEntity> queryRequest = new QueryRequest<>();
@@ -31,7 +36,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
         MenuEntity filter = sourceRequestData.getFilter();
         sourceRequestData.setSort(Objects.requireNonNullElse(
                 sourceRequestData.getSort(),
-                new Sort().setField("orderNo")
+                new Sort().setField(ORDER_FIELD_NAME)
         ));
         sourceRequestData.setFilter(filter);
         return sourceRequestData;

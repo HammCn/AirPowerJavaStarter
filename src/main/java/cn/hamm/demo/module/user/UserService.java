@@ -45,11 +45,16 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
      * <h3>Code缓存 包含了 Oauth2的 Code 和 验证码的 Code</h3>
      */
-    private static final int CACHE_CODE_EXPIRE_SECOND = 300;
+    private static final int CACHE_CODE_EXPIRE_SECOND = Constant.SECOND_PER_MINUTE * 5;
     /**
      * <h2>Cookie缓存</h2>
      */
-    private static final int CACHE_COOKIE_EXPIRE_SECOND = 86400;
+    private static final int CACHE_COOKIE_EXPIRE_SECOND = Constant.SECOND_PER_DAY;
+
+    /**
+     * <h2>密码盐的长度</h2>
+     */
+    public static final int PASSWORD_SALT_LENGTH = 4;
 
     @Autowired
     private MenuService menuService;
@@ -130,7 +135,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
                 existUser.getPassword(),
                 "原密码输入错误，修改密码失败"
         );
-        String salt = AirUtil.getRandomUtil().randomString(4);
+        String salt = AirUtil.getRandomUtil().randomString(PASSWORD_SALT_LENGTH);
         user.setSalt(salt);
         user.setPassword(AirUtil.getPasswordUtil().encode(user.getPassword(), salt));
         removeEmailCodeCache(existUser.getEmail());
@@ -156,7 +161,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         Result.PARAM_INVALID.whenNotEqualsIgnoreCase(code, userEntity.getCode(), "邮箱验证码不一致");
         UserEntity existUser = repository.getByEmail(userEntity.getEmail());
         Result.PARAM_INVALID.whenNull(existUser, "重置密码失败，用户信息异常");
-        String salt = AirUtil.getRandomUtil().randomString(4);
+        String salt = AirUtil.getRandomUtil().randomString(PASSWORD_SALT_LENGTH);
         existUser.setSalt(salt);
         existUser.setPassword(AirUtil.getPasswordUtil().encode(userEntity.getPassword(), salt));
         removeEmailCodeCache(existUser.getEmail());
@@ -294,7 +299,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         UserEntity existUser = repository.getByEmail(userEntity.getEmail());
         CustomResult.USER_REGISTER_ERROR_EXIST.whenNotNull(existUser, "账号已存在,无法重复注册");
         // 获取一个随机盐
-        String salt = AirUtil.getRandomUtil().randomString(4);
+        String salt = AirUtil.getRandomUtil().randomString(PASSWORD_SALT_LENGTH);
         UserEntity newUser = new UserEntity();
         newUser.setEmail(userEntity.getEmail());
         newUser.setSalt(salt);
@@ -347,8 +352,8 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         Result.FORBIDDEN_EXIST.whenNotNull(existUser, "邮箱已经存在，请勿重复添加用户");
         if (!StringUtils.hasLength(user.getPassword())) {
             // 创建时没有设置密码的话 随机一个密码
-            String salt = AirUtil.getRandomUtil().randomString(4);
-            user.setPassword(AirUtil.getPasswordUtil().encode("123123", salt));
+            String salt = AirUtil.getRandomUtil().randomString(PASSWORD_SALT_LENGTH);
+            user.setPassword(AirUtil.getPasswordUtil().encode("YSYSLJJMTDSXXXGZTSFGMHXXDXYJ", salt));
             user.setSalt(salt);
         }
         return user;

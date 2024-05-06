@@ -39,7 +39,7 @@ public class Initialization implements CommandLineRunner {
         Services.getPermissionService().loadPermission();
         Services.getMenuService().loadMenu();
         // 所有数据检查完毕
-        String[] localEnvList = {"hamm"};
+        String[] localEnvList = {"local-hamm"};
         if (Arrays.stream(localEnvList).toList().contains(AirUtil.getCurrentEnvironment())) {
             // 其他需要在本地初始化的数据
         }
