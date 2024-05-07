@@ -41,6 +41,7 @@ public class Initialization implements CommandLineRunner {
         Services.getMenuService().loadMenu();
         // 所有数据检查完毕
         String[] localEnvList = {"local-hamm"};
+        //noinspection StatementWithEmptyBody
         if (Arrays.stream(localEnvList).toList().contains(AirUtil.getCurrentEnvironment())) {
             // 其他需要在本地初始化的数据
         }
