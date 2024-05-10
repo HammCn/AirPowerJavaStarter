@@ -20,6 +20,7 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -72,12 +73,8 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
         return list;
     }
 
-    /**
-     * <h2>初始化所有权限</h2>
-     */
     @SuppressWarnings("AlibabaMethodTooLong")
-    public final void loadPermission() {
-        // 遍历所有接口
+    public void loadPermission() {
         try {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
@@ -92,7 +89,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 String className = metadataReader.getClassMetadata().getClassName();
                 Class<?> clazz = Class.forName(className);
 
-                RestController restController = clazz.getAnnotation(RestController.class);
+                RestController restController = AirUtil.getReflectUtil().getAnnotation(RestController.class, clazz);
                 if (Objects.isNull(restController) || RootEntityController.class.getSimpleName().equals(clazz.getSimpleName())) {
                     // 不是rest控制器或者是指定的几个白名单控制器
                     continue;
@@ -106,15 +103,13 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                             .setName(customClassName)
                             .setIdentity(identity)
                             .setIsSystem(true);
-                    long permissionId = add(permissionEntity);
-                    permissionEntity.setId(permissionId);
+                    permissionEntity.setId(add(permissionEntity));
                 } else {
                     permissionEntity.setName(customClassName)
                             .setIdentity(identity)
                             .setIsSystem(true);
                     update(permissionEntity);
                 }
-
                 permissionEntity = get(permissionEntity.getId());
 
                 // 读取类的RequestMapping
@@ -126,34 +121,37 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 }
                 // 取出所有控制器方法
                 Method[] methods = clazz.getMethods();
+
+                // 取出控制器类上的Extends注解 如自己没标 则使用父类的
+                Extends extendsApi = AirUtil.getReflectUtil().getAnnotation(Extends.class, clazz);
                 for (Method method : methods) {
-                    Extends extendsApi = AirUtil.getReflectUtil().getAnnotation(Extends.class, method);
                     if (Objects.nonNull(extendsApi)) {
-                        List<Api> apis = Arrays.asList(extendsApi.exclude());
-                        Api current;
                         try {
-                            current = Api.valueOf(method.getName());
+                            Api current = Api.valueOf(method.getName());
+                            if (checkApiExcluded(current, extendsApi)) {
+                                continue;
+                            }
                         } catch (Exception ignored) {
-                            continue;
-                        }
-                        if (apis.contains(current)) {
-                            continue;
                         }
                     }
                     String customMethodName = AirUtil.getReflectUtil().getDescription(method);
+
                     String subIdentity = (!Constant.EMPTY_STRING.equalsIgnoreCase(pathClass) ? (pathClass + Constant.UNDERLINE) : Constant.EMPTY_STRING);
 
-                    PostMapping postMapping = AirUtil.getReflectUtil().getAnnotation(PostMapping.class, method);
                     RequestMapping requestMapping = AirUtil.getReflectUtil().getAnnotation(RequestMapping.class, method);
-                    if (Objects.isNull(postMapping) && Objects.isNull(requestMapping)) {
-                        continue;
-                    }
-                    if (Objects.nonNull(postMapping) && postMapping.value().length > 0) {
-                        subIdentity += postMapping.value()[0];
-                    }
                     if (Objects.nonNull(requestMapping) && requestMapping.value().length > 0) {
                         subIdentity += requestMapping.value()[0];
                     }
+
+                    PostMapping postMapping = AirUtil.getReflectUtil().getAnnotation(PostMapping.class, method);
+                    if (Objects.nonNull(postMapping) && postMapping.value().length > 0) {
+                        subIdentity += postMapping.value()[0];
+                    }
+
+                    if (!StringUtils.hasText(subIdentity) || (pathClass + Constant.UNDERLINE).equals(subIdentity)) {
+                        continue;
+                    }
+
                     Access accessConfig = AirUtil.getAccessUtil().getWhatNeedAccess(clazz, method);
                     if (!accessConfig.isLogin() || !accessConfig.isAuthorize()) {
                         // 这里可以选择是否不读取这些接口的权限，但前端可能需要
@@ -177,7 +175,19 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("初始化权限失败: {}", e.getMessage());
         }
+    }
+
+    private boolean checkApiExcluded(Api api, @NotNull Extends extend) {
+        List<Api> excludeList = Arrays.asList(extend.exclude());
+        List<Api> includeList = Arrays.asList(extend.value());
+        if (excludeList.contains(api)) {
+            return true;
+        }
+        if (includeList.isEmpty()) {
+            return false;
+        }
+        return !includeList.contains(api);
     }
 }
