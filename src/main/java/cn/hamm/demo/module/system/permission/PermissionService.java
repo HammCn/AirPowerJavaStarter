@@ -118,7 +118,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 permissionEntity = get(permissionEntity.getId());
 
                 // 读取类的RequestMapping
-                RequestMapping requestMappingClass = clazz.getAnnotation(RequestMapping.class);
+                RequestMapping requestMappingClass = AirUtil.getReflectUtil().getAnnotation(RequestMapping.class, clazz);
                 String pathClass = Constant.EMPTY_STRING;
                 if (Objects.nonNull(requestMappingClass) && requestMappingClass.value().length > 0) {
                     // 标了RequestMapping
@@ -127,7 +127,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
                 // 取出所有控制器方法
                 Method[] methods = clazz.getMethods();
                 for (Method method : methods) {
-                    Extends extendsApi = clazz.getAnnotation(Extends.class);
+                    Extends extendsApi = AirUtil.getReflectUtil().getAnnotation(Extends.class, method);
                     if (Objects.nonNull(extendsApi)) {
                         List<Api> apis = Arrays.asList(extendsApi.exclude());
                         Api current;
