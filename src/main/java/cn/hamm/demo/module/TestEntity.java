@@ -17,7 +17,7 @@ public class TestEntity extends BaseEntity<TestEntity> {
     private String name = "凌小云";
 
     @Desensitize(Desensitize.Type.ID_CARD)
-    private String idCard = "500110199801010101";
+    private String idCard = "500110199801010102";
 
     @Desensitize(Desensitize.Type.EMAIL)
     private String email = "admin@hamm.cn";
