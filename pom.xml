@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.hamm</groupId>
+        <artifactId>airpower</artifactId>
+        <version>2.0.0-alpha.1</version>
+    </parent>
+    <groupId>cn.hamm.demo</groupId>
+    <artifactId>airpower-java-starter</artifactId>
+    <version>1.0.0</version>
+    <name>airpower-java-starter</name>
+    <description>airpower-java-starter</description>
+    <dependencies>
+        <dependency>
+            <groupId>cn.hamm</groupId>
+            <artifactId>airpower-core</artifactId>
+            <version>${airpower.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+                <configuration>
+                    <mainClass>cn.hamm.demo.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
