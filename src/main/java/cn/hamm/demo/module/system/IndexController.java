@@ -4,7 +4,7 @@ import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.DesensitizeExclude;
 import cn.hamm.airpower.model.Json;
-import cn.hamm.airpower.model.TaskFlow;
+import cn.hamm.airpower.task.TaskFlow;
 import cn.hamm.airpower.root.RootController;
 import lombok.Data;
 import lombok.experimental.Accessors;
