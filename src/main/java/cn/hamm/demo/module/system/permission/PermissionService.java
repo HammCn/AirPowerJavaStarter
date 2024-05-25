@@ -52,7 +52,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
      * <h2>加载权限</h2>
      */
     public final void loadPermission() {
-        List<PermissionEntity> permissions = Utils.getAccessUtil().scanPermission(Application.class.getPackageName(), PermissionEntity.class);
+        List<PermissionEntity> permissions = Utils.getAccessUtil().scanPermission(Application.class, PermissionEntity.class);
         for (PermissionEntity permission : permissions) {
             PermissionEntity exist = getPermissionByIdentity(permission.getIdentity());
             if (Objects.isNull(exist)) {
