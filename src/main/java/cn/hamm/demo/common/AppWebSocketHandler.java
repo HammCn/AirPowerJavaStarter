@@ -1,5 +1,6 @@
 package cn.hamm.demo.common;
 
+import cn.hamm.airpower.util.Utils;
 import cn.hamm.airpower.websocket.WebSocketHandler;
 import cn.hamm.airpower.websocket.WebSocketPayload;
 import lombok.extern.slf4j.Slf4j;
@@ -17,5 +18,6 @@ public class AppWebSocketHandler extends WebSocketHandler {
     @Override
     public void onWebSocketPayload(@NotNull WebSocketPayload webSocketPayload) {
         super.onWebSocketPayload(webSocketPayload);
+        Utils.getWebsocketUtil().publish(webSocketPayload);
     }
 }
