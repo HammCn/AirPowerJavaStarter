@@ -20,7 +20,9 @@ public class IndexController extends RootController {
     @GetMapping("")
     @DesensitizeExclude
     public Json index() {
-        Utils.getWebsocketUtil().publish(new WebSocketPayload().setType("index").setData("Hello World"));
+        Utils.getWebsocketUtil().publish(new WebSocketPayload().setData("全服消息"));
+        Utils.getWebsocketUtil().publishToUser(1L, new WebSocketPayload().setType("chat").setData("用户消息"));
+        Utils.getWebsocketUtil().publishToChannel("group_1", new WebSocketPayload().setType("gift").setData("频道礼物消息"));
         return Json.success("成功");
     }
 }
