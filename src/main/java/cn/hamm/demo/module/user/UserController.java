@@ -8,12 +8,11 @@ import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.base.BaseController;
+import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.system.app.AppEntity;
-import cn.hamm.demo.module.system.app.AppService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +30,6 @@ import java.util.List;
 @ApiController("user")
 @Description("用户")
 public class UserController extends BaseController<UserEntity, UserService, UserRepository> implements IUserAction {
-    @Autowired
-    private AppService appService;
-
     @Description("获取我的信息")
     @Permission(authorize = false)
     @PostMapping("getMyInfo")
@@ -143,7 +139,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         }
 
         // 验证应用信息
-        AppEntity appEntity = appService.getByAppKey(appKey);
+        AppEntity appEntity = Services.getAppService().getByAppKey(appKey);
         ServiceError.PARAM_INVALID.whenNull(appEntity, "登录失败,错误的应用ID");
 
         // 生成临时身份令牌code

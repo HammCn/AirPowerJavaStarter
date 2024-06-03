@@ -9,19 +9,14 @@ import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.annotation.DisableLog;
-import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.common.config.AppConstant;
 import cn.hamm.demo.module.role.RoleEntity;
 import cn.hamm.demo.module.system.log.LogEntity;
-import cn.hamm.demo.module.system.log.LogService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
-import cn.hamm.demo.module.system.permission.PermissionService;
 import cn.hamm.demo.module.user.UserEntity;
-import cn.hamm.demo.module.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -36,18 +31,6 @@ import java.util.Objects;
 @Component
 public class RequestInterceptor extends AbstractRequestInterceptor {
     static final String LOG_ID = "logId";
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private PermissionService permissionService;
-
-    @Autowired
-    private LogService logService;
-
-    @Autowired
-    private AppConfig appConfig;
 
     /**
      * <h2>验证指定的用户是否有指定权限标识的权限</h2>
@@ -100,11 +83,11 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
         } catch (Exception ignored) {
         }
         String identity = Utils.getAccessUtil().getPermissionIdentity(clazz, method);
-        PermissionEntity permissionEntity = permissionService.getPermissionByIdentity(identity);
+        PermissionEntity permissionEntity = Services.getPermissionService().getPermissionByIdentity(identity);
         if (Objects.nonNull(permissionEntity)) {
             action = permissionEntity.getName();
         }
-        long logId = logService.add(new LogEntity()
+        long logId = Services.getLogService().add(new LogEntity()
                 .setIp(Utils.getRequestUtil().getIpAddress(request))
                 .setAction(action)
                 .setPlatform(platform)

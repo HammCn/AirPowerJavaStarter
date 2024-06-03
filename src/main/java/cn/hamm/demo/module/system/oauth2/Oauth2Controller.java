@@ -9,19 +9,16 @@ import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.Utils;
-import cn.hamm.demo.common.config.AppConfig;
+import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.system.app.AppEntity;
-import cn.hamm.demo.module.system.app.AppService;
 import cn.hamm.demo.module.system.app.IAppAction;
 import cn.hamm.demo.module.user.UserEntity;
-import cn.hamm.demo.module.user.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,15 +47,6 @@ public class Oauth2Controller extends RootController implements IAppAction {
     private static final String INVALID_APP_KEY = "Invalid appKey!";
     private static final String APP_KEY = "appKey";
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AppService appService;
-
-    @Autowired
-    private AppConfig appConfig;
-
     @GetMapping("authorize")
     public ModelAndView index(
             HttpServletRequest request,
@@ -70,7 +58,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
         }
         AppEntity appEntity;
         try {
-            appEntity = appService.getByAppKey(appKey);
+            appEntity = Services.getAppService().getByAppKey(appKey);
         } catch (Exception exception) {
             return showError(String.format(APP_NOT_FOUND, appKey));
         }
@@ -94,15 +82,15 @@ public class Oauth2Controller extends RootController implements IAppAction {
             // 没有cookie
             return redirectLogin(response, appKey, redirectUri);
         }
-        Long userId = userService.getUserIdByCookie(cookieString);
+        Long userId = Services.getUserService().getUserIdByCookie(cookieString);
         if (Objects.isNull(userId)) {
             // cookie没有找到用户
             return redirectLogin(response, appKey, redirectUri);
         }
-        UserEntity userEntity = userService.get(userId);
+        UserEntity userEntity = Services.getUserService().get(userId);
         String code = Utils.getRandomUtil().randomString();
         appEntity.setCode(code).setAppKey(appKey);
-        userService.saveOauthCode(userEntity.getId(), appEntity);
+        Services.getUserService().saveOauthCode(userEntity.getId(), appEntity);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
         String querySplit = "?";
         if (redirectTarget.contains(querySplit)) {
@@ -119,10 +107,10 @@ public class Oauth2Controller extends RootController implements IAppAction {
     @PostMapping("accessToken")
     public Json accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) AppEntity appEntity) {
         String code = appEntity.getCode();
-        Long userId = userService.getUserIdByOauthAppKeyAndCode(appEntity.getAppKey(), code);
-        AppEntity existApp = appService.getByAppKey(appEntity.getAppKey());
+        Long userId = Services.getUserService().getUserIdByOauthAppKeyAndCode(appEntity.getAppKey(), code);
+        AppEntity existApp = Services.getAppService().getByAppKey(appEntity.getAppKey());
         ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), appEntity.getAppSecret(), "应用秘钥错误");
-        userService.removeOauthCode(existApp.getAppKey(), code);
+        Services.getUserService().removeOauthCode(existApp.getAppKey(), code);
         String accessToken = Utils.getSecurityUtil().createAccessToken(userId);
         return Json.data(accessToken);
     }
@@ -136,7 +124,7 @@ public class Oauth2Controller extends RootController implements IAppAction {
      * @return 无返回
      */
     private @Nullable ModelAndView redirectLogin(HttpServletResponse response, String appKey, String redirectUri) {
-        String url = appConfig.getLoginUrl() +
+        String url = Services.getAppConfig().getLoginUrl() +
                 "?appKey=" +
                 appKey +
                 "&redirectUri=" +
