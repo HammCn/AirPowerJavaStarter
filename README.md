@@ -9,9 +9,9 @@
   <img src="https://svg.hamm.cn?key=Cache&value=Redis"/>
 </p>
 
-# AirPowerJavaStarter 
+# AirPowerJavaStarter
 
-via [Gitee](https://gitee.com/air-power/AirPowerJavaStarter) / [Github](https://github.com/HammCn/AirPowerJavaStarter) 
+via [Gitee](https://gitee.com/air-power/AirPowerJavaStarter) / [Github](https://github.com/HammCn/AirPowerJavaStarter)
 
 #### 1. 创建项目文件夹
 
@@ -19,20 +19,19 @@ via [Gitee](https://gitee.com/air-power/AirPowerJavaStarter) / [Github](https://
 
 #### 2. 下载源代码
 
-> 建议windows开发者使用 ```git bash``` 不要使用windows自带的拉垮的 ```cmd``` ```powershell``` 等。否则接下来的脚本可能出现问题，你只能通过自己手动去操作。
+> 建议windows开发者使用 ```git bash``` 不要使用windows自带的拉垮的 ```cmd``` ```powershell```
+> 等。否则接下来的脚本可能出现问题，你只能通过自己手动去操作。
 
 - 通过 **Gitee** 代码仓库初始化(推荐)
 
   ```shell
-  git clone https://gitee.com/air-power/AirPowerJavaStarter.git &&
-  git clone https://gitee.com/air-power/AirPower4J.git airpower
+  git clone https://gitee.com/air-power/AirPowerJavaStarter.git
   ```
 
 - 通过 **Github** 代码仓库初始化
 
   ```shell
-  git clone https://github.com/HammCn/AirPowerJavaStarter.git &&
-  git clone https://github.com/HammCn/AirPower4J.git airpower
+  git clone https://github.com/HammCn/AirPowerJavaStarter.git
   ```
 
 #### 3. IDEA打开项目文件夹
