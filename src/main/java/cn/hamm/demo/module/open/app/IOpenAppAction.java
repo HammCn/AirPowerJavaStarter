@@ -1,11 +1,11 @@
-package cn.hamm.demo.module.system.app;
+package cn.hamm.demo.module.open.app;
 
 /**
- * <h1>应用行为</h1>
+ * <h1>开放应用动作</h1>
  *
  * @author Hamm.cn
  */
-public interface IAppAction {
+public interface IOpenAppAction {
     /**
      * <h2>Code换AccessToken</h2>
      */

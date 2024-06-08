@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.system.unit;
+package cn.hamm.demo.module.open.log;
 
 import cn.hamm.demo.base.BaseService;
 import org.springframework.stereotype.Service;
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service;
  * @author Hamm.cn
  */
 @Service
-public class UnitService extends BaseService<UnitEntity, UnitRepository> {
+public class OpenLogService extends BaseService<OpenLogEntity, OpenLogRepository> {
 }

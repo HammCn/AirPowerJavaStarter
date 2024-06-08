@@ -10,8 +10,8 @@ import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.common.Services;
-import cn.hamm.demo.module.system.app.AppEntity;
-import cn.hamm.demo.module.system.app.IAppAction;
+import cn.hamm.demo.module.open.app.IOpenAppAction;
+import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.user.UserEntity;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ import java.util.Objects;
  */
 @ApiController("oauth2")
 @Slf4j
-public class Oauth2Controller extends RootController implements IAppAction {
+public class Oauth2Controller extends RootController implements IOpenAppAction {
     private static final String APP_NOT_FOUND = "App(%s) not found!";
     private static final String REDIRECT_URI = "redirectUri";
     private static final String REDIRECT_URI_MISSING = "RedirectUri missing!";
@@ -56,9 +56,9 @@ public class Oauth2Controller extends RootController implements IAppAction {
         if (!StringUtils.hasText(appKey)) {
             return showError(INVALID_APP_KEY);
         }
-        AppEntity appEntity;
+        OpenAppEntity openAppEntity;
         try {
-            appEntity = Services.getAppService().getByAppKey(appKey);
+            openAppEntity = Services.getOpenAppService().getByAppKey(appKey);
         } catch (Exception exception) {
             return showError(String.format(APP_NOT_FOUND, appKey));
         }
@@ -89,8 +89,8 @@ public class Oauth2Controller extends RootController implements IAppAction {
         }
         UserEntity userEntity = Services.getUserService().get(userId);
         String code = Utils.getRandomUtil().randomString();
-        appEntity.setCode(code).setAppKey(appKey);
-        Services.getUserService().saveOauthCode(userEntity.getId(), appEntity);
+        openAppEntity.setCode(code).setAppKey(appKey);
+        Services.getUserService().saveOauthCode(userEntity.getId(), openAppEntity);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
         String querySplit = "?";
         if (redirectTarget.contains(querySplit)) {
@@ -105,11 +105,11 @@ public class Oauth2Controller extends RootController implements IAppAction {
     @Description("Code换取AccessToken")
     @Permission(login = false)
     @PostMapping("accessToken")
-    public Json accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) AppEntity appEntity) {
-        String code = appEntity.getCode();
-        Long userId = Services.getUserService().getUserIdByOauthAppKeyAndCode(appEntity.getAppKey(), code);
-        AppEntity existApp = Services.getAppService().getByAppKey(appEntity.getAppKey());
-        ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), appEntity.getAppSecret(), "应用秘钥错误");
+    public Json accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) OpenAppEntity openAppEntity) {
+        String code = openAppEntity.getCode();
+        Long userId = Services.getUserService().getUserIdByOauthAppKeyAndCode(openAppEntity.getAppKey(), code);
+        OpenAppEntity existApp = Services.getOpenAppService().getByAppKey(openAppEntity.getAppKey());
+        ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), openAppEntity.getAppSecret(), "应用秘钥错误");
         Services.getUserService().removeOauthCode(existApp.getAppKey(), code);
         String accessToken = Utils.getSecurityUtil().createAccessToken(userId);
         return Json.data(accessToken);

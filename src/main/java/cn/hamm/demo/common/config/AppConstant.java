@@ -15,4 +15,9 @@ public class AppConstant {
      * <h2>平台key</h2>
      */
     public static final String APP_PLATFORM_HEADER = "app-platform";
+
+    /**
+     * <h2>开放应用错误代码基数</h2>
+     */
+    public static final int BASE_OPEN_ERROR = 500000;
 }

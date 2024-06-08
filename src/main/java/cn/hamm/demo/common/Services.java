@@ -1,8 +1,8 @@
 package cn.hamm.demo.common;
 
 import cn.hamm.demo.common.config.AppConfig;
+import cn.hamm.demo.module.open.app.OpenAppService;
 import cn.hamm.demo.module.role.RoleService;
-import cn.hamm.demo.module.system.app.AppService;
 import cn.hamm.demo.module.system.log.LogService;
 import cn.hamm.demo.module.system.menu.MenuService;
 import cn.hamm.demo.module.system.permission.PermissionService;
@@ -41,7 +41,7 @@ public class Services {
     private static LogService logService;
 
     @Getter
-    private static AppService appService;
+    private static OpenAppService openAppService;
 
 
     @Autowired
@@ -53,7 +53,7 @@ public class Services {
             PermissionService permissionService,
             MenuService menuService,
             LogService logService,
-            AppService appService
+            OpenAppService openAppService
     ) {
         Services.environment = environment;
         Services.appConfig = appConfig;
@@ -62,6 +62,6 @@ public class Services {
         Services.permissionService = permissionService;
         Services.menuService = menuService;
         Services.logService = logService;
-        Services.appService = appService;
+        Services.openAppService = openAppService;
     }
 }

@@ -8,8 +8,8 @@ import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.exception.CustomError;
+import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.role.RoleEntity;
-import cn.hamm.demo.module.system.app.AppEntity;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.mail.MessagingException;
@@ -179,11 +179,11 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
      * <h2>存储Oauth的一次性Code</h2>
      *
-     * @param userId    用户ID
-     * @param appEntity 保存的应用信息
+     * @param userId        用户ID
+     * @param openAppEntity 保存的应用信息
      */
-    public void saveOauthCode(Long userId, @NotNull AppEntity appEntity) {
-        Utils.getRedisUtil().set(getAppCodeKey(appEntity.getAppKey(), appEntity.getCode()), userId, CACHE_CODE_EXPIRE_SECOND);
+    public void saveOauthCode(Long userId, @NotNull OpenAppEntity openAppEntity) {
+        Utils.getRedisUtil().set(getAppCodeKey(openAppEntity.getAppKey(), openAppEntity.getCode()), userId, CACHE_CODE_EXPIRE_SECOND);
     }
 
     /**
