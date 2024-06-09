@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Contract;
 
 @Getter
 public enum OpenErrorCode implements IException, IDictionary {
-    INVALID_APP_KEY(1, "INVALID_APP_KEY"),
+    INVALID_APP_KEY(1, "传入的AppKey无效"),
 
-    APP_DISABLED(2, "APP_DISABLED"),
+    APP_DISABLED(2, "当前应用已被禁用"),
 
-    SIGNATURE_INVALID(3, "SIGNATURE_INVALID"),
+    SIGNATURE_INVALID(3, "签名无效"),
 
-    DECRYPT_DATA_FAIL(4, "DECRYPT_DATA_FAIL"),
+    DECRYPT_DATA_FAIL(4, "数据解密失败"),
 
-    API_NOT_SUPPORT(5, "API_NOT_SUPPORT"),
+    API_NOT_SUPPORT(5, "请求的API暂不支持"),
     ;
 
     private final int code;
