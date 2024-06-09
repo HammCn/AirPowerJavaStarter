@@ -63,7 +63,7 @@ public class OpenRequest {
      */
     public final void checkSignature() {
         String source = this.openApp.getAppSecret() + this.appKey + this.version + this.timestamp + this.content;
-        OpenErrorCode.SIGNATURE_INVALID.whenNotEquals(this.signature, DigestUtils.sha1Hex(source));
+        OpenApiError.SIGNATURE_INVALID.whenNotEquals(this.signature, DigestUtils.sha1Hex(source));
     }
 
     /**
@@ -96,7 +96,7 @@ public class OpenRequest {
                 default:
             }
         } catch (Exception e) {
-            OpenErrorCode.DECRYPT_DATA_FAIL.show();
+            OpenApiError.DECRYPT_DATA_FAIL.show();
         }
         return request;
     }

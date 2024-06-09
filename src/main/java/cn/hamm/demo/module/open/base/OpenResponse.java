@@ -21,7 +21,7 @@ public class OpenResponse {
      * @return 加密后的数据
      */
     public static String encodeResponse(OpenAppEntity openApp, @NotNull Json json) {
-        String response = "";
+        String response;
         if (Objects.isNull(json.getData())) {
             // 数据负载为空 直接返回
             return json.toString();
@@ -41,7 +41,7 @@ public class OpenResponse {
                 default:
             }
         } catch (Exception e) {
-            OpenErrorCode.ENCRYPT_DATA_FAIL.show();
+            OpenApiError.ENCRYPT_DATA_FAIL.show();
         }
         return response;
     }

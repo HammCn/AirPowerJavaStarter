@@ -1,6 +1,7 @@
 package cn.hamm.demo.common.exception;
 
 import cn.hamm.airpower.interfaces.IException;
+import cn.hamm.demo.common.config.AppConstant;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 
@@ -17,13 +18,12 @@ public enum CustomError implements IException {
     USER_REGISTER_ERROR_EXIST(3, "注册失败，账号已存在"),
     ;
 
-    private static final int BASE_CUSTOM_CODE = 10000000;
     private final int code;
     private final String message;
 
     @Contract(pure = true)
     CustomError(int code, String message) {
-        this.code = code + BASE_CUSTOM_CODE;
+        this.code = code + AppConstant.BASE_CUSTOM_ERROR;
         this.message = message;
     }
 }

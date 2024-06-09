@@ -18,10 +18,4 @@ public interface IOpenAppAction {
      */
     interface WhenGetByAppKey {
     }
-
-    /**
-     * <h2>重置密钥</h2>
-     */
-    interface WhenResetSecret {
-    }
 }

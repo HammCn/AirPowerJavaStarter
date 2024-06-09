@@ -11,7 +11,6 @@ import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.annotation.DisableLog;
 import cn.hamm.demo.common.annotation.OpenApi;
 import cn.hamm.demo.common.config.AppConstant;
-import cn.hamm.demo.module.role.RoleEntity;
 import cn.hamm.demo.module.system.log.LogEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.user.UserEntity;
@@ -33,8 +32,6 @@ import java.util.Objects;
 public class RequestInterceptor extends AbstractRequestInterceptor {
     static final String LOG_ID = "logId";
 
-    static final String OPEN_LOG_ID = "openLogId";
-
     /**
      * <h2>验证指定的用户是否有指定权限标识的权限</h2>
      *
@@ -50,12 +47,8 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             return true;
         }
         PermissionEntity needPermission = Services.getPermissionService().getPermissionByIdentity(permissionIdentity);
-        for (RoleEntity role : existUser.getRoleList()) {
-            for (PermissionEntity permission : role.getPermissionList()) {
-                if (needPermission.getId().equals(permission.getId())) {
-                    return true;
-                }
-            }
+        if (existUser.getRoleList().stream().flatMap(role -> role.getPermissionList().stream()).anyMatch(permission -> needPermission.getId().equals(permission.getId()))) {
+            return true;
         }
         ServiceError.FORBIDDEN.show(String.format(
                 MessageConstant.ACCESS_DENIED,

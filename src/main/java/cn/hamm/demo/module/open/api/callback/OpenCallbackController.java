@@ -5,7 +5,6 @@ import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.root.RootController;
 
-
 /**
  * <h1>Controller</h1>
  *

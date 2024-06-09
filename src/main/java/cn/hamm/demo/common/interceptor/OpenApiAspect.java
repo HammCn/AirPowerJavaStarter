@@ -6,7 +6,7 @@ import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.annotation.OpenApi;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
-import cn.hamm.demo.module.open.base.OpenErrorCode;
+import cn.hamm.demo.module.open.base.OpenApiError;
 import cn.hamm.demo.module.open.base.OpenRequest;
 import cn.hamm.demo.module.open.base.OpenResponse;
 import cn.hamm.demo.module.open.log.OpenLogEntity;
@@ -47,7 +47,7 @@ public class OpenApiAspect {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
         OpenApi openApi = method.getAnnotation(OpenApi.class);
-        OpenErrorCode.API_NOT_SUPPORT.whenNull(openApi);
+        OpenApiError.API_NOT_SUPPORT.whenNull(openApi);
         Long openLogId = null;
         String response = "";
         if (args.length != 1) {
@@ -57,9 +57,9 @@ public class OpenApiAspect {
             throw new ServiceException("OpenApi必须接收一个OpenRequest参数");
         }
         try {
-            OpenErrorCode.INVALID_APP_KEY.when(!StringUtils.hasText(openRequest.getAppKey()));
+            OpenApiError.INVALID_APP_KEY.when(!StringUtils.hasText(openRequest.getAppKey()));
             OpenAppEntity openApp = Services.getOpenAppService().getByAppKey(openRequest.getAppKey());
-            OpenErrorCode.INVALID_APP_KEY.whenNull(openApp);
+            OpenApiError.INVALID_APP_KEY.whenNull(openApp);
             openRequest.setOpenApp(openApp);
             openLogId = addOpenLog(openRequest.getOpenApp(), Utils.getRequest().getRequestURI(), openRequest.getRequest());
             openRequest.checkSignature();
@@ -85,7 +85,7 @@ public class OpenApiAspect {
     /**
      * <h2>添加日志</h2>
      *
-     * @param appKey  AppKey
+     * @param openApp OpenAPp
      * @param url     请求URL
      * @param request 请求数据
      * @return 日志ID
