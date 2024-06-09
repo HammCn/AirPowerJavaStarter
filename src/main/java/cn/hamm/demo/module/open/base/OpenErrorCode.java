@@ -16,7 +16,9 @@ public enum OpenErrorCode implements IException, IDictionary {
 
     DECRYPT_DATA_FAIL(4, "数据解密失败"),
 
-    API_NOT_SUPPORT(5, "请求的API暂不支持"),
+    ENCRYPT_DATA_FAIL(5, "数据加密失败"),
+
+    API_NOT_SUPPORT(6, "请求的API暂不支持"),
     ;
 
     private final int code;

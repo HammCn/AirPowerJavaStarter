@@ -6,9 +6,7 @@ import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -42,7 +40,6 @@ public class OpenRequest {
      * <h2>加密后的业务数据</h2>
      */
     @NotNull(message = "业务数据包体不能为空")
-    @Getter(AccessLevel.PRIVATE)
     private String content;
 
     /**
@@ -57,6 +54,11 @@ public class OpenRequest {
     private OpenAppEntity openApp;
 
     /**
+     * <h2>解密后的业务数据</h2>
+     */
+    private String decodeContent;
+
+    /**
      * <h2>签名验证结果</h2>
      */
     public final void checkSignature() {
@@ -69,24 +71,33 @@ public class OpenRequest {
      *
      * @param clazz 业务数据对象类型
      */
-    public final <T extends RootModel<T>> T getContent(Class<T> clazz) {
-        String json = "";
-        OpenArithmeticType appArithmeticType = Utils.getDictionaryUtil().getDictionary(OpenArithmeticType.class, this.openApp.getArithmetic());
+    public final <T extends RootModel<T>> T getRequest(Class<T> clazz) {
+        return Json.parse(getRequest(), clazz);
+    }
+
+    /**
+     * <h2>获取请求的数据</h2>
+     *
+     * @return 请求数据
+     */
+    public final String getRequest() {
+        String request = this.content;
+        OpenArithmeticType appArithmeticType = Utils.getDictionaryUtil().getDictionary(
+                OpenArithmeticType.class, this.openApp.getArithmetic()
+        );
         try {
             switch (appArithmeticType) {
                 case AES:
-                    json = Utils.getAesUtil().setKey(this.openApp.getAppSecret()).decrypt(this.content);
+                    request = Utils.getAesUtil().setKey(this.openApp.getAppSecret()).decrypt(request);
                     break;
                 case RSA:
-                    json = Utils.getRsaUtil().setPrivateKey(openApp.getPrivateKey()).privateKeyDecrypt(this.content);
+                    request = Utils.getRsaUtil().setPrivateKey(openApp.getPrivateKey()).privateKeyDecrypt(request);
                     break;
-                case NO:
-                    json = this.content;
                 default:
             }
         } catch (Exception e) {
             OpenErrorCode.DECRYPT_DATA_FAIL.show();
         }
-        return Json.parse(json, clazz);
+        return request;
     }
 }

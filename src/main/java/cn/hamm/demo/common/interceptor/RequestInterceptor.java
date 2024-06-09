@@ -9,6 +9,7 @@ import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.annotation.DisableLog;
+import cn.hamm.demo.common.annotation.OpenApi;
 import cn.hamm.demo.common.config.AppConstant;
 import cn.hamm.demo.module.role.RoleEntity;
 import cn.hamm.demo.module.system.log.LogEntity;
@@ -31,6 +32,8 @@ import java.util.Objects;
 @Component
 public class RequestInterceptor extends AbstractRequestInterceptor {
     static final String LOG_ID = "logId";
+
+    static final String OPEN_LOG_ID = "openLogId";
 
     /**
      * <h2>验证指定的用户是否有指定权限标识的权限</h2>
@@ -66,6 +69,10 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
     protected boolean beforeHandleRequest(@NotNull HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
         DisableLog disableLog = Utils.getReflectUtil().getAnnotation(DisableLog.class, method);
         if (Objects.nonNull(disableLog)) {
+            return true;
+        }
+        OpenApi openApi = Utils.getReflectUtil().getAnnotation(OpenApi.class, method);
+        if (Objects.nonNull(openApi)) {
             return true;
         }
         String accessToken = request.getHeader(Configs.getServiceConfig().getAuthorizeHeader());
