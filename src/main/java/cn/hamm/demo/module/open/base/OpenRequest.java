@@ -19,6 +19,16 @@ import org.apache.commons.codec.digest.DigestUtils;
 @Data
 public class OpenRequest {
     /**
+     * <h2>防重放缓存前缀</h2>
+     */
+    private static final String NONCE_CACHE_PREFIX = "NONCE_";
+
+    /**
+     * <h2>防重放时长</h2>
+     */
+    private static final int NONCE_CACHE_SECOND = 60;
+
+    /**
      * <h2>AppKey</h2>
      */
     @NotBlank(message = "AppKey不能为空")
@@ -49,6 +59,12 @@ public class OpenRequest {
     private String signature;
 
     /**
+     * <h2>请求随机串不能为空</h2>
+     */
+    @NotNull(message = "请求随机串不能为空")
+    private String nonce;
+
+    /**
      * <h2>当前请求的应用</h2>
      */
     private OpenAppEntity openApp;
@@ -62,8 +78,11 @@ public class OpenRequest {
      * <h2>签名验证结果</h2>
      */
     public final void checkSignature() {
-        String source = this.openApp.getAppSecret() + this.appKey + this.version + this.timestamp + this.content;
+        String source = this.openApp.getAppSecret() + this.appKey + this.version + this.timestamp + this.nonce + this.content;
         OpenApiError.SIGNATURE_INVALID.whenNotEquals(this.signature, DigestUtils.sha1Hex(source));
+        Object savedNonce = Utils.getRedisUtil().get(NONCE_CACHE_PREFIX + this.nonce);
+        OpenApiError.REPEAT_REQUEST.whenNotNull(savedNonce);
+        Utils.getRedisUtil().set(NONCE_CACHE_PREFIX + this.nonce, 1, NONCE_CACHE_SECOND);
     }
 
     /**

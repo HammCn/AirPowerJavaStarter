@@ -19,6 +19,8 @@ public enum OpenApiError implements IException, IDictionary {
     ENCRYPT_DATA_FAIL(5, "数据加密失败"),
 
     API_NOT_SUPPORT(6, "请求的API暂不支持"),
+
+    REPEAT_REQUEST(7, "重复的请求"),
     ;
 
     private final int code;
