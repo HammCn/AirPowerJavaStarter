@@ -85,7 +85,7 @@ public class OpenApiAspect {
     /**
      * <h2>添加日志</h2>
      *
-     * @param openApp OpenAPp
+     * @param openApp OpenApp
      * @param url     请求URL
      * @param request 请求数据
      * @return 日志ID
