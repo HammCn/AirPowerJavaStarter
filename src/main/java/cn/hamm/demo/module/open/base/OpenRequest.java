@@ -1,5 +1,6 @@
 package cn.hamm.demo.module.open.base;
 
+import cn.hamm.airpower.exception.ServiceException;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.root.RootModel;
 import cn.hamm.airpower.util.Utils;
@@ -83,6 +84,10 @@ public class OpenRequest {
         Object savedNonce = Utils.getRedisUtil().get(NONCE_CACHE_PREFIX + this.nonce);
         OpenApiError.REPEAT_REQUEST.whenNotNull(savedNonce);
         Utils.getRedisUtil().set(NONCE_CACHE_PREFIX + this.nonce, 1, NONCE_CACHE_SECOND);
+        OpenApiError.TIMESTAMP_INVALID.when(
+                this.timestamp > System.currentTimeMillis() + NONCE_CACHE_SECOND ||
+                        this.timestamp < System.currentTimeMillis() - NONCE_CACHE_SECOND
+        );
     }
 
     /**
@@ -91,7 +96,12 @@ public class OpenRequest {
      * @param clazz 业务数据对象类型
      */
     public final <T extends RootModel<T>> T getRequest(Class<T> clazz) {
-        return Json.parse(getRequest(), clazz);
+        try {
+            return Json.parse(getRequest(), clazz);
+        } catch (Exception e) {
+            OpenApiError.JSON_DECODE_FAIL.show();
+            throw new ServiceException(e);
+        }
     }
 
     /**

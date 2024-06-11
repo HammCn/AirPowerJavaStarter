@@ -21,6 +21,10 @@ public enum OpenApiError implements IException, IDictionary {
     API_NOT_SUPPORT(6, "请求的API暂不支持"),
 
     REPEAT_REQUEST(7, "重复的请求"),
+
+    TIMESTAMP_INVALID(8, "请求时间不在允许范围内"),
+
+    JSON_DECODE_FAIL(9, "JSON解码失败"),
     ;
 
     private final int code;
