@@ -39,34 +39,33 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
      * @param userId             用户ID
      * @param permissionIdentity 权限标识
      * @param request            请求对象
-     * @return 验证结果
+     * @apiNote 抛出异常则为拦截
      */
     @Override
-    public boolean checkPermissionAccess(Long userId, String permissionIdentity, HttpServletRequest request) {
+    protected void checkUserPermission(Long userId, String permissionIdentity, HttpServletRequest request) {
         UserEntity existUser = Services.getUserService().get(userId);
         if (existUser.isRootUser()) {
-            return true;
+            return;
         }
         PermissionEntity needPermission = Services.getPermissionService().getPermissionByIdentity(permissionIdentity);
         if (existUser.getRoleList().stream().flatMap(role -> role.getPermissionList().stream()).anyMatch(permission -> needPermission.getId().equals(permission.getId()))) {
-            return true;
+            return;
         }
         ServiceError.FORBIDDEN.show(String.format(
                 MessageConstant.ACCESS_DENIED,
                 needPermission.getName(),
                 needPermission.getIdentity()
         ));
-        return false;
     }
 
-    @Override
-    protected void interceptOpenApiRequest(
-            HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method
-    ) {
-
-        super.interceptOpenApiRequest(request, response, clazz, method);
-    }
-
+    /**
+     * <h2>拦截请求</h2>
+     *
+     * @param request  请求对象
+     * @param response 响应对象
+     * @param clazz    控制器类
+     * @param method   执行方法
+     */
     @Override
     protected void interceptRequest(HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
         DisableLog disableLog = Utils.getReflectUtil().getAnnotation(DisableLog.class, method);
