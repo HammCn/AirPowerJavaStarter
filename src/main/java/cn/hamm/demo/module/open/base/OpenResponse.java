@@ -3,7 +3,6 @@ package cn.hamm.demo.module.open.base;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -17,16 +16,16 @@ public class OpenResponse {
      * <h2>加密响应数据</h2>
      *
      * @param openApp 应用
-     * @param json    JSON
+     * @param data    数据
      * @return 加密后的数据
      */
-    public static String encodeResponse(OpenAppEntity openApp, @NotNull Json json) {
-        String response;
-        if (Objects.isNull(json.getData())) {
+    public static String encodeResponse(OpenAppEntity openApp, Object data) {
+        String response = null;
+        if (Objects.isNull(data)) {
             // 数据负载为空 直接返回
-            return json.toString();
+            return response;
         }
-        response = Json.toString(json.getData());
+        response = Json.toString(data);
         OpenArithmeticType appArithmeticType = Utils.getDictionaryUtil().getDictionary(
                 OpenArithmeticType.class, openApp.getArithmetic()
         );
