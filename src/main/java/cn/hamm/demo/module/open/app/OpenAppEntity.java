@@ -34,7 +34,7 @@ public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenApp
 
     @Description("应用密钥")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(columnDefinition = "varchar(255) default '' comment 'AppSecret'", unique = true)
+    @Column(columnDefinition = "varchar(255) default '' comment 'AppSecret'")
     @NotBlank(groups = {WhenCode2AccessToken.class})
     @Exclude(filters = {WhenGetDetail.class})
     private String appSecret;
