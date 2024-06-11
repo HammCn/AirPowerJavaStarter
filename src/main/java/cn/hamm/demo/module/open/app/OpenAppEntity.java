@@ -1,9 +1,10 @@
 package cn.hamm.demo.module.open.app;
 
 import cn.hamm.airpower.annotation.*;
+import cn.hamm.airpower.open.IOpenApp;
+import cn.hamm.airpower.open.OpenArithmeticType;
 import cn.hamm.airpower.validate.dictionary.Dictionary;
 import cn.hamm.demo.base.BaseEntity;
-import cn.hamm.demo.module.open.base.OpenArithmeticType;
 import cn.hamm.demo.module.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -27,7 +28,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Table(name = "open_app")
 @Description("开放应用")
-public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenAppAction {
+public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenAppAction, IOpenApp {
     @Description("应用Key")
     @Column(columnDefinition = "varchar(255) default '' comment 'AppKey'", unique = true)
     private String appKey;

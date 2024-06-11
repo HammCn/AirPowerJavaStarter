@@ -9,14 +9,12 @@ import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.annotation.DisableLog;
-import cn.hamm.demo.common.annotation.OpenApi;
 import cn.hamm.demo.common.config.AppConstant;
 import cn.hamm.demo.module.system.log.LogEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.user.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +28,9 @@ import java.util.Objects;
  */
 @Component
 public class RequestInterceptor extends AbstractRequestInterceptor {
+    /**
+     * <h2>普通请求日志ID</h2>
+     */
     static final String LOG_ID = "logId";
 
     /**
@@ -59,14 +60,18 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
     }
 
     @Override
-    protected boolean beforeHandleRequest(@NotNull HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
+    protected void interceptOpenApiRequest(
+            HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method
+    ) {
+
+        super.interceptOpenApiRequest(request, response, clazz, method);
+    }
+
+    @Override
+    protected void interceptRequest(HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
         DisableLog disableLog = Utils.getReflectUtil().getAnnotation(DisableLog.class, method);
         if (Objects.nonNull(disableLog)) {
-            return true;
-        }
-        OpenApi openApi = Utils.getReflectUtil().getAnnotation(OpenApi.class, method);
-        if (Objects.nonNull(openApi)) {
-            return true;
+            return;
         }
         String accessToken = request.getHeader(Configs.getServiceConfig().getAuthorizeHeader());
         Long userId = null;
@@ -96,6 +101,5 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
                 .setUserId(userId)
         );
         setShareData(LOG_ID, logId);
-        return true;
     }
 }

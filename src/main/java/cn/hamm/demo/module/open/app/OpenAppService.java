@@ -1,6 +1,7 @@
 package cn.hamm.demo.module.open.app;
 
 import cn.hamm.airpower.exception.ServiceException;
+import cn.hamm.airpower.open.IOpenAppService;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.base.BaseService;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ import java.util.Objects;
  * @author Hamm.cn
  */
 @Service
-public class OpenAppService extends BaseService<OpenAppEntity, OpenAppRepository> {
+public class OpenAppService extends BaseService<OpenAppEntity, OpenAppRepository> implements IOpenAppService {
     /**
      * <h2>通过AppKey获取一个应用</h2>
      *
