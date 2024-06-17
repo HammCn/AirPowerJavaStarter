@@ -31,6 +31,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -56,10 +57,8 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
         if (!StringUtils.hasText(appKey)) {
             return showError(INVALID_APP_KEY);
         }
-        OpenAppEntity openAppEntity;
-        try {
-            openAppEntity = Services.getOpenAppService().getByAppKey(appKey);
-        } catch (Exception exception) {
+        OpenAppEntity openApp = Services.getOpenAppService().getByAppKey(appKey);
+        if (Objects.isNull(openApp)) {
             return showError(String.format(APP_NOT_FOUND, appKey));
         }
         String redirectUri = request.getParameter(REDIRECT_URI);
@@ -71,13 +70,10 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
             // 没有cookie
             return redirectLogin(response, appKey, redirectUri);
         }
-        String cookieString = null;
-        for (Cookie c : cookies) {
-            if (Configs.getCookieConfig().getAuthCookieName().equals(c.getName())) {
-                cookieString = c.getValue();
-                break;
-            }
-        }
+        String cookieString = Arrays.stream(cookies)
+                .filter(c -> Configs.getCookieConfig().getAuthCookieName().equals(c.getName()))
+                .findFirst().map(Cookie::getValue)
+                .orElse(null);
         if (!StringUtils.hasText(cookieString)) {
             // 没有cookie
             return redirectLogin(response, appKey, redirectUri);
@@ -89,8 +85,8 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
         }
         UserEntity userEntity = Services.getUserService().get(userId);
         String code = Utils.getRandomUtil().randomString();
-        openAppEntity.setCode(code).setAppKey(appKey);
-        Services.getUserService().saveOauthCode(userEntity.getId(), openAppEntity);
+        openApp.setCode(code).setAppKey(appKey);
+        Services.getUserService().saveOauthCode(userEntity.getId(), openApp);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
         String querySplit = "?";
         if (redirectTarget.contains(querySplit)) {
