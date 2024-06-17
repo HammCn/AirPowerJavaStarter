@@ -48,7 +48,9 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
         return list;
     }
 
-
+    /**
+     * <h2>加载菜单</h2>
+     */
     public final void loadMenu() {
         MenuEntity exist = getMaybeNull(1L);
         if (Objects.nonNull(exist)) {
@@ -86,7 +88,6 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
         // 系统设置
         firstMenu = new MenuEntity().setName("系统设置").setOrderNo(2).setParentId(0L);
         firstMenu = get(add(firstMenu));
-
 
         secondMenu = new MenuEntity().setName("权限管理").setPath("/console/permission/list").setParentId(firstMenu.getId());
         add(secondMenu);

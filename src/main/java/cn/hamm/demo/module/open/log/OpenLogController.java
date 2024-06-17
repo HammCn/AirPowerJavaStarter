@@ -10,7 +10,6 @@ import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 
-
 /**
  * <h1>Controller</h1>
  *

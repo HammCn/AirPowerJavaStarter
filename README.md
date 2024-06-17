@@ -41,5 +41,3 @@ via [Gitee](https://gitee.com/air-power/AirPowerJavaStarter) / [Github](https://
 #### 4. Enjoy your coding!
 
 接下来就可以愉快的添砖Java了！
-
-

@@ -47,7 +47,6 @@ public class Services {
     @Getter
     private static OpenLogService openLogService;
 
-
     @Autowired
     public Services(
             Environment environment,
