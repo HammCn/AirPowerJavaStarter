@@ -114,14 +114,9 @@ public class UserController extends BaseController<UserEntity, UserService, User
     private Json doLogin(@NotNull UserLoginType userLoginType, UserEntity userEntity, HttpServletResponse response) {
         String accessToken = "";
         switch (userLoginType) {
-            case VIA_ACCOUNT_PASSWORD:
-                accessToken = service.login(userEntity);
-                break;
-            case VIA_EMAIL_CODE:
-                accessToken = service.loginViaEmail(userEntity);
-                break;
-            default:
-                ServiceError.SERVICE_ERROR.show("暂不支持的登录方式");
+            case VIA_ACCOUNT_PASSWORD -> accessToken = service.login(userEntity);
+            case VIA_EMAIL_CODE -> accessToken = service.loginViaEmail(userEntity);
+            default -> ServiceError.SERVICE_ERROR.show("暂不支持的登录方式");
         }
 
         // 开始处理Oauth2登录逻辑
