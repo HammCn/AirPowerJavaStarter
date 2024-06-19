@@ -17,6 +17,7 @@ import java.util.Objects;
  *
  * @author Hamm.cn
  */
+@SuppressWarnings("AlibabaServiceOrDaoClassShouldEndWithImpl")
 @Service
 public class OpenAppService extends BaseService<OpenAppEntity, OpenAppRepository> implements IOpenAppService {
     /**
@@ -25,6 +26,7 @@ public class OpenAppService extends BaseService<OpenAppEntity, OpenAppRepository
      * @param appKey AppKey
      * @return 应用
      */
+    @Override
     public OpenAppEntity getByAppKey(String appKey) {
         return repository.getByAppKey(appKey);
     }
@@ -35,8 +37,8 @@ public class OpenAppService extends BaseService<OpenAppEntity, OpenAppRepository
         openApp.setAppSecret(Base64.getEncoder().encodeToString(Utils.getRandomUtil().randomBytes()));
         try {
             KeyPair keyPair = Utils.getRsaUtil().generateKeyPair();
-            openApp.setPrivateKey(Utils.getRsaUtil().convertPrivateKeyToPEM(keyPair.getPrivate()));
-            openApp.setPublicKey(Utils.getRsaUtil().convertPublicKeyToPEM(keyPair.getPublic()));
+            openApp.setPrivateKey(Utils.getRsaUtil().convertPrivateKeyToPem(keyPair.getPrivate()));
+            openApp.setPublicKey(Utils.getRsaUtil().convertPublicKeyToPem(keyPair.getPublic()));
         } catch (NoSuchAlgorithmException e) {
             throw new ServiceException(e);
         }
