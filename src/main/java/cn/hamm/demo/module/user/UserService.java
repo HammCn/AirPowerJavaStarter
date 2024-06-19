@@ -344,7 +344,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         if (!StringUtils.hasLength(user.getPassword())) {
             // 创建时没有设置密码的话 随机一个密码
             String salt = Utils.getRandomUtil().randomString(PASSWORD_SALT_LENGTH);
-            user.setPassword(Utils.getPasswordUtil().encode("YSYSLJJMTDSXXXGZTSFGMHXXDXYJ", salt));
+            user.setPassword(Utils.getPasswordUtil().encode("Aa123456", salt));
             user.setSalt(salt);
         }
         return user;
