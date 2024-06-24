@@ -37,6 +37,7 @@ spring:
       prefix: /
 airpower:
   access-token-secret: 1234567890
+  enable-document: true
   websocket:
     support: redis
-    channel-prefix: demo
+    channel-prefix: airpower
