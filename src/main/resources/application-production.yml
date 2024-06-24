@@ -1,8 +1,11 @@
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/airpower?allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/airpower?allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: airpower
     password: airpower
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # 生产环境改为 validate
   data:
     redis:
       host: 127.0.0.1
