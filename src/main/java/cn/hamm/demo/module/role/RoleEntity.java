@@ -1,8 +1,6 @@
 package cn.hamm.demo.module.role;
 
 import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Exclude;
-import cn.hamm.airpower.annotation.Payload;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
@@ -38,16 +36,12 @@ public class RoleEntity extends BaseEntity<RoleEntity> implements IRoleAction {
 
     @Description("角色的菜单列表")
     @ManyToMany(fetch = FetchType.EAGER)
-    @Payload
     @OrderBy("orderNo DESC")
-    @Exclude(filters = {WhenPayLoad.class})
     @NotNull(groups = {WhenAuthorizeMenu.class}, message = "请传入授权的菜单列表")
     private Set<MenuEntity> menuList;
 
     @Description("角色的权限列表")
     @ManyToMany(fetch = FetchType.EAGER)
-    @Payload
-    @Exclude(filters = {WhenPayLoad.class})
     @NotNull(groups = {WhenAuthorizeMenu.class}, message = "请传入授权的权限列表")
     private Set<PermissionEntity> permissionList;
 
