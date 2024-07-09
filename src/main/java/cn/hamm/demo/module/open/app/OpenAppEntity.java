@@ -1,6 +1,9 @@
 package cn.hamm.demo.module.open.app;
 
-import cn.hamm.airpower.annotation.*;
+import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.annotation.Exclude;
+import cn.hamm.airpower.annotation.ReadOnly;
+import cn.hamm.airpower.annotation.Search;
 import cn.hamm.airpower.open.IOpenApp;
 import cn.hamm.airpower.open.OpenArithmeticType;
 import cn.hamm.airpower.validate.dictionary.Dictionary;
@@ -65,7 +68,6 @@ public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenApp
 
     @Description("应用所有者")
     @ManyToOne
-    @Payload
     @Search(Search.Mode.JOIN)
     @ReadOnly
     private UserEntity owner;
