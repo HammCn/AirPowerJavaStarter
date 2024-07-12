@@ -8,6 +8,7 @@ import cn.hamm.demo.module.system.log.LogService;
 import cn.hamm.demo.module.system.menu.MenuService;
 import cn.hamm.demo.module.system.permission.PermissionService;
 import cn.hamm.demo.module.user.UserService;
+import cn.hamm.demo.module.webhook.WebHookService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -47,6 +48,9 @@ public class Services {
     @Getter
     private static OpenLogService openLogService;
 
+    @Getter
+    private static WebHookService webHookService;
+
     @Autowired
     public Services(
             Environment environment,
@@ -57,7 +61,8 @@ public class Services {
             MenuService menuService,
             LogService logService,
             OpenAppService openAppService,
-            OpenLogService openLogService
+            OpenLogService openLogService,
+            WebHookService webHookService
     ) {
         Services.environment = environment;
         Services.appConfig = appConfig;
@@ -68,5 +73,6 @@ public class Services {
         Services.logService = logService;
         Services.openAppService = openAppService;
         Services.openLogService = openLogService;
+        Services.webHookService = webHookService;
     }
 }
