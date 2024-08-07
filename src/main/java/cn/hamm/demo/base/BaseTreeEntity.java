@@ -58,7 +58,7 @@ public class BaseTreeEntity<E extends BaseTreeEntity<E>> extends BaseEntity<E> i
     }
 
     public E setRootTree() {
-        this.parentId = Constant.ZERO_LONG;
+        parentId = Constant.ZERO_LONG;
         return (E) this;
     }
 }
