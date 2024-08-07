@@ -84,6 +84,6 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
      * @return 结果
      */
     public final boolean isRootUser() {
-        return this.getId() == 1L;
+        return getId() == 1L;
     }
 }
