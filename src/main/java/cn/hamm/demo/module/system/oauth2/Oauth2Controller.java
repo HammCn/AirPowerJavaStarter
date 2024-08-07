@@ -13,6 +13,7 @@ import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.open.app.IOpenAppAction;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.user.UserEntity;
+import cn.hamm.demo.module.user.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -78,15 +79,16 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
             // 没有cookie
             return redirectLogin(response, appKey, redirectUri);
         }
-        Long userId = Services.getUserService().getUserIdByCookie(cookieString);
+        UserService userService = Services.getUserService();
+        Long userId = userService.getUserIdByCookie(cookieString);
         if (Objects.isNull(userId)) {
             // cookie没有找到用户
             return redirectLogin(response, appKey, redirectUri);
         }
-        UserEntity userEntity = Services.getUserService().get(userId);
+        UserEntity userEntity = userService.get(userId);
         String code = Utils.getRandomUtil().randomString();
         openApp.setCode(code).setAppKey(appKey);
-        Services.getUserService().saveOauthCode(userEntity.getId(), openApp);
+        userService.saveOauthCode(userEntity.getId(), openApp);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
         String querySplit = "?";
         if (redirectTarget.contains(querySplit)) {
@@ -103,10 +105,11 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
     @PostMapping("accessToken")
     public Json accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) OpenAppEntity openAppEntity) {
         String code = openAppEntity.getCode();
-        Long userId = Services.getUserService().getUserIdByOauthAppKeyAndCode(openAppEntity.getAppKey(), code);
+        UserService userService = Services.getUserService();
+        Long userId = userService.getUserIdByOauthAppKeyAndCode(openAppEntity.getAppKey(), code);
         OpenAppEntity existApp = Services.getOpenAppService().getByAppKey(openAppEntity.getAppKey());
         ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), openAppEntity.getAppSecret(), "应用秘钥错误");
-        Services.getUserService().removeOauthCode(existApp.getAppKey(), code);
+        userService.removeOauthCode(existApp.getAppKey(), code);
         String accessToken = Utils.getSecurityUtil().createAccessToken(userId);
         return Json.data(accessToken);
     }
