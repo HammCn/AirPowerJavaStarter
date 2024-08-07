@@ -24,11 +24,12 @@ public class WebHookController extends BaseController<WebHookEntity, WebHookServ
     @RequestMapping("getSceneList")
     @Permission(authorize = false)
     public Json getSceneList() {
-        return Json.data(Arrays
-                .stream(WebHookScene.values()).map(item -> Map.of(
+        return Json.data(Arrays.stream(WebHookScene.values())
+                .map(item -> Map.of(
                         "key", item.getKey(),
                         "label", item.getLabel()
-                )).toList()
+                ))
+                .toList()
         );
     }
 }

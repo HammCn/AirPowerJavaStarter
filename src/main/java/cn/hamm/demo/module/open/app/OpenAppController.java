@@ -5,7 +5,6 @@ import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Filter;
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.enums.ServiceError;
-import cn.hamm.airpower.exception.ServiceException;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.model.query.QueryPageRequest;
 import cn.hamm.airpower.model.query.QueryRequest;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
@@ -65,13 +62,7 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     @RequestMapping("resetKeyPair")
     public Json resetKeyPair(@RequestBody @Validated(WhenIdRequired.class) OpenAppEntity openApp) {
         OpenAppEntity exist = service.get(openApp.getId());
-        try {
-            KeyPair keyPair = Utils.getRsaUtil().generateKeyPair();
-            exist.setPrivateKey(Utils.getRsaUtil().convertPrivateKeyToPem(keyPair.getPrivate()));
-            exist.setPublicKey(Utils.getRsaUtil().convertPublicKeyToPem(keyPair.getPublic()));
-        } catch (NoSuchAlgorithmException e) {
-            throw new ServiceException(e);
-        }
+        service.resetKeyPare(exist);
         service.update(exist);
         return Json.data(exist.getPublicKey());
     }

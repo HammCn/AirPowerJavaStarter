@@ -4,6 +4,7 @@ import cn.hamm.airpower.interceptor.ResponseBodyInterceptor;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.system.log.LogEntity;
+import cn.hamm.demo.module.system.log.LogService;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,8 @@ public class ResponseInterceptor extends ResponseBodyInterceptor {
         if (Objects.isNull(logId)) {
             return body;
         }
-        LogEntity log = Services.getLogService().getMaybeNull(Long.parseLong(logId.toString()));
+        LogService logService = Services.getLogService();
+        LogEntity log = logService.getMaybeNull(Long.parseLong(logId.toString()));
         if (Objects.isNull(log)) {
             return null;
         }
@@ -34,7 +36,7 @@ public class ResponseInterceptor extends ResponseBodyInterceptor {
 
         }
         log.setResponse(responseBody);
-        Services.getLogService().update(log);
+        logService.update(log);
         return body;
     }
 }

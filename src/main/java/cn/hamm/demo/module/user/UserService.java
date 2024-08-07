@@ -4,6 +4,8 @@ import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.model.query.QueryRequest;
+import cn.hamm.airpower.util.PasswordUtil;
+import cn.hamm.airpower.util.TreeUtil;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.common.Services;
@@ -65,9 +67,10 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return 菜单树列表
      */
     public List<MenuEntity> getMenuListByUserId(long userId) {
-        UserEntity userEntity = get(userId);
-        if (userEntity.isRootUser()) {
-            return Utils.getTreeUtil().buildTreeList(
+        UserEntity user = get(userId);
+        TreeUtil treeUtil = Utils.getTreeUtil();
+        if (user.isRootUser()) {
+            return treeUtil.buildTreeList(
                     Services.getMenuService().getList(
                             new QueryRequest<MenuEntity>()
                                     .setSort(new Sort().setField("orderNo"))
@@ -75,8 +78,8 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             );
         }
         List<MenuEntity> menuList = new ArrayList<>();
-        for (RoleEntity roleEntity : userEntity.getRoleList()) {
-            roleEntity.getMenuList().forEach(menu -> {
+        for (RoleEntity role : user.getRoleList()) {
+            role.getMenuList().forEach(menu -> {
                 boolean isExist = menuList.stream()
                         .anyMatch(existMenu -> menu.getId().equals(existMenu.getId()));
                 if (!isExist) {
@@ -84,7 +87,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
                 }
             });
         }
-        return Utils.getTreeUtil().buildTreeList(menuList);
+        return treeUtil.buildTreeList(menuList);
     }
 
     /**
@@ -121,14 +124,15 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         String code = getEmailCode(existUser.getEmail());
         ServiceError.PARAM_INVALID.whenNotEquals(code, user.getCode(), "验证码输入错误");
         String oldPassword = user.getOldPassword();
+        PasswordUtil passwordUtil = Utils.getPasswordUtil();
         ServiceError.PARAM_INVALID.whenNotEqualsIgnoreCase(
-                Utils.getPasswordUtil().encode(oldPassword, existUser.getSalt()),
+                passwordUtil.encode(oldPassword, existUser.getSalt()),
                 existUser.getPassword(),
                 "原密码输入错误，修改密码失败"
         );
         String salt = Utils.getRandomUtil().randomString();
         user.setSalt(salt);
-        user.setPassword(Utils.getPasswordUtil().encode(user.getPassword(), salt));
+        user.setPassword(passwordUtil.encode(user.getPassword(), salt));
         removeEmailCodeCache(existUser.getEmail());
         update(user);
     }

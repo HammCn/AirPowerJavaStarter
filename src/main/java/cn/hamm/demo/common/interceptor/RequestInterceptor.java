@@ -48,7 +48,10 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             return;
         }
         PermissionEntity needPermission = Services.getPermissionService().getPermissionByIdentity(permissionIdentity);
-        if (existUser.getRoleList().stream().flatMap(role -> role.getPermissionList().stream()).anyMatch(permission -> needPermission.getId().equals(permission.getId()))) {
+        if (existUser.getRoleList().stream()
+                .flatMap(role -> role.getPermissionList().stream())
+                .anyMatch(permission -> needPermission.getId().equals(permission.getId()))
+        ) {
             return;
         }
         ServiceError.FORBIDDEN.show(String.format(
