@@ -54,6 +54,10 @@ public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenApp
     @Search(Search.Mode.EQUALS)
     private Integer arithmetic;
 
+    @Description("IP白名单")
+    @Column(columnDefinition = "text comment 'IP白名单'")
+    private String ipWhiteList;
+
     @Description("公钥")
     @ReadOnly
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
