@@ -26,15 +26,17 @@ public class AppWebSocketHandler extends WebSocketHandler {
      */
     private static final String EVENT_LEAVE = "leave";
 
+    public static final String GROUP_PREFIX = "group_";
+
     @Override
     public void onWebSocketPayload(@NotNull WebSocketPayload webSocketPayload, @NotNull WebSocketSession session) {
         switch (webSocketPayload.getType()) {
             case EVENT_JOIN:
-                subscribe("group_" + webSocketPayload.getData(), session);
+                subscribe(GROUP_PREFIX + webSocketPayload.getData(), session);
                 sendWebSocketPayload(session, new WebSocketPayload().setType(EVENT_JOIN).setData("User " + userIdHashMap.get(session.getId()) + " 加入了房间"));
                 break;
             case EVENT_LEAVE:
-                unsubscribe("group_" + webSocketPayload.getData(), session);
+                unsubscribe(GROUP_PREFIX + webSocketPayload.getData(), session);
                 break;
             default:
         }
