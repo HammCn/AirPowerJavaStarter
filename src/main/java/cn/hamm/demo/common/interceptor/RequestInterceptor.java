@@ -3,7 +3,6 @@ package cn.hamm.demo.common.interceptor;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.config.Configs;
 import cn.hamm.airpower.config.Constant;
-import cn.hamm.airpower.config.MessageConstant;
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.util.Utils;
@@ -55,7 +54,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             return;
         }
         ServiceError.FORBIDDEN.show(String.format(
-                MessageConstant.ACCESS_DENIED,
+                "你无权访问 %s (%s)",
                 needPermission.getName(),
                 needPermission.getIdentity()
         ));
@@ -85,7 +84,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             platform = request.getHeader(AppConstant.APP_PLATFORM_HEADER);
             Description description = method.getAnnotation(Description.class);
             if (Objects.nonNull(description) && StringUtils.hasText(description.value())) {
-                action = String.format(MessageConstant.MESSAGE_AND_DESCRIPTION, description.value(), action);
+                action = String.format("%s (%s)", description.value(), action);
             }
         } catch (Exception ignored) {
         }
