@@ -86,6 +86,7 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
      * @return 结果
      */
     @Transient
+    @JsonIgnore
     public final boolean isRootUser() {
         return Objects.nonNull(getId()) && getId() == 1L;
     }
