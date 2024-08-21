@@ -26,7 +26,7 @@ public class WebHookService extends BaseService<WebHookEntity, WebHookRepository
     /**
      * <h2>工厂列表</h2>
      */
-    private final Map<WebHookScene, AbstractWebHookFactory<?>> factoryMap = Map.of(
+    private final Map<WebHookScene, AbstractEventFactory<?>> factoryMap = Map.of(
             WebHookScene.APP_SECRET_RESET, new AppSecretResetEvent(),
             WebHookScene.SUPPLIER_ADD, new SupplierAddEvent(),
             WebHookScene.SUPPLIER_UPDATE, new SupplierUpdateEvent()
@@ -64,7 +64,7 @@ public class WebHookService extends BaseService<WebHookEntity, WebHookRepository
      * @return 工厂
      */
     @SuppressWarnings("unchecked")
-    private <E, F extends AbstractWebHookFactory<E>> @NotNull F getFactory(@NotNull WebHookScene scene, E entity) {
+    private <E, F extends AbstractEventFactory<E>> @NotNull F getFactory(@NotNull WebHookScene scene, E entity) {
         try {
             F factory = (F) factoryMap.get(scene);
             factory.setData(entity).setScene(scene);

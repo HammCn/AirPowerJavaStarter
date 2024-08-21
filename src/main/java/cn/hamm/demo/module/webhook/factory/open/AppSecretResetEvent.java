@@ -1,7 +1,7 @@
 package cn.hamm.demo.module.webhook.factory.open;
 
 import cn.hamm.demo.module.open.app.OpenAppEntity;
-import cn.hamm.demo.module.webhook.AbstractWebHookFactory;
+import cn.hamm.demo.module.webhook.AbstractEventFactory;
 import cn.hamm.demo.module.webhook.WebHookEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Hamm.cn
  */
-public class AppSecretResetEvent extends AbstractWebHookFactory<OpenAppEntity> {
+public class AppSecretResetEvent extends AbstractEventFactory<OpenAppEntity> {
 
     /**
      * <h2>获取通知内容</h2>

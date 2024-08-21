@@ -1,7 +1,7 @@
 package cn.hamm.demo.module.webhook.factory.supplier;
 
 import cn.hamm.demo.module.supplier.SupplierEntity;
-import cn.hamm.demo.module.webhook.AbstractWebHookFactory;
+import cn.hamm.demo.module.webhook.AbstractEventFactory;
 import cn.hamm.demo.module.webhook.WebHookEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Hamm.cn
  */
-public class SupplierUpdateEvent extends AbstractWebHookFactory<SupplierEntity> {
+public class SupplierUpdateEvent extends AbstractEventFactory<SupplierEntity> {
 
     /**
      * <h2>获取通知内容</h2>

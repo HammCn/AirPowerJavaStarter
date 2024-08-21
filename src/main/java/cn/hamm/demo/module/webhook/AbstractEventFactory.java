@@ -19,14 +19,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <h1>抽象通知工厂</h1>
+ * <h1>抽象事件工厂</h1>
  *
  * @author Hamm.cn
  */
 @Slf4j
 @Data
 @Accessors(chain = true)
-public abstract class AbstractWebHookFactory<E> {
+public abstract class AbstractEventFactory<E> {
     /**
      * <h2>当前数据</h2>
      */
