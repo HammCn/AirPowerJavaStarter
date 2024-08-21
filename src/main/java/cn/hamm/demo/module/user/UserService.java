@@ -11,7 +11,6 @@ import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.exception.CustomError;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
-import cn.hamm.demo.module.role.RoleEntity;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.mail.MessagingException;
@@ -78,15 +77,13 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             );
         }
         List<MenuEntity> menuList = new ArrayList<>();
-        for (RoleEntity role : user.getRoleList()) {
-            role.getMenuList().forEach(menu -> {
-                boolean isExist = menuList.stream()
-                        .anyMatch(existMenu -> menu.getId().equals(existMenu.getId()));
-                if (!isExist) {
-                    menuList.add(menu);
-                }
-            });
-        }
+        user.getRoleList().forEach(role -> role.getMenuList().forEach(menu -> {
+            boolean isExist = menuList.stream()
+                    .anyMatch(existMenu -> menu.getId().equals(existMenu.getId()));
+            if (!isExist) {
+                menuList.add(menu);
+            }
+        }));
         return treeUtil.buildTreeList(menuList);
     }
 
@@ -102,15 +99,13 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             return Services.getPermissionService().getList(null);
         }
         List<PermissionEntity> permissionList = new ArrayList<>();
-        for (RoleEntity roleEntity : userEntity.getRoleList()) {
-            roleEntity.getPermissionList().forEach(permission -> {
-                boolean isExist = permissionList.stream()
-                        .anyMatch(existPermission -> permission.getId().equals(existPermission.getId()));
-                if (!isExist) {
-                    permissionList.add(permission);
-                }
-            });
-        }
+        userEntity.getRoleList().forEach(roleEntity -> roleEntity.getPermissionList().forEach(permission -> {
+            boolean isExist = permissionList.stream()
+                    .anyMatch(existPermission -> permission.getId().equals(existPermission.getId()));
+            if (!isExist) {
+                permissionList.add(permission);
+            }
+        }));
         return permissionList;
     }
 

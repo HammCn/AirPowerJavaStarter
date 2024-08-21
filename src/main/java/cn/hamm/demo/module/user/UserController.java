@@ -6,6 +6,7 @@ import cn.hamm.airpower.annotation.Filter;
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Json;
+import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.common.Services;
@@ -135,7 +136,8 @@ public class UserController extends BaseController<UserEntity, UserService, User
         Long userId = Utils.getSecurityUtil().getIdFromAccessToken(accessToken);
 
         // 存储Cookies
-        String cookieString = Utils.getRandomUtil().randomString();
+        RandomUtil randomUtil = Utils.getRandomUtil();
+        String cookieString = randomUtil.randomString();
         service.saveCookie(userId, cookieString);
         response.addCookie(Utils.getCookieUtil().getAuthorizeCookie(cookieString));
 
@@ -149,7 +151,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         ServiceError.PARAM_INVALID.whenNull(openAppEntity, "登录失败,错误的应用ID");
 
         // 生成临时身份令牌code
-        String code = Utils.getRandomUtil().randomString();
+        String code = randomUtil.randomString();
         openAppEntity.setCode(code);
 
         // 缓存临时身份令牌code

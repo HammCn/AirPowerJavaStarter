@@ -7,6 +7,7 @@ import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.airpower.websocket.WebSocketPayload;
+import cn.hamm.airpower.websocket.WebsocketUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -20,9 +21,10 @@ public class IndexController extends RootController {
     @GetMapping("")
     @DesensitizeExclude
     public Json index() {
-        Utils.getWebsocketUtil().publish(new WebSocketPayload().setData("全服消息"));
-        Utils.getWebsocketUtil().publishToUser(1L, new WebSocketPayload().setType("chat").setData("用户消息"));
-        Utils.getWebsocketUtil().publishToChannel("group_1", new WebSocketPayload().setType("gift").setData("频道礼物消息"));
+        WebsocketUtil websocketUtil = Utils.getWebsocketUtil();
+        websocketUtil.publish(new WebSocketPayload().setData("全服消息"));
+        websocketUtil.publishToUser(1L, new WebSocketPayload().setType("chat").setData("用户消息"));
+        websocketUtil.publishToChannel("group_1", new WebSocketPayload().setType("gift").setData("频道礼物消息"));
         return Json.success("成功");
     }
 }
