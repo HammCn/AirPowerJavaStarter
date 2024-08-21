@@ -9,6 +9,7 @@ import cn.hamm.airpower.model.query.QueryPageRequest;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <h1>Controller</h1>
@@ -20,7 +21,7 @@ import cn.hamm.demo.module.open.app.OpenAppEntity;
 @Extends({Api.GetDetail, Api.GetPage})
 public class OpenLogController extends BaseController<OpenLogEntity, OpenLogService, OpenLogRepository> implements IOpenLogAction {
     @Override
-    protected <T extends QueryPageRequest<OpenLogEntity>> T beforeGetPage(T queryPageRequest) {
+    protected <T extends QueryPageRequest<OpenLogEntity>> T beforeGetPage(@NotNull T queryPageRequest) {
         OpenAppEntity openApp = new OpenAppEntity();
         openApp.setOwner(Services.getUserService().get(getCurrentUserId()));
         queryPageRequest.setFilter(queryPageRequest.getFilter().setOpenApp(openApp));
@@ -28,7 +29,7 @@ public class OpenLogController extends BaseController<OpenLogEntity, OpenLogServ
     }
 
     @Override
-    protected OpenLogEntity afterGetDetail(OpenLogEntity openLog) {
+    protected OpenLogEntity afterGetDetail(@NotNull OpenLogEntity openLog) {
         ServiceError.DATA_NOT_FOUND.whenNotEquals(openLog.getOpenApp().getOwner().getId(), getCurrentUserId(), "没有查询到日志信息");
         return openLog;
     }
