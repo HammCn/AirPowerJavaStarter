@@ -48,18 +48,6 @@ public class UserController extends BaseController<UserEntity, UserService, User
         return Json.success("资料修改成功");
     }
 
-    @Description("获取WebAuthn参数")
-    @Permission(authorize = false)
-    @PostMapping("getWebAuthnParam")
-    public Json getWebAuthnParam(Long userId) {
-        UserEntity user = service.get(userId);
-        UserEntity response = new UserEntity();
-        response.setEmail(user.getEmail());
-        String code = Utils.getRandomUtil().randomString();
-        response.setCode(code);
-        return Json.data(response);
-    }
-
     @Description("获取我的菜单")
     @Permission(authorize = false)
     @PostMapping("getMyMenuList")
