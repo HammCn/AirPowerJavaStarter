@@ -16,7 +16,6 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
-import org.jetbrains.annotations.Contract;
 
 import java.util.Objects;
 import java.util.Set;
