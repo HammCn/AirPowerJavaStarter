@@ -29,4 +29,9 @@ public class RoleController extends BaseController<RoleEntity, RoleService, Role
         service.update(entity);
         return Json.success("授权权限成功");
     }
+
+    @Override
+    protected RoleEntity beforeUpdate(RoleEntity role) {
+        return role.setMenuList(null).setPermissionList(null);
+    }
 }
