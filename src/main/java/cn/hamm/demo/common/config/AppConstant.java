@@ -20,9 +20,4 @@ public class AppConstant {
      * <h2>应用自定义异常代码基数</h2>
      */
     public static final int BASE_CUSTOM_ERROR = 200000;
-
-    /**
-     * <h2>开放应用错误代码基数</h2>
-     */
-    public static final int BASE_OPEN_ERROR = 500000;
 }

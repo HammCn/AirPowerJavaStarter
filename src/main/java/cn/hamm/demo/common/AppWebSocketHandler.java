@@ -17,7 +17,7 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class AppWebSocketHandler extends WebSocketHandler {
     /**
-     * <h2></h2>
+     * <h2>加入房间</h2>
      */
     private static final String EVENT_JOIN = "join";
 
@@ -26,6 +26,9 @@ public class AppWebSocketHandler extends WebSocketHandler {
      */
     private static final String EVENT_LEAVE = "leave";
 
+    /**
+     * <h2>订阅分组前缀</h2>
+     */
     public static final String GROUP_PREFIX = "group_";
 
     @Override

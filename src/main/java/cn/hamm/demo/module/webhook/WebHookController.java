@@ -3,6 +3,7 @@ package cn.hamm.demo.module.webhook;
 import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Permission;
+import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.interfaces.IEntityAction;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.demo.base.BaseController;
@@ -26,8 +27,8 @@ public class WebHookController extends BaseController<WebHookEntity, WebHookServ
     public Json getSceneList() {
         return Json.data(Arrays.stream(WebHookScene.values())
                 .map(item -> Map.of(
-                        "key", item.getKey(),
-                        "label", item.getLabel()
+                        Constant.KEY, item.getKey(),
+                        Constant.LABEL, item.getLabel()
                 ))
                 .toList()
         );
