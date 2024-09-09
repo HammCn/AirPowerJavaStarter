@@ -33,7 +33,9 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     @Permission(login = false)
     @Filter(RootEntity.WhenGetDetail.class)
     public Json getByAppKey(@RequestBody @Validated(WhenGetByAppKey.class) OpenAppEntity entity) {
-        return Json.data(service.getByAppKey(entity.getAppKey()));
+        OpenAppEntity openApp = service.getByAppKey(entity.getAppKey());
+        ServiceError.DATA_NOT_FOUND.whenNull(openApp, "没有查到指定AppKey的应用");
+        return Json.data(openApp);
     }
 
     @Override
