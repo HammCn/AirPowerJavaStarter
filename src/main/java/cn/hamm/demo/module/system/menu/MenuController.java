@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class MenuController extends BaseController<MenuEntity, MenuService, MenuRepository> {
     @Permission(authorize = false)
     @Override
-    public Json getList(QueryListRequest<MenuEntity> queryListRequest) {
+    public Json getList(@RequestBody QueryListRequest<MenuEntity> queryListRequest) {
         return Json.data(Utils.getTreeUtil().buildTreeList(service.getList(queryListRequest)));
     }
 }
