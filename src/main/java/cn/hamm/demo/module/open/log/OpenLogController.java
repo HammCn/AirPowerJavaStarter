@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @Extends({Api.GetDetail, Api.GetPage})
 public class OpenLogController extends BaseController<OpenLogEntity, OpenLogService, OpenLogRepository> implements IOpenLogAction {
     @Override
-    protected QueryPageRequest<OpenLogEntity> beforeGetPage(QueryPageRequest<OpenLogEntity> queryPageRequest) {
+    protected QueryPageRequest<OpenLogEntity> beforeGetPage(@NotNull QueryPageRequest<OpenLogEntity> queryPageRequest) {
         OpenAppEntity openApp = new OpenAppEntity();
         openApp.setOwner(Services.getUserService().get(getCurrentUserId()));
         return queryPageRequest.setFilter(queryPageRequest.getFilter().setOpenApp(openApp));
