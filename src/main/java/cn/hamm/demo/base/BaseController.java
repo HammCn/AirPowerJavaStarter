@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class BaseController<E extends BaseEntity, S extends BaseService<E, R>, R extends BaseRepository<E>> extends RootEntityController<E, S, R> {
     @DisableLog
     @Override
-    public Json getList(QueryListRequest<E> queryListRequest) {
+    public Json getList(@RequestBody QueryListRequest<E> queryListRequest) {
         return super.getList(queryListRequest);
     }
 

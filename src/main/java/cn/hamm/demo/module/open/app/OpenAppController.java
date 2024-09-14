@@ -89,12 +89,12 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     }
 
     @Override
-    protected QueryListRequest<OpenAppEntity> beforeGetList(QueryListRequest<OpenAppEntity> queryListRequest) {
+    protected QueryListRequest<OpenAppEntity> beforeGetList(@NotNull QueryListRequest<OpenAppEntity> queryListRequest) {
         return queryListRequest.setFilter(queryListRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));
     }
 
     @Override
-    protected QueryPageRequest<OpenAppEntity> beforeGetPage(QueryPageRequest<OpenAppEntity> queryPageRequest) {
+    protected QueryPageRequest<OpenAppEntity> beforeGetPage(@NotNull QueryPageRequest<OpenAppEntity> queryPageRequest) {
         return queryPageRequest.setFilter(queryPageRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));
     }
 
