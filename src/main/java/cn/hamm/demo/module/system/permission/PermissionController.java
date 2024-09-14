@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class PermissionController extends BaseController<PermissionEntity, PermissionService, PermissionRepository> {
     @Permission(authorize = false)
     @Override
-    public Json getList(QueryListRequest<PermissionEntity> queryListRequest) {
+    public Json getList(@RequestBody QueryListRequest<PermissionEntity> queryListRequest) {
         return Json.data(Utils.getTreeUtil().buildTreeList(service.getList(queryListRequest)));
     }
 }
