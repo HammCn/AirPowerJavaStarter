@@ -2,6 +2,7 @@ package cn.hamm.demo.base;
 
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.model.Json;
+import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.model.query.QueryPageRequest;
 import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.root.RootEntityController;
@@ -19,12 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author Hamm.cn
  */
 @Permission
-public class BaseController<E extends BaseEntity<E>, S extends BaseService<E, R>, R extends BaseRepository<E>> extends RootEntityController<E, S, R> {
-
+public class BaseController<E extends BaseEntity, S extends BaseService<E, R>, R extends BaseRepository<E>> extends RootEntityController<E, S, R> {
     @DisableLog
     @Override
-    public Json getList(@RequestBody QueryRequest<E> queryRequest) {
-        return super.getList(queryRequest);
+    public Json getList(QueryListRequest<E> queryListRequest) {
+        return super.getList(queryListRequest);
     }
 
     @DisableLog

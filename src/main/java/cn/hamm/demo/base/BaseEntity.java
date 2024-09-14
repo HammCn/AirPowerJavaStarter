@@ -13,5 +13,5 @@ import lombok.Getter;
 @MappedSuperclass
 @Getter
 @Description("")
-public class BaseEntity<E extends BaseEntity<E>> extends RootEntity<E> {
+public class BaseEntity extends RootEntity {
 }

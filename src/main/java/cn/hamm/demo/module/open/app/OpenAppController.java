@@ -6,6 +6,7 @@ import cn.hamm.airpower.annotation.Filter;
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Json;
+import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.model.query.QueryPageRequest;
 import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.root.RootEntity;
@@ -88,15 +89,13 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     }
 
     @Override
-    protected <T extends QueryRequest<OpenAppEntity>> T beforeGetList(@NotNull T queryRequest) {
-        queryRequest.setFilter(queryRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));
-        return queryRequest;
+    protected QueryListRequest<OpenAppEntity> beforeGetList(QueryListRequest<OpenAppEntity> queryListRequest) {
+        return queryListRequest.setFilter(queryListRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));
     }
 
     @Override
-    protected <T extends QueryPageRequest<OpenAppEntity>> T beforeGetPage(@NotNull T queryPageRequest) {
-        queryPageRequest.setFilter(queryPageRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));
-        return queryPageRequest;
+    protected QueryPageRequest<OpenAppEntity> beforeGetPage(QueryPageRequest<OpenAppEntity> queryPageRequest) {
+        return queryPageRequest.setFilter(queryPageRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));
     }
 
     @Override

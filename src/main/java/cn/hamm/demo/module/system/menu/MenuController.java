@@ -4,6 +4,7 @@ import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.model.Json;
+import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.base.BaseController;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class MenuController extends BaseController<MenuEntity, MenuService, MenuRepository> {
     @Permission(authorize = false)
     @Override
-    public Json getList(@RequestBody QueryRequest<MenuEntity> queryRequest) {
-        return Json.data(Utils.getTreeUtil().buildTreeList(service.getList(queryRequest)));
+    public Json getList(QueryListRequest<MenuEntity> queryListRequest) {
+        return Json.data(Utils.getTreeUtil().buildTreeList(service.getList(queryListRequest)));
     }
 }

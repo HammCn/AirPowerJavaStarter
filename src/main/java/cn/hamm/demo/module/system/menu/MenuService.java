@@ -2,6 +2,7 @@ package cn.hamm.demo.module.system.menu;
 
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Sort;
+import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.demo.base.BaseService;
@@ -25,14 +26,12 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
 
     @Override
     protected void beforeDelete(long id) {
-        QueryRequest<MenuEntity> queryRequest = new QueryRequest<>();
-        queryRequest.setFilter(new MenuEntity().setParentId(id));
-        List<MenuEntity> children = getList(queryRequest);
+        List<MenuEntity> children = filter(new MenuEntity().setParentId(id));
         ServiceError.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子菜单,无法删除!");
     }
 
     @Override
-    protected <T extends QueryRequest<MenuEntity>> @NotNull T beforeGetList(@NotNull T sourceRequestData) {
+    protected @NotNull QueryListRequest<MenuEntity> beforeGetList(@NotNull QueryListRequest<MenuEntity> sourceRequestData) {
         MenuEntity filter = sourceRequestData.getFilter();
         sourceRequestData.setSort(Objects.requireNonNullElse(
                 sourceRequestData.getSort(),

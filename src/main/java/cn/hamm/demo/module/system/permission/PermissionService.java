@@ -34,9 +34,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
     protected void beforeDelete(long id) {
         PermissionEntity entity = get(id);
         ServiceError.FORBIDDEN_DELETE.when(entity.getIsSystem(), "系统内置权限无法被删除!");
-        QueryRequest<PermissionEntity> queryRequest = new QueryRequest<>();
-        queryRequest.setFilter(new PermissionEntity().setParentId(id));
-        List<PermissionEntity> children = getList(queryRequest);
+        List<PermissionEntity> children = filter(new PermissionEntity().setParentId(id));
         ServiceError.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子权限,无法删除!");
     }
 
