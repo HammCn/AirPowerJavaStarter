@@ -1,7 +1,6 @@
 package cn.hamm.demo.module.system.permission;
 
 import cn.hamm.airpower.enums.ServiceError;
-import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.Application;
 import cn.hamm.demo.base.BaseService;

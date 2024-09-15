@@ -3,7 +3,6 @@ package cn.hamm.demo.module.system.menu;
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.model.query.QueryListRequest;
-import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.demo.base.BaseService;
 import org.jetbrains.annotations.NotNull;

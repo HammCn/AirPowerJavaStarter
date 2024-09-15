@@ -4,7 +4,6 @@ import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.model.query.QueryListRequest;
-import cn.hamm.airpower.model.query.QueryRequest;
 import cn.hamm.airpower.util.PasswordUtil;
 import cn.hamm.airpower.util.TreeUtil;
 import cn.hamm.airpower.util.Utils;
