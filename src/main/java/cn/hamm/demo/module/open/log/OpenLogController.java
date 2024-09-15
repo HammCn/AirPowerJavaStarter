@@ -24,7 +24,8 @@ public class OpenLogController extends BaseController<OpenLogEntity, OpenLogServ
     protected QueryPageRequest<OpenLogEntity> beforeGetPage(@NotNull QueryPageRequest<OpenLogEntity> queryPageRequest) {
         OpenAppEntity openApp = new OpenAppEntity();
         openApp.setOwner(Services.getUserService().get(getCurrentUserId()));
-        return queryPageRequest.setFilter(queryPageRequest.getFilter().setOpenApp(openApp));
+        queryPageRequest.setFilter(queryPageRequest.getFilter().setOpenApp(openApp));
+        return queryPageRequest;
     }
 
     @Override
