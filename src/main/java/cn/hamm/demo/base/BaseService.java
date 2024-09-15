@@ -9,5 +9,5 @@ import cn.hamm.airpower.root.RootService;
  * @param <R> 数据源
  * @author Hamm.cn
  */
-public class BaseService<E extends BaseEntity, R extends BaseRepository<E>> extends RootService<E, R> {
+public class BaseService<E extends BaseEntity<E>, R extends BaseRepository<E>> extends RootService<E, R> {
 }

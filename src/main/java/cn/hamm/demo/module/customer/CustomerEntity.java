@@ -26,7 +26,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Table(name = "customer")
 @Description("客户")
-public class CustomerEntity extends BaseEntity {
+public class CustomerEntity extends BaseEntity<CustomerEntity> {
     @Description("客户名称")
     @NotNull(groups = {WhenUpdate.class, WhenAdd.class}, message = "客户名称不能为空")
     @Column(columnDefinition = "varchar(255) default '' comment '客户名称'")

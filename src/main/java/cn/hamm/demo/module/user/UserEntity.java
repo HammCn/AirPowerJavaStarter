@@ -33,7 +33,7 @@ import java.util.Set;
 @DynamicUpdate
 @Table(name = "user")
 @Description("用户")
-public class UserEntity extends BaseEntity implements IUserAction {
+public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @Description("邮箱")
     @Column(columnDefinition = "varchar(255) default '' comment '邮箱'", unique = true)
     @NotBlank(groups = {WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class, WhenAdd.class}, message = "邮箱不能为空")
