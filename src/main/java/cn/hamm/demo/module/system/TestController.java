@@ -6,7 +6,7 @@ import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.Utils;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <h1>Controller</h1>
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Description("测试")
 @Permission(login = false)
 public class TestController extends RootController {
-    @GetMapping("")
+    @RequestMapping("")
     public Json index() {
         return Json.success("Hello World!");
     }
 
-    @GetMapping("ip")
+    @RequestMapping("ip")
     public Json ip() {
         return Json.success(Utils.getRequestUtil().getIpAddress(Utils.getRequest()));
     }

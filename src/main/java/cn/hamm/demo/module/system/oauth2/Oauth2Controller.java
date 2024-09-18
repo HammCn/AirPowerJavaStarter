@@ -23,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -102,7 +102,7 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
 
     @Description("Code换取AccessToken")
     @Permission(login = false)
-    @PostMapping("accessToken")
+    @RequestMapping("accessToken")
     public Json accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) OpenAppEntity openAppEntity) {
         String code = openAppEntity.getCode();
         UserService userService = Services.getUserService();

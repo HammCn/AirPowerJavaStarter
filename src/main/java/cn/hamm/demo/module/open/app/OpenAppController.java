@@ -14,7 +14,6 @@ import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.common.Services;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,7 +28,7 @@ import java.util.Base64;
 @Description("开放应用")
 public class OpenAppController extends BaseController<OpenAppEntity, OpenAppService, OpenAppRepository> implements IOpenAppAction {
     @Description("通过AppKey获取应用信息")
-    @PostMapping("getByAppKey")
+    @RequestMapping("getByAppKey")
     @Permission(login = false)
     @Filter(RootEntity.WhenGetDetail.class)
     public Json getByAppKey(@RequestBody @Validated(WhenGetByAppKey.class) OpenAppEntity entity) {
@@ -88,11 +87,11 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     }
 
     @Override
-    protected QueryListRequest<OpenAppEntity> beforeGetList(QueryListRequest<OpenAppEntity> queryListRequest) {
+    protected QueryListRequest<OpenAppEntity> beforeGetList(@NotNull QueryListRequest<OpenAppEntity> queryListRequest) {
         queryListRequest.setFilter(queryListRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));
         return queryListRequest;
     }
-    
+
     @Override
     protected QueryPageRequest<OpenAppEntity> beforeGetPage(@NotNull QueryPageRequest<OpenAppEntity> queryPageRequest) {
         queryPageRequest.setFilter(queryPageRequest.getFilter().setOwner(Services.getUserService().get(getCurrentUserId())));

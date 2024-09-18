@@ -1,5 +1,6 @@
 package cn.hamm.demo.module.webhook.enums;
 
+import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.interfaces.IDictionary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
+@Description("WebHook的通知类型")
 public enum WebHookType implements IDictionary {
     /**
      * <h2>企业微信</h2>

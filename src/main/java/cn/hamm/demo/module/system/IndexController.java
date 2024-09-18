@@ -8,7 +8,7 @@ import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.airpower.websocket.WebSocketPayload;
 import cn.hamm.airpower.websocket.WebsocketUtil;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <h1>Controller</h1>
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @ApiController("/")
 @Description("首页")
 public class IndexController extends RootController {
-    @GetMapping("")
+    @RequestMapping("")
     @DesensitizeExclude
     public Json index() {
         WebsocketUtil websocketUtil = Utils.getWebsocketUtil();

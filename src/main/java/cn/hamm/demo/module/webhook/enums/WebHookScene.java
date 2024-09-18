@@ -1,5 +1,6 @@
 package cn.hamm.demo.module.webhook.enums;
 
+import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.interfaces.IDictionary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.Getter;
 @SuppressWarnings("AlibabaEnumConstantsMustHaveComment")
 @Getter
 @AllArgsConstructor
+@Description("WebHook的通知场景")
 public enum WebHookScene implements IDictionary {
     APP_SECRET_RESET(1, "应用密钥重置通知"),
     SUPPLIER_ADD(2, "新建供应商"),
