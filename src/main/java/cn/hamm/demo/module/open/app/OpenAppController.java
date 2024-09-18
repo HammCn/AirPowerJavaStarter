@@ -14,8 +14,8 @@ import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.common.Services;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Base64;
 
@@ -28,7 +28,7 @@ import java.util.Base64;
 @Description("开放应用")
 public class OpenAppController extends BaseController<OpenAppEntity, OpenAppService, OpenAppRepository> implements IOpenAppAction {
     @Description("通过AppKey获取应用信息")
-    @RequestMapping("getByAppKey")
+    @PostMapping("getByAppKey")
     @Permission(login = false)
     @Filter(RootEntity.WhenGetDetail.class)
     public Json getByAppKey(@RequestBody @Validated(WhenGetByAppKey.class) OpenAppEntity entity) {
@@ -50,7 +50,7 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     }
 
     @Description("重置密钥")
-    @RequestMapping("resetSecret")
+    @PostMapping("resetSecret")
     public Json resetSecret(@RequestBody @Validated(WhenIdRequired.class) OpenAppEntity openApp) {
         OpenAppEntity exist = service.get(openApp.getId());
         String appSecret = Base64.getEncoder().encodeToString(Utils.getRandomUtil().randomBytes());
@@ -60,7 +60,7 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     }
 
     @Description("重置密钥对")
-    @RequestMapping("resetKeyPair")
+    @PostMapping("resetKeyPair")
     public Json resetKeyPair(@RequestBody @Validated(WhenIdRequired.class) OpenAppEntity openApp) {
         OpenAppEntity exist = service.get(openApp.getId());
         service.resetKeyPare(exist);
