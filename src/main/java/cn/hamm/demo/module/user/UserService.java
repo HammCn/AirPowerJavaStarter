@@ -90,12 +90,12 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return 权限列表
      */
     public List<PermissionEntity> getPermissionListByUserId(long userId) {
-        UserEntity userEntity = get(userId);
-        if (userEntity.isRootUser()) {
+        UserEntity user = get(userId);
+        if (user.isRootUser()) {
             return Services.getPermissionService().getList(null);
         }
         List<PermissionEntity> permissionList = new ArrayList<>();
-        userEntity.getRoleList().forEach(roleEntity -> roleEntity.getPermissionList().forEach(permission -> {
+        user.getRoleList().forEach(roleEntity -> roleEntity.getPermissionList().forEach(permission -> {
             boolean isExist = permissionList.stream()
                     .anyMatch(existPermission -> permission.getId().equals(existPermission.getId()));
             if (!isExist) {
@@ -140,16 +140,16 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
      * <h2>重置密码</h2>
      *
-     * @param userEntity 用户实体
+     * @param user 用户实体
      */
-    public void resetMyPassword(@NotNull UserEntity userEntity) {
-        String code = getEmailCode(userEntity.getEmail());
-        ServiceError.PARAM_INVALID.whenNotEqualsIgnoreCase(code, userEntity.getCode(), "邮箱验证码不一致");
-        UserEntity existUser = repository.getByEmail(userEntity.getEmail());
+    public void resetMyPassword(@NotNull UserEntity user) {
+        String code = getEmailCode(user.getEmail());
+        ServiceError.PARAM_INVALID.whenNotEqualsIgnoreCase(code, user.getCode(), "邮箱验证码不一致");
+        UserEntity existUser = repository.getByEmail(user.getEmail());
         ServiceError.PARAM_INVALID.whenNull(existUser, "重置密码失败，用户信息异常");
         String salt = Utils.getRandomUtil().randomString(PASSWORD_SALT_LENGTH);
         existUser.setSalt(salt);
-        existUser.setPassword(Utils.getPasswordUtil().encode(userEntity.getPassword(), salt));
+        existUser.setPassword(Utils.getPasswordUtil().encode(user.getPassword(), salt));
         removeEmailCodeCache(existUser.getEmail());
         update(existUser);
     }
