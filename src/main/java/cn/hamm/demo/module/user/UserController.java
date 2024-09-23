@@ -34,15 +34,15 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Permission(authorize = false)
     @PostMapping("getMyInfo")
     @Filter(WhenGetMyInfo.class)
-    public Json getMyInfo(Long userId) {
-        return Json.data(service.get(userId));
+    public Json getMyInfo() {
+        return Json.data(service.get(getCurrentUserId()));
     }
 
     @Description("修改我的信息")
     @Permission(authorize = false)
     @PostMapping("updateMyInfo")
-    public Json updateMyInfo(@RequestBody @Validated(WhenUpdateMyInfo.class) UserEntity userEntity, Long userId) {
-        userEntity.setId(userId);
+    public Json updateMyInfo(@RequestBody @Validated(WhenUpdateMyInfo.class) UserEntity userEntity) {
+        userEntity.setId(getCurrentUserId());
         userEntity.setRoleList(null);
         service.update(userEntity);
         return Json.success("资料修改成功");
@@ -68,8 +68,8 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("修改我的密码")
     @Permission(authorize = false)
     @PostMapping("updateMyPassword")
-    public Json updateMyPassword(@RequestBody @Validated(WhenUpdateMyPassword.class) UserEntity userEntity, Long userId) {
-        userEntity.setId(userId);
+    public Json updateMyPassword(@RequestBody @Validated(WhenUpdateMyPassword.class) UserEntity userEntity) {
+        userEntity.setId(getCurrentUserId());
         service.modifyUserPassword(userEntity);
         return Json.success("密码修改成功");
     }
