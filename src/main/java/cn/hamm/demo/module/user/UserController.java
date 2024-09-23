@@ -41,10 +41,10 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("修改我的信息")
     @Permission(authorize = false)
     @PostMapping("updateMyInfo")
-    public Json updateMyInfo(@RequestBody @Validated(WhenUpdateMyInfo.class) UserEntity userEntity) {
-        userEntity.setId(getCurrentUserId());
-        userEntity.setRoleList(null);
-        service.update(userEntity);
+    public Json updateMyInfo(@RequestBody @Validated(WhenUpdateMyInfo.class) UserEntity user) {
+        user.setId(getCurrentUserId());
+        user.setRoleList(null);
+        service.update(user);
         return Json.success("资料修改成功");
     }
 
@@ -68,55 +68,55 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Description("修改我的密码")
     @Permission(authorize = false)
     @PostMapping("updateMyPassword")
-    public Json updateMyPassword(@RequestBody @Validated(WhenUpdateMyPassword.class) UserEntity userEntity) {
-        userEntity.setId(getCurrentUserId());
-        service.modifyUserPassword(userEntity);
+    public Json updateMyPassword(@RequestBody @Validated(WhenUpdateMyPassword.class) UserEntity user) {
+        user.setId(getCurrentUserId());
+        service.modifyUserPassword(user);
         return Json.success("密码修改成功");
     }
 
     @Description("找回密码")
     @Permission(login = false)
     @PostMapping("resetMyPassword")
-    public Json resetMyPassword(@RequestBody @Validated(WhenResetMyPassword.class) UserEntity userEntity) {
-        service.resetMyPassword(userEntity);
+    public Json resetMyPassword(@RequestBody @Validated(WhenResetMyPassword.class) UserEntity user) {
+        service.resetMyPassword(user);
         return Json.success("密码重置成功");
     }
 
     @Description("注册账号")
     @Permission(login = false)
     @PostMapping("register")
-    public Json register(@RequestBody @Validated(WhenRegister.class) UserEntity userEntity) {
-        service.register(userEntity);
+    public Json register(@RequestBody @Validated(WhenRegister.class) UserEntity user) {
+        service.register(user);
         return Json.success("注册成功");
     }
 
     @Description("账号密码登录")
     @Permission(login = false)
     @PostMapping("login")
-    public Json login(@RequestBody @Validated(WhenLogin.class) UserEntity userEntity, HttpServletResponse httpServletResponse) {
-        return doLogin(UserLoginType.VIA_ACCOUNT_PASSWORD, userEntity, httpServletResponse);
+    public Json login(@RequestBody @Validated(WhenLogin.class) UserEntity user, HttpServletResponse httpServletResponse) {
+        return doLogin(UserLoginType.VIA_ACCOUNT_PASSWORD, user, httpServletResponse);
     }
 
     @Description("邮箱验证码登录")
     @Permission(login = false)
     @PostMapping("loginViaEmail")
-    public Json loginViaEmail(@RequestBody @Validated(WhenLoginViaEmail.class) UserEntity userEntity, HttpServletResponse httpServletResponse) {
-        return doLogin(UserLoginType.VIA_EMAIL_CODE, userEntity, httpServletResponse);
+    public Json loginViaEmail(@RequestBody @Validated(WhenLoginViaEmail.class) UserEntity user, HttpServletResponse httpServletResponse) {
+        return doLogin(UserLoginType.VIA_EMAIL_CODE, user, httpServletResponse);
     }
 
     /**
      * <h1>处理用户登录</h1>
      *
      * @param userLoginType 登录方式
-     * @param userEntity    登录数据
+     * @param user          登录数据
      * @param response      响应的请求
      * @return JsonData
      */
-    private Json doLogin(@NotNull UserLoginType userLoginType, UserEntity userEntity, HttpServletResponse response) {
+    private Json doLogin(@NotNull UserLoginType userLoginType, UserEntity user, HttpServletResponse response) {
         String accessToken = "";
         switch (userLoginType) {
-            case VIA_ACCOUNT_PASSWORD -> accessToken = service.login(userEntity);
-            case VIA_EMAIL_CODE -> accessToken = service.loginViaEmail(userEntity);
+            case VIA_ACCOUNT_PASSWORD -> accessToken = service.login(user);
+            case VIA_EMAIL_CODE -> accessToken = service.loginViaEmail(user);
             default -> ServiceError.SERVICE_ERROR.show("暂不支持的登录方式");
         }
 
@@ -129,7 +129,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         service.saveCookie(userId, cookieString);
         response.addCookie(Utils.getCookieUtil().getAuthorizeCookie(cookieString));
 
-        String appKey = userEntity.getAppKey();
+        String appKey = user.getAppKey();
         if (!StringUtils.hasText(appKey)) {
             return Json.data(accessToken, "登录成功,请存储你的访问凭证");
         }

@@ -103,12 +103,12 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
     @Description("Code换取AccessToken")
     @Permission(login = false)
     @PostMapping("accessToken")
-    public Json accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) OpenAppEntity openAppEntity) {
-        String code = openAppEntity.getCode();
+    public Json accessToken(@RequestBody @Validated(WhenCode2AccessToken.class) OpenAppEntity openApp) {
+        String code = openApp.getCode();
         UserService userService = Services.getUserService();
-        Long userId = userService.getUserIdByOauthAppKeyAndCode(openAppEntity.getAppKey(), code);
-        OpenAppEntity existApp = Services.getOpenAppService().getByAppKey(openAppEntity.getAppKey());
-        ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), openAppEntity.getAppSecret(), "应用秘钥错误");
+        Long userId = userService.getUserIdByOauthAppKeyAndCode(openApp.getAppKey(), code);
+        OpenAppEntity existApp = Services.getOpenAppService().getByAppKey(openApp.getAppKey());
+        ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), openApp.getAppSecret(), "应用秘钥错误");
         userService.removeOauthCode(existApp.getAppKey(), code);
         String accessToken = Utils.getSecurityUtil().createAccessToken(userId);
         return Json.data(accessToken);

@@ -24,8 +24,8 @@ public class MailController extends RootController implements IUserAction {
     @Description("发送邮件")
     @Permission(login = false)
     @PostMapping("send")
-    public Json send(@RequestBody @Validated(WhenSendEmail.class) UserEntity userEntity) throws MessagingException {
-        Services.getUserService().sendMail(userEntity.getEmail());
+    public Json send(@RequestBody @Validated(WhenSendEmail.class) UserEntity user) throws MessagingException {
+        Services.getUserService().sendMail(user.getEmail());
         return Json.success("发送成功");
     }
 }
