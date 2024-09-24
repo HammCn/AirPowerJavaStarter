@@ -2,6 +2,7 @@ package cn.hamm.demo.module.user;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.validate.phone.Phone;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.role.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,6 +42,13 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入email字段")
     @Search()
     private String email;
+
+    @Description("手机号")
+    @Column(columnDefinition = "varchar(255) default '' comment '手机号'", unique = true)
+    @Phone(groups = {WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class}, message = "手机格式不正确")
+    @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入phone字段")
+    @Search()
+    private String phone;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Description("密码")
