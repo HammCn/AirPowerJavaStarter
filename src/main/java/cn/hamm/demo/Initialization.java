@@ -47,7 +47,7 @@ public class Initialization implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // 开始加载数据，请注意，以下数据请确保不会重复加载！！！
+        // 开始加载数据，请注意，以下数据请自行确保不会重复加载！！！
         loadUser();
         Services.getPermissionService().loadPermission();
         Services.getMenuService().loadMenu();
