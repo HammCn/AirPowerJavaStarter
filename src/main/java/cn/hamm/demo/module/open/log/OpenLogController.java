@@ -7,9 +7,10 @@ import cn.hamm.airpower.enums.Api;
 import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.model.query.QueryPageRequest;
 import cn.hamm.demo.base.BaseController;
-import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
+import cn.hamm.demo.module.user.UserService;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <h1>Controller</h1>
@@ -20,10 +21,13 @@ import org.jetbrains.annotations.NotNull;
 @Description("调用日志")
 @Extends({Api.GetDetail, Api.GetPage})
 public class OpenLogController extends BaseController<OpenLogEntity, OpenLogService, OpenLogRepository> implements IOpenLogAction {
+    @Autowired
+    private UserService userService;
+
     @Override
     protected QueryPageRequest<OpenLogEntity> beforeGetPage(@NotNull QueryPageRequest<OpenLogEntity> queryPageRequest) {
         OpenAppEntity openApp = new OpenAppEntity();
-        openApp.setOwner(Services.getUserService().get(getCurrentUserId()));
+        openApp.setOwner(userService.get(getCurrentUserId()));
         queryPageRequest.setFilter(queryPageRequest.getFilter().setOpenApp(openApp));
         return queryPageRequest;
     }

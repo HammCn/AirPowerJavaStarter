@@ -1,9 +1,12 @@
 package cn.hamm.demo;
 
+import cn.hamm.airpower.util.PasswordUtil;
+import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,17 +20,26 @@ import java.util.Objects;
  */
 @Component
 public class Initialization implements CommandLineRunner {
+    @Autowired
+    private RandomUtil randomUtil;
+
+    @Autowired
+    private PasswordUtil passwordUtil;
+
+    @Autowired
+    private UserService userService;
+
     private void loadUser() {
         // 初始化用户
-        UserEntity userEntity = Services.getUserService().getMaybeNull(1L);
-        if (Objects.nonNull(userEntity)) {
+        UserEntity user = userService.getMaybeNull(1L);
+        if (Objects.nonNull(user)) {
             return;
         }
-        String salt = Utils.getRandomUtil().randomString(UserService.PASSWORD_SALT_LENGTH);
-        Services.getUserService().add(new UserEntity()
+        String salt = randomUtil.randomString(UserService.PASSWORD_SALT_LENGTH);
+        userService.add(new UserEntity()
                 .setNickname("Hamm")
                 .setEmail("admin@hamm.cn")
-                .setPassword(Utils.getPasswordUtil().encode("Aa123456", salt))
+                .setPassword(passwordUtil.encode("Aa123456", salt))
                 .setSalt(salt)
                 .setRemark("超级管理员,请勿数据库暴力直接删除"));
         System.out.println("---------------------------------");

@@ -1,6 +1,5 @@
 package cn.hamm.demo.common;
 
-import cn.hamm.airpower.config.Configs;
 import cn.hamm.airpower.websocket.WebSocketHandler;
 import cn.hamm.airpower.websocket.WebSocketPayload;
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +16,17 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class AppWebSocketHandler extends WebSocketHandler {
     /**
+     * <h2>订阅分组前缀</h2>
+     */
+    public static final String GROUP_PREFIX = "group_";
+    /**
      * <h2>加入房间</h2>
      */
     private static final String EVENT_JOIN = "join";
-
     /**
      * <h2>离开房间</h2>
      */
     private static final String EVENT_LEAVE = "leave";
-
-    /**
-     * <h2>订阅分组前缀</h2>
-     */
-    public static final String GROUP_PREFIX = "group_";
 
     @Override
     public void onWebSocketPayload(@NotNull WebSocketPayload webSocketPayload, @NotNull WebSocketSession session) {
@@ -52,7 +49,7 @@ public class AppWebSocketHandler extends WebSocketHandler {
      * @param session WebSocket会话
      */
     private void subscribe(String channel, WebSocketSession session) {
-        switch (Configs.getWebsocketConfig().getSupport()) {
+        switch (webSocketConfig.getSupport()) {
             case REDIS:
                 redisSubscribe(channel, session);
                 break;
@@ -71,7 +68,7 @@ public class AppWebSocketHandler extends WebSocketHandler {
      * @param session WebSocket会话
      */
     private void unsubscribe(String channel, WebSocketSession session) {
-        switch (Configs.getWebsocketConfig().getSupport()) {
+        switch (webSocketConfig.getSupport()) {
             case REDIS:
                 redisUnSubscribe(channel, session);
                 break;
