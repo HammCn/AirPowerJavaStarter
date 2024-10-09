@@ -89,7 +89,7 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
             return redirectLogin(response, appKey, redirectUri);
         }
         String cookieString = Arrays.stream(cookies)
-                .filter(c -> cookieConfig.getAuthCookieName().equals(c.getName()))
+                .filter(c -> Objects.equals(cookieConfig.getAuthCookieName(), c.getName()))
                 .findFirst().map(Cookie::getValue)
                 .orElse(null);
         if (!StringUtils.hasText(cookieString)) {
