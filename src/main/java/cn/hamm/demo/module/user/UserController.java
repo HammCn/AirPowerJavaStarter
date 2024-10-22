@@ -35,6 +35,9 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @Autowired
     private OpenAppService openAppService;
 
+    @Autowired
+    private CookieHelper cookieHelper;
+
     @Description("获取我的信息")
     @Permission(authorize = false)
     @PostMapping("getMyInfo")
@@ -131,7 +134,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         // 存储Cookies
         String cookieString = RandomUtil.randomString();
         service.saveCookie(userId, cookieString);
-        response.addCookie(CookieHelper.getAuthorizeCookie(cookieString));
+        response.addCookie(cookieHelper.getAuthorizeCookie(cookieString));
 
         String appKey = user.getAppKey();
         if (!StringUtils.hasText(appKey)) {

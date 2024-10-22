@@ -3,10 +3,12 @@ package cn.hamm.demo.module.user;
 
 import cn.hamm.airpower.core.config.Constant;
 import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.core.helper.AirCoreHelper;
 import cn.hamm.airpower.core.helper.EmailHelper;
 import cn.hamm.airpower.core.util.AccessTokenUtil;
 import cn.hamm.airpower.core.util.RandomUtil;
 import cn.hamm.airpower.core.util.TreeUtil;
+import cn.hamm.airpower.crud.helper.AirCrudHelper;
 import cn.hamm.airpower.crud.model.Sort;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.common.Services;
@@ -165,7 +167,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         CustomError.EMAIL_SEND_BUSY.when(hasEmailCodeInRedis(email));
         String code = RandomUtil.randomNumbers(6);
         setCodeToRedis(email, code);
-        EmailHelper.sendCode(email, "你收到一个邮箱验证码", code, "DEMO");
+        AirCoreHelper.getEmailHelper().sendCode(email, "你收到一个邮箱验证码", code, "DEMO");
     }
 
     /**

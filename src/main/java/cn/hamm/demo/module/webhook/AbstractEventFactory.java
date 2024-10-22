@@ -1,5 +1,6 @@
 package cn.hamm.demo.module.webhook;
 
+import cn.hamm.airpower.core.helper.AirCoreHelper;
 import cn.hamm.airpower.core.helper.EmailHelper;
 import cn.hamm.airpower.core.json.Json;
 import cn.hamm.airpower.core.util.DictionaryUtil;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +87,7 @@ public abstract class AbstractEventFactory<E> {
         if (webHookType == WebHookType.EMAIL) {
             // 如果是邮箱通知 直接发送邮件
             try {
-                EmailHelper.sendEmail(webHook.getUrl(), scene.getLabel(), data.toString());
+                AirCoreHelper.getEmailHelper().sendEmail(webHook.getUrl(), scene.getLabel(), data.toString());
             } catch (MessagingException e) {
                 log.error(e.getMessage(), e);
             }
