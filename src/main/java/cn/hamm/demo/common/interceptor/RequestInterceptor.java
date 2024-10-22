@@ -1,9 +1,14 @@
 package cn.hamm.demo.common.interceptor;
 
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.config.Constant;
-import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
-import cn.hamm.airpower.util.ReflectUtil;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.config.Constant;
+import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.core.util.AccessTokenUtil;
+import cn.hamm.airpower.core.util.AccessUtil;
+import cn.hamm.airpower.core.util.ReflectUtil;
+import cn.hamm.airpower.core.util.RequestUtil;
+import cn.hamm.airpower.crud.config.CrudConfig;
+import cn.hamm.airpower.crud.interceptor.AbstractRequestInterceptor;
 import cn.hamm.demo.common.annotation.DisableLog;
 import cn.hamm.demo.common.config.AppConstant;
 import cn.hamm.demo.module.system.log.LogEntity;
@@ -34,9 +39,6 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
     static final String LOG_ID = "logId";
 
     @Autowired
-    private ReflectUtil reflectUtil;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -44,6 +46,9 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
 
     @Autowired
     private LogService logService;
+
+    @Autowired
+    private CrudConfig crudConfig;
 
     /**
      * <h2>验证指定的用户是否有指定权限标识的权限</h2>
@@ -83,17 +88,17 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
      */
     @Override
     protected void interceptRequest(HttpServletRequest request, HttpServletResponse response, Class<?> clazz, Method method) {
-        DisableLog disableLog = reflectUtil.getAnnotation(DisableLog.class, method);
+        DisableLog disableLog = ReflectUtil.getAnnotation(DisableLog.class, method);
         if (Objects.nonNull(disableLog)) {
             return;
         }
-        String accessToken = request.getHeader(serviceConfig.getAuthorizeHeader());
+        String accessToken = request.getHeader(crudConfig.getAuthorizeHeader());
         Long userId = null;
         int appVersion = request.getIntHeader(AppConstant.APP_VERSION_HEADER);
         String platform = Constant.EMPTY_STRING;
         String action = request.getRequestURI();
         try {
-            userId = securityUtil.getIdFromAccessToken(accessToken);
+            userId = AccessTokenUtil.getIdFromAccessToken(accessToken, crudConfig.getAccessTokenSecret());
             platform = request.getHeader(AppConstant.APP_PLATFORM_HEADER);
             Description description = method.getAnnotation(Description.class);
             if (Objects.nonNull(description) && StringUtils.hasText(description.value())) {
@@ -101,13 +106,13 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
             }
         } catch (Exception ignored) {
         }
-        String identity = accessUtil.getPermissionIdentity(clazz, method);
+        String identity = AccessUtil.getPermissionIdentity(clazz, method);
         PermissionEntity permissionEntity = permissionService.getPermissionByIdentity(identity);
         if (Objects.nonNull(permissionEntity)) {
             action = permissionEntity.getName();
         }
         long logId = logService.add(new LogEntity()
-                .setIp(requestUtil.getIpAddress(request))
+                .setIp(RequestUtil.getIpAddress(request))
                 .setAction(action)
                 .setPlatform(platform)
                 .setRequest(getRequestBody(request))

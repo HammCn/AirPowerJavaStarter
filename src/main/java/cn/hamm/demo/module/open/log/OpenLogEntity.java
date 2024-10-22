@@ -1,8 +1,8 @@
 package cn.hamm.demo.module.open.log;
 
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.ReadOnly;
-import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.ReadOnly;
+import cn.hamm.airpower.core.annotation.Search;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import jakarta.persistence.Column;

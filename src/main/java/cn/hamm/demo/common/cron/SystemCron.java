@@ -1,6 +1,6 @@
 package cn.hamm.demo.common.cron;
 
-import cn.hamm.airpower.config.ServiceConfig;
+import cn.hamm.airpower.crud.config.CrudConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemCron {
     @Autowired
-    private ServiceConfig serviceConfig;
+    private CrudConfig crudConfig;
 
     @Scheduled(cron = "59 59 23 * * *")
     void softShutdownService() {
-        serviceConfig.setServiceRunning(false);
+        crudConfig.setServiceRunning(false);
     }
 
     @Scheduled(cron = "0 0 0 * * *")
     void resetCodeRuleBaseNumber() {
-        serviceConfig.setServiceRunning(true);
+        crudConfig.setServiceRunning(true);
     }
 }

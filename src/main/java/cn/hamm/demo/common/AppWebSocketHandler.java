@@ -1,9 +1,11 @@
 package cn.hamm.demo.common;
 
-import cn.hamm.airpower.websocket.WebSocketHandler;
-import cn.hamm.airpower.websocket.WebSocketPayload;
+import cn.hamm.airpower.crud.config.WebSocketConfig;
+import cn.hamm.airpower.crud.websocket.WebSocketHandler;
+import cn.hamm.airpower.crud.websocket.WebSocketPayload;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -15,6 +17,9 @@ import org.springframework.web.socket.WebSocketSession;
 @Slf4j
 @Component
 public class AppWebSocketHandler extends WebSocketHandler {
+    @Autowired
+    private WebSocketConfig webSocketConfig;
+
     /**
      * <h2>订阅分组前缀</h2>
      */

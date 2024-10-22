@@ -1,10 +1,11 @@
 package cn.hamm.demo.module.open.log;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Extends;
-import cn.hamm.airpower.enums.Api;
-import cn.hamm.airpower.model.query.QueryPageRequest;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.Extends;
+import cn.hamm.airpower.core.enums.Api;
+import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.crud.model.query.QueryPageRequest;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.user.UserService;

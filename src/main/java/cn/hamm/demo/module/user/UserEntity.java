@@ -1,8 +1,8 @@
 package cn.hamm.demo.module.user;
 
 import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.Search;
 import cn.hamm.airpower.core.validate.phone.Phone;
-import cn.hamm.airpower.crud.annotation.Search;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.role.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;

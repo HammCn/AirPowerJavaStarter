@@ -1,8 +1,8 @@
 package cn.hamm.demo.module.wechat;
 
-import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.config.Constant;
-import cn.hamm.airpower.root.RootController;
+import cn.hamm.airpower.core.annotation.Permission;
+import cn.hamm.airpower.core.config.Constant;
+import cn.hamm.airpower.crud.root.RootController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

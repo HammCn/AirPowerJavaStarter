@@ -1,11 +1,14 @@
 package cn.hamm.demo.module.user;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Filter;
-import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.util.CookieUtil;
-import cn.hamm.airpower.util.RandomUtil;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.Filter;
+import cn.hamm.airpower.core.annotation.Permission;
+import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.core.json.Json;
+import cn.hamm.airpower.core.util.AccessTokenUtil;
+import cn.hamm.airpower.core.util.RandomUtil;
+import cn.hamm.airpower.crud.helper.CookieHelper;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.open.app.OpenAppService;
@@ -29,12 +32,6 @@ import java.util.List;
 @ApiController("user")
 @Description("用户")
 public class UserController extends BaseController<UserEntity, UserService, UserRepository> implements IUserAction {
-    @Autowired
-    private CookieUtil cookieUtil;
-
-    @Autowired
-    private RandomUtil randomUtil;
-
     @Autowired
     private OpenAppService openAppService;
 
@@ -129,12 +126,12 @@ public class UserController extends BaseController<UserEntity, UserService, User
         }
 
         // 开始处理Oauth2登录逻辑
-        Long userId = securityUtil.getIdFromAccessToken(accessToken);
+        Long userId = AccessTokenUtil.getIdFromAccessToken(accessToken, crudConfig.getAccessTokenSecret());
 
         // 存储Cookies
-        String cookieString = randomUtil.randomString();
+        String cookieString = RandomUtil.randomString();
         service.saveCookie(userId, cookieString);
-        response.addCookie(cookieUtil.getAuthorizeCookie(cookieString));
+        response.addCookie(CookieHelper.getAuthorizeCookie(cookieString));
 
         String appKey = user.getAppKey();
         if (!StringUtils.hasText(appKey)) {
@@ -146,7 +143,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         ServiceError.PARAM_INVALID.whenNull(openAppEntity, "登录失败,错误的应用ID");
 
         // 生成临时身份令牌code
-        String code = randomUtil.randomString();
+        String code = RandomUtil.randomString();
         openAppEntity.setCode(code);
 
         // 缓存临时身份令牌code

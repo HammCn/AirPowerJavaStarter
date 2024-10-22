@@ -1,13 +1,15 @@
 package cn.hamm.demo.module.open.app;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Filter;
-import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.model.query.QueryListRequest;
-import cn.hamm.airpower.model.query.QueryPageRequest;
-import cn.hamm.airpower.root.RootEntity;
-import cn.hamm.airpower.util.RandomUtil;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.Filter;
+import cn.hamm.airpower.core.annotation.Permission;
+import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.core.json.Json;
+import cn.hamm.airpower.core.util.RandomUtil;
+import cn.hamm.airpower.crud.model.query.QueryListRequest;
+import cn.hamm.airpower.crud.model.query.QueryPageRequest;
+import cn.hamm.airpower.crud.root.RootEntity;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.user.UserService;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +28,6 @@ import java.util.Base64;
 @ApiController("open/app")
 @Description("开放应用")
 public class OpenAppController extends BaseController<OpenAppEntity, OpenAppService, OpenAppRepository> implements IOpenAppAction {
-    @Autowired
-    private RandomUtil randomUtil;
-
     @Autowired
     private UserService userService;
 
@@ -58,7 +57,7 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     @PostMapping("resetSecret")
     public Json resetSecret(@RequestBody @Validated(WhenIdRequired.class) OpenAppEntity openApp) {
         OpenAppEntity exist = service.get(openApp.getId());
-        String appSecret = Base64.getEncoder().encodeToString(randomUtil.randomBytes());
+        String appSecret = Base64.getEncoder().encodeToString(RandomUtil.randomBytes());
         exist.setAppSecret(appSecret);
         service.update(exist);
         return Json.data(appSecret);

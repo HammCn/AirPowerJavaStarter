@@ -3,8 +3,8 @@ package cn.hamm.demo.module.user;
 
 import cn.hamm.airpower.core.config.Constant;
 import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.core.helper.EmailHelper;
 import cn.hamm.airpower.core.util.AccessTokenUtil;
-import cn.hamm.airpower.core.util.EmailUtil;
 import cn.hamm.airpower.core.util.RandomUtil;
 import cn.hamm.airpower.core.util.TreeUtil;
 import cn.hamm.airpower.crud.model.Sort;
@@ -17,7 +17,6 @@ import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.mail.MessagingException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -137,7 +136,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param email 邮箱
      */
     public void removeEmailCodeCache(String email) {
-        redisUtil.del(REDIS_EMAIL_CODE_KEY + email);
+        redisHelper.del(REDIS_EMAIL_CODE_KEY + email);
     }
 
     /**
@@ -166,7 +165,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         CustomError.EMAIL_SEND_BUSY.when(hasEmailCodeInRedis(email));
         String code = RandomUtil.randomNumbers(6);
         setCodeToRedis(email, code);
-        EmailUtil.sendCode(email, "你收到一个邮箱验证码", code, "DEMO");
+        EmailHelper.sendCode(email, "你收到一个邮箱验证码", code, "DEMO");
     }
 
     /**
@@ -176,7 +175,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param openApp 保存的应用信息
      */
     public void saveOauthCode(Long userId, @NotNull OpenAppEntity openApp) {
-        redisUtil.set(getAppCodeKey(openApp.getAppKey(), openApp.getCode()), userId, CACHE_CODE_EXPIRE_SECOND);
+        redisHelper.set(getAppCodeKey(openApp.getAppKey(), openApp.getCode()), userId, CACHE_CODE_EXPIRE_SECOND);
     }
 
     /**
@@ -198,7 +197,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return UserId
      */
     public Long getUserIdByOauthAppKeyAndCode(String appKey, String code) {
-        Object userId = redisUtil.get(getAppCodeKey(appKey, code));
+        Object userId = redisHelper.get(getAppCodeKey(appKey, code));
         ServiceError.FORBIDDEN.whenNull(userId, "你的AppKey或Code错误，请重新获取");
         return Long.valueOf(userId.toString());
     }
@@ -210,7 +209,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param code   Code
      */
     public void removeOauthCode(String appKey, String code) {
-        redisUtil.del(getAppCodeKey(appKey, code));
+        redisHelper.del(getAppCodeKey(appKey, code));
     }
 
     /**
@@ -220,7 +219,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param cookie Cookie
      */
     public void saveCookie(Long userId, String cookie) {
-        redisUtil.set(COOKIE_CODE_KEY + cookie, userId, CACHE_COOKIE_EXPIRE_SECOND);
+        redisHelper.set(COOKIE_CODE_KEY + cookie, userId, CACHE_COOKIE_EXPIRE_SECOND);
     }
 
     /**
@@ -230,7 +229,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return UserId
      */
     public Long getUserIdByCookie(String cookie) {
-        Object userId = redisUtil.get(COOKIE_CODE_KEY + cookie);
+        Object userId = redisHelper.get(COOKIE_CODE_KEY + cookie);
         if (Objects.isNull(userId)) {
             return null;
         }
@@ -318,7 +317,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param code  验证码
      */
     private void setCodeToRedis(String email, String code) {
-        redisUtil.set(REDIS_EMAIL_CODE_KEY + email, code, CACHE_CODE_EXPIRE_SECOND);
+        redisHelper.set(REDIS_EMAIL_CODE_KEY + email, code, CACHE_CODE_EXPIRE_SECOND);
     }
 
     /**
@@ -328,7 +327,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return 验证码
      */
     private String getEmailCode(String email) {
-        Object code = redisUtil.get(REDIS_EMAIL_CODE_KEY + email);
+        Object code = redisHelper.get(REDIS_EMAIL_CODE_KEY + email);
         return Objects.isNull(code) ? Constant.EMPTY_STRING : code.toString();
     }
 
@@ -339,7 +338,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return 是否在缓存内
      */
     private boolean hasEmailCodeInRedis(String email) {
-        return redisUtil.hasKey(REDIS_EMAIL_CODE_KEY + email);
+        return redisHelper.hasKey(REDIS_EMAIL_CODE_KEY + email);
     }
 
     @Override

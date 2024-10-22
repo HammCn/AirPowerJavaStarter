@@ -1,9 +1,10 @@
 package cn.hamm.demo.module.system.mail;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.root.RootController;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.Permission;
+import cn.hamm.airpower.core.json.Json;
+import cn.hamm.airpower.crud.root.RootController;
 import cn.hamm.demo.module.user.IUserAction;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;

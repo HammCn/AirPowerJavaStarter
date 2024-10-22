@@ -4,8 +4,6 @@ import cn.hamm.airpower.core.exception.ServiceException;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.module.webhook.enums.WebHookScene;
 import cn.hamm.demo.module.webhook.factory.open.AppSecretResetEvent;
-import cn.hamm.demo.module.webhook.factory.supplier.SupplierAddEvent;
-import cn.hamm.demo.module.webhook.factory.supplier.SupplierUpdateEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.threads.ThreadPoolExecutor;
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +25,7 @@ public class WebHookService extends BaseService<WebHookEntity, WebHookRepository
      * <h2>工厂列表</h2>
      */
     private final Map<WebHookScene, AbstractEventFactory<?>> factoryMap = Map.of(
-            WebHookScene.APP_SECRET_RESET, new AppSecretResetEvent(),
-            WebHookScene.SUPPLIER_ADD, new SupplierAddEvent(),
-            WebHookScene.SUPPLIER_UPDATE, new SupplierUpdateEvent()
+            WebHookScene.APP_SECRET_RESET, new AppSecretResetEvent()
     );
 
     /**

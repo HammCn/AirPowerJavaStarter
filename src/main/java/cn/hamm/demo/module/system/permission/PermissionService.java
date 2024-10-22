@@ -1,11 +1,11 @@
 package cn.hamm.demo.module.system.permission;
 
-import cn.hamm.airpower.util.AccessUtil;
-import cn.hamm.demo.Application;
+import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.core.util.AccessUtil;
+import cn.hamm.demo.StarterApplication;
 import cn.hamm.demo.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +19,6 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> {
-    @Autowired
-    private AccessUtil accessUtil;
-
     /**
      * <h2>通过标识获取一个权限</h2>
      *
@@ -52,7 +49,7 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
      * <h2>加载权限</h2>
      */
     public final void loadPermission() {
-        List<PermissionEntity> permissions = accessUtil.scanPermission(Application.class, PermissionEntity.class);
+        List<PermissionEntity> permissions = AccessUtil.scanPermission(StarterApplication.class, PermissionEntity.class);
         for (PermissionEntity permission : permissions) {
             PermissionEntity exist = getPermissionByIdentity(permission.getIdentity());
             if (Objects.isNull(exist)) {

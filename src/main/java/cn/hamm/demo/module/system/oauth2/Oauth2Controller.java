@@ -1,12 +1,15 @@
 package cn.hamm.demo.module.system.oauth2;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.config.Constant;
-import cn.hamm.airpower.config.CookieConfig;
-import cn.hamm.airpower.root.RootController;
-import cn.hamm.airpower.util.RandomUtil;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.Permission;
+import cn.hamm.airpower.core.config.Constant;
+import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.core.json.Json;
+import cn.hamm.airpower.core.util.AccessTokenUtil;
+import cn.hamm.airpower.core.util.RandomUtil;
+import cn.hamm.airpower.crud.config.CookieConfig;
+import cn.hamm.airpower.crud.root.RootController;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.module.open.app.IOpenAppAction;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
@@ -50,12 +53,6 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
     private static final String APP_KEY = "appKey";
 
     @Autowired
-    private RandomUtil randomUtil;
-
-    @Autowired
-    private CookieConfig cookieConfig;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -63,6 +60,9 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
 
     @Autowired
     private AppConfig appConfig;
+
+    @Autowired
+    private CookieConfig cookieConfig;
 
     @GetMapping("authorize")
     public ModelAndView index(
@@ -100,7 +100,7 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
             return redirectLogin(response, appKey, redirectUri);
         }
         UserEntity userEntity = userService.get(userId);
-        String code = randomUtil.randomString();
+        String code = RandomUtil.randomString();
         openApp.setCode(code).setAppKey(appKey);
         userService.saveOauthCode(userEntity.getId(), openApp);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
@@ -123,7 +123,7 @@ public class Oauth2Controller extends RootController implements IOpenAppAction {
         OpenAppEntity existApp = openAppService.getByAppKey(openApp.getAppKey());
         ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), openApp.getAppSecret(), "应用秘钥错误");
         userService.removeOauthCode(existApp.getAppKey(), code);
-        String accessToken = securityUtil.createAccessToken(userId);
+        String accessToken = AccessTokenUtil.createAccessToken(userId, crudConfig.getAccessTokenSecret(), crudConfig.getAuthorizeExpireSecond());
         return Json.data(accessToken);
     }
 

@@ -1,12 +1,12 @@
 package cn.hamm.demo.module.open.app;
 
 import cn.hamm.airpower.core.annotation.Description;
-import cn.hamm.airpower.crud.annotation.Exclude;
-import cn.hamm.airpower.crud.annotation.ReadOnly;
-import cn.hamm.airpower.crud.annotation.Search;
+import cn.hamm.airpower.core.annotation.Exclude;
+import cn.hamm.airpower.core.annotation.ReadOnly;
+import cn.hamm.airpower.core.annotation.Search;
+import cn.hamm.airpower.core.validate.dictionary.Dictionary;
 import cn.hamm.airpower.crud.open.IOpenApp;
 import cn.hamm.airpower.crud.open.OpenArithmeticType;
-import cn.hamm.airpower.core.validate.dictionary.Dictionary;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;

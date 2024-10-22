@@ -13,9 +13,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @SpringBootApplication
 @EnableWebSocket
 @EnableScheduling
-public class Application {
+public class StarterApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(StarterApplication.class, args);
         System.out.println("---------------------------------");
         System.out.println("   Hi Guy, Service is running!   ");
         System.out.println("---------------------------------");

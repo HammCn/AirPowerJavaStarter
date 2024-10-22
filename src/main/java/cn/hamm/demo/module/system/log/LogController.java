@@ -1,7 +1,7 @@
 package cn.hamm.demo.module.system.log;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
 import cn.hamm.demo.base.BaseController;
 
 /**

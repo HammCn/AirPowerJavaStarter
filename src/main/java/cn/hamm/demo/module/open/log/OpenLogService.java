@@ -1,7 +1,7 @@
 package cn.hamm.demo.module.open.log;
 
-import cn.hamm.airpower.open.IOpenApp;
-import cn.hamm.airpower.open.IOpenLogService;
+import cn.hamm.airpower.crud.open.IOpenApp;
+import cn.hamm.airpower.crud.open.IOpenLogService;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.open.app.OpenAppEntity;

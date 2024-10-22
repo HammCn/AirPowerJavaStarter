@@ -17,10 +17,6 @@
     <dependencies>
         <dependency>
             <groupId>cn.hamm.airpower</groupId>
-            <artifactId>airpower-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.hamm.airpower</groupId>
             <artifactId>airpower-crud</artifactId>
         </dependency>
         <dependency>
@@ -68,7 +64,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>cn.hamm.demo.Application</mainClass>
+                    <mainClass>cn.hamm.demo.StarterApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

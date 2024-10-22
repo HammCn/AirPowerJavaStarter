@@ -1,6 +1,6 @@
 package cn.hamm.demo.module.system.log;
 
-import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.core.annotation.Description;
 import cn.hamm.demo.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
