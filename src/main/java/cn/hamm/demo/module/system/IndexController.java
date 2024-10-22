@@ -1,12 +1,11 @@
 package cn.hamm.demo.module.system;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.DesensitizeExclude;
-import cn.hamm.airpower.model.Json;
-import cn.hamm.airpower.root.RootController;
-import cn.hamm.airpower.websocket.WebSocketPayload;
-import cn.hamm.airpower.websocket.WebsocketUtil;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.DesensitizeExclude;
+import cn.hamm.airpower.core.root.RootController;
+import cn.hamm.airpower.core.websocket.WebSocketPayload;
+import cn.hamm.airpower.core.websocket.WebsocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 

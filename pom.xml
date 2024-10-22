@@ -2,11 +2,13 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>cn.hamm</groupId>
+        <groupId>cn.hamm.airpower</groupId>
         <artifactId>airpower</artifactId>
-        <version>2.3.4</version>
+        <version>1.0.0</version>
     </parent>
+
     <groupId>cn.hamm.demo</groupId>
     <artifactId>airpower-java-starter</artifactId>
     <version>1.0.0</version>
@@ -14,8 +16,49 @@
     <description>airpower-java-starter</description>
     <dependencies>
         <dependency>
-            <groupId>cn.hamm</groupId>
+            <groupId>cn.hamm.airpower</groupId>
             <artifactId>airpower-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hamm.airpower</groupId>
+            <artifactId>airpower-crud</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-mqtt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-integration</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -23,7 +66,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${springboot.version}</version>
+                <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>cn.hamm.demo.Application</mainClass>
                 </configuration>

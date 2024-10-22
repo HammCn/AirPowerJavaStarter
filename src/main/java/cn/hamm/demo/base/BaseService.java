@@ -1,6 +1,6 @@
 package cn.hamm.demo.base;
 
-import cn.hamm.airpower.root.RootService;
+import cn.hamm.airpower.crud.root.RootService;
 
 /**
  * <h1>Service</h1>

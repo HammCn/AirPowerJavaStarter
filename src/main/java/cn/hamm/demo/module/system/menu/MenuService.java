@@ -1,9 +1,9 @@
 package cn.hamm.demo.module.system.menu;
 
-import cn.hamm.airpower.enums.ServiceError;
-import cn.hamm.airpower.model.Sort;
-import cn.hamm.airpower.model.query.QueryListRequest;
-import cn.hamm.airpower.root.RootEntity;
+import cn.hamm.airpower.core.exception.ServiceError;
+import cn.hamm.airpower.crud.model.Sort;
+import cn.hamm.airpower.crud.model.query.QueryListRequest;
+import cn.hamm.airpower.crud.root.RootEntity;
 import cn.hamm.demo.base.BaseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

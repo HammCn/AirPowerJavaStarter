@@ -1,6 +1,6 @@
 package cn.hamm.demo.module.open.app;
 
-import cn.hamm.airpower.exception.ServiceException;
+import cn.hamm.airpower.core.exception.ServiceException;
 import cn.hamm.airpower.open.IOpenAppService;
 import cn.hamm.airpower.util.RsaUtil;
 import cn.hamm.demo.base.BaseService;

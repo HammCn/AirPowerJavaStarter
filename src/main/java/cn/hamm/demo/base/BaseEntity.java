@@ -1,7 +1,7 @@
 package cn.hamm.demo.base;
 
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.root.RootEntity;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.crud.root.RootEntity;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 

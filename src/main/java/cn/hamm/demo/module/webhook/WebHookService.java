@@ -1,6 +1,6 @@
 package cn.hamm.demo.module.webhook;
 
-import cn.hamm.airpower.exception.ServiceException;
+import cn.hamm.airpower.core.exception.ServiceException;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.module.webhook.enums.WebHookScene;
 import cn.hamm.demo.module.webhook.factory.open.AppSecretResetEvent;

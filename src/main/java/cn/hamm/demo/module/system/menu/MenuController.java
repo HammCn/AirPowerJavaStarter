@@ -3,7 +3,6 @@ package cn.hamm.demo.module.system.menu;
 import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.util.TreeUtil;
 import cn.hamm.demo.base.BaseController;

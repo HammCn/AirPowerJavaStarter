@@ -1,8 +1,8 @@
 package cn.hamm.demo.module.webhook;
 
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Search;
-import cn.hamm.airpower.validate.dictionary.Dictionary;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.validate.dictionary.Dictionary;
+import cn.hamm.airpower.crud.annotation.Search;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.webhook.enums.WebHookScene;
 import cn.hamm.demo.module.webhook.enums.WebHookType;

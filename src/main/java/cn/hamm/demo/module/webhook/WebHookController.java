@@ -1,11 +1,11 @@
 package cn.hamm.demo.module.webhook;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.config.Constant;
-import cn.hamm.airpower.interfaces.IEntityAction;
-import cn.hamm.airpower.model.Json;
+import cn.hamm.airpower.core.json.Json;
+import cn.hamm.airpower.core.annotation.ApiController;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.annotation.Permission;
+import cn.hamm.airpower.core.config.Constant;
+import cn.hamm.airpower.crud.interfaces.IEntityAction;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.webhook.enums.WebHookScene;
 import org.springframework.web.bind.annotation.PostMapping;

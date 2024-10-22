@@ -1,7 +1,7 @@
 package cn.hamm.demo.module.system.permission;
 
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.interfaces.IPermission;
+import cn.hamm.airpower.core.annotation.Description;
+import cn.hamm.airpower.core.interfaces.IPermission;
 import cn.hamm.demo.base.BaseTreeEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;

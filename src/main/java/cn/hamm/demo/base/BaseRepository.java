@@ -1,6 +1,6 @@
 package cn.hamm.demo.base;
 
-import cn.hamm.airpower.root.RootRepository;
+import cn.hamm.airpower.crud.root.RootRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 /**

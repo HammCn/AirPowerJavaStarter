@@ -2,7 +2,6 @@ package cn.hamm.demo.common.interceptor;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.config.Constant;
-import cn.hamm.airpower.enums.ServiceError;
 import cn.hamm.airpower.interceptor.AbstractRequestInterceptor;
 import cn.hamm.airpower.util.ReflectUtil;
 import cn.hamm.demo.common.annotation.DisableLog;
