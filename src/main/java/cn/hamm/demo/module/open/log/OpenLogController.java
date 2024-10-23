@@ -4,7 +4,7 @@ import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Extends;
 import cn.hamm.airpower.enums.Api;
-import cn.hamm.airpower.enums.ServiceError;
+import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.model.query.QueryPageRequest;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.open.app.OpenAppEntity;

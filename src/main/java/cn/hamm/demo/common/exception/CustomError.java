@@ -1,7 +1,7 @@
 package cn.hamm.demo.common.exception;
 
+import cn.hamm.airpower.exception.IException;
 import cn.hamm.airpower.interfaces.IDictionary;
-import cn.hamm.airpower.interfaces.IException;
 import cn.hamm.demo.common.config.AppConstant;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;

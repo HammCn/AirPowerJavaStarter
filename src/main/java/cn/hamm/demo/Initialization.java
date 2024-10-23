@@ -1,8 +1,8 @@
 package cn.hamm.demo;
 
+import cn.hamm.airpower.helper.AirHelper;
 import cn.hamm.airpower.util.PasswordUtil;
 import cn.hamm.airpower.util.RandomUtil;
-import cn.hamm.airpower.util.Utils;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
@@ -21,12 +21,6 @@ import java.util.Objects;
 @Component
 public class Initialization implements CommandLineRunner {
     @Autowired
-    private RandomUtil randomUtil;
-
-    @Autowired
-    private PasswordUtil passwordUtil;
-
-    @Autowired
     private UserService userService;
 
     private void loadUser() {
@@ -35,11 +29,11 @@ public class Initialization implements CommandLineRunner {
         if (Objects.nonNull(user)) {
             return;
         }
-        String salt = randomUtil.randomString(UserService.PASSWORD_SALT_LENGTH);
+        String salt = RandomUtil.randomString(UserService.PASSWORD_SALT_LENGTH);
         userService.add(new UserEntity()
                 .setNickname("Hamm")
                 .setEmail("admin@hamm.cn")
-                .setPassword(passwordUtil.encode("Aa123456", salt))
+                .setPassword(PasswordUtil.encode("Aa123456", salt))
                 .setSalt(salt)
                 .setRemark("超级管理员,请勿数据库暴力直接删除"));
         System.out.println("---------------------------------");
@@ -54,7 +48,7 @@ public class Initialization implements CommandLineRunner {
         // 所有数据检查完毕
         String[] localEnvList = {"local-hamm"};
         //noinspection StatementWithEmptyBody
-        if (Arrays.stream(localEnvList).toList().contains(Utils.getCurrentEnvironment())) {
+        if (Arrays.stream(localEnvList).toList().contains(AirHelper.getCurrentEnvironment())) {
             // 其他需要在本地初始化的数据
         }
     }

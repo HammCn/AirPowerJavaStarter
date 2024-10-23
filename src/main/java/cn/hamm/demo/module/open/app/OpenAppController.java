@@ -4,7 +4,7 @@ import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Filter;
 import cn.hamm.airpower.annotation.Permission;
-import cn.hamm.airpower.enums.ServiceError;
+import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.model.query.QueryPageRequest;
@@ -28,9 +28,6 @@ import java.util.Base64;
 @ApiController("open/app")
 @Description("开放应用")
 public class OpenAppController extends BaseController<OpenAppEntity, OpenAppService, OpenAppRepository> implements IOpenAppAction {
-    @Autowired
-    private RandomUtil randomUtil;
-
     @Autowired
     private UserService userService;
 
@@ -60,7 +57,7 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
     @PostMapping("resetSecret")
     public Json resetSecret(@RequestBody @Validated(WhenIdRequired.class) OpenAppEntity openApp) {
         OpenAppEntity exist = service.get(openApp.getId());
-        String appSecret = Base64.getEncoder().encodeToString(randomUtil.randomBytes());
+        String appSecret = Base64.getEncoder().encodeToString(RandomUtil.randomBytes());
         exist.setAppSecret(appSecret);
         service.update(exist);
         return Json.data(appSecret);
