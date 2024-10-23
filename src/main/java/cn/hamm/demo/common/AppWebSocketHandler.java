@@ -19,10 +19,12 @@ public class AppWebSocketHandler extends WebSocketHandler {
      * <h2>订阅分组前缀</h2>
      */
     public static final String GROUP_PREFIX = "group_";
+    
     /**
      * <h2>加入房间</h2>
      */
     private static final String EVENT_JOIN = "join";
+
     /**
      * <h2>离开房间</h2>
      */
