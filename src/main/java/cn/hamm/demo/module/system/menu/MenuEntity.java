@@ -2,6 +2,7 @@ package cn.hamm.demo.module.system.menu;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.interfaces.ITree;
 import cn.hamm.demo.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +31,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "menu")
 @Description("菜单")
-public class MenuEntity extends BaseEntity<MenuEntity> {
+public class MenuEntity extends BaseEntity<MenuEntity> implements ITree<MenuEntity> {
     @Description("名称")
     @Search
     @Column(columnDefinition = "varchar(255) default '' comment '名称'")
