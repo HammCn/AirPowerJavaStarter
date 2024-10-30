@@ -1,8 +1,9 @@
 package cn.hamm.demo.module.system.permission;
 
 import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.annotation.Search;
 import cn.hamm.airpower.interfaces.IPermission;
-import cn.hamm.demo.base.BaseTreeEntity;
+import cn.hamm.demo.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -30,7 +32,19 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "permission")
 @Description("权限")
-public class PermissionEntity extends BaseTreeEntity<PermissionEntity> implements IPermission<PermissionEntity> {
+public class PermissionEntity extends BaseEntity<PermissionEntity> implements IPermission<PermissionEntity> {
+    @Description("名称")
+    @Search
+    @Column(columnDefinition = "varchar(255) default '' comment '名称'")
+    @Length(max = 200, message = "名称最多允许{max}个字符")
+    @NotBlank(groups = {WhenUpdate.class, WhenAdd.class}, message = "名称不能为空")
+    private String name;
+
+    @Description("父级ID")
+    @Column(columnDefinition = "bigint UNSIGNED default 0 comment '父级ID'")
+    @Search(Search.Mode.EQUALS)
+    private Long parentId;
+
     @Description("权限标识")
     @Column(columnDefinition = "varchar(255) default '' comment '权限标识'", unique = true)
     @NotBlank(groups = {WhenUpdate.class, WhenAdd.class}, message = "权限标识不能为空")
@@ -41,7 +55,7 @@ public class PermissionEntity extends BaseTreeEntity<PermissionEntity> implement
     @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '系统权限'")
     private Boolean isSystem;
 
-    @Description("子菜单")
+    @Description("子权限")
     @Transient
     private List<PermissionEntity> children;
 }
