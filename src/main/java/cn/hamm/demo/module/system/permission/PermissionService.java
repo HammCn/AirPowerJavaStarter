@@ -1,6 +1,8 @@
 package cn.hamm.demo.module.system.permission;
 
 import cn.hamm.airpower.exception.ServiceError;
+import cn.hamm.airpower.interfaces.IServiceTree;
+import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.airpower.util.PermissionUtil;
 import cn.hamm.demo.Application;
 import cn.hamm.demo.base.BaseService;
@@ -18,7 +20,7 @@ import java.util.Objects;
  */
 @Service
 @Slf4j
-public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> {
+public class PermissionService extends BaseService<PermissionEntity, PermissionRepository> implements IServiceTree<PermissionEntity> {
     /**
      * <h2>通过标识获取一个权限</h2>
      *
@@ -33,15 +35,12 @@ public class PermissionService extends BaseService<PermissionEntity, PermissionR
     protected void beforeDelete(long id) {
         PermissionEntity entity = get(id);
         ServiceError.FORBIDDEN_DELETE.when(entity.getIsSystem(), "系统内置权限无法被删除!");
-        List<PermissionEntity> children = filter(new PermissionEntity().setParentId(id));
-        ServiceError.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子权限,无法删除!");
+        ensureNoChildrenBeforeDelete(id);
     }
 
     @Override
     protected @NotNull List<PermissionEntity> afterGetList(@NotNull List<PermissionEntity> list) {
-        for (PermissionEntity item : list) {
-            item.excludeBaseData();
-        }
+        list.forEach(RootEntity::excludeBaseData);
         return list;
     }
 
