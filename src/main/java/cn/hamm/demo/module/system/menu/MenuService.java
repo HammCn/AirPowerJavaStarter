@@ -1,9 +1,9 @@
 package cn.hamm.demo.module.system.menu;
 
-import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.root.RootEntity;
+import cn.hamm.airpower.root.delegate.TreeServiceDelegate;
 import cn.hamm.demo.base.BaseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
 
     @Override
     protected void beforeDelete(long id) {
-        List<MenuEntity> children = filter(new MenuEntity().setParentId(id));
-        ServiceError.FORBIDDEN_DELETE.when(!children.isEmpty(), "含有子菜单,无法删除!");
+        TreeServiceDelegate.ensureNoChildrenBeforeDelete(this, id);
     }
 
     @Override
