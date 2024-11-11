@@ -13,10 +13,10 @@
   <a href="https://github.com/HammCn/AirPowerJavaStarter">Github</a> /  <a href="https://gitee.com/air-power/AirPowerJavaStarter">Gitee</a>
 </p>
 
-
 # 如何使用
 
-这是 **`AirPower4J`**（[Github](https://github.com/HammCn/AirPower4J)/[Gitee](https://gitee.com/air-power/AirPower4J)）的宿主项目，你可以使用下面的方式进行使用：
+这是 **`AirPower4J`**（[Github](https://github.com/HammCn/AirPower4J)/[Gitee](https://gitee.com/air-power/AirPower4J)
+）的宿主项目，你可以使用下面的方式进行使用：
 
 ### 1. 创建项目文件夹
 

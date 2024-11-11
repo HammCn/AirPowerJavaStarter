@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class MailController extends RootController implements IUserAction {
     @Autowired
     private UserService userService;
-    
+
     @Description("发送邮件")
     @Permission(login = false)
     @PostMapping("send")
