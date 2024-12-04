@@ -34,8 +34,7 @@ public class Initialization implements CommandLineRunner {
                 .setNickname("Hamm")
                 .setEmail("admin@hamm.cn")
                 .setPassword(PasswordUtil.encode("Aa123456", salt))
-                .setSalt(salt)
-                .setRemark("超级管理员,请勿数据库暴力直接删除"));
+                .setSalt(salt));
         System.out.println("---------------------------------");
     }
 
