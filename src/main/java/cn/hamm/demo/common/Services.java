@@ -8,7 +8,7 @@ import cn.hamm.demo.module.system.log.LogService;
 import cn.hamm.demo.module.system.menu.MenuService;
 import cn.hamm.demo.module.system.permission.PermissionService;
 import cn.hamm.demo.module.user.UserService;
-import cn.hamm.demo.module.webhook.WebHookService;
+import cn.hamm.demo.module.notify.NotifyService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -49,7 +49,7 @@ public class Services {
     private static OpenLogService openLogService;
 
     @Getter
-    private static WebHookService webHookService;
+    private static NotifyService notifyService;
 
     @Autowired
     public Services(
@@ -62,7 +62,7 @@ public class Services {
             LogService logService,
             OpenAppService openAppService,
             OpenLogService openLogService,
-            WebHookService webHookService
+            NotifyService notifyService
     ) {
         Services.environment = environment;
         Services.appConfig = appConfig;
@@ -73,6 +73,6 @@ public class Services {
         Services.logService = logService;
         Services.openAppService = openAppService;
         Services.openLogService = openLogService;
-        Services.webHookService = webHookService;
+        Services.notifyService = notifyService;
     }
 }

@@ -70,12 +70,6 @@ public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenApp
     @Column(columnDefinition = "text comment '私钥'")
     private String privateKey;
 
-    @Description("应用所有者")
-    @ManyToOne
-    @Search(Search.Mode.JOIN)
-    @ReadOnly
-    private UserEntity owner;
-
     @Description("应用地址")
     @Column(columnDefinition = "varchar(255) default '' comment '应用地址'")
     @NotBlank(groups = {WhenAdd.class, WhenUpdate.class}, message = "应用地址必须填写")

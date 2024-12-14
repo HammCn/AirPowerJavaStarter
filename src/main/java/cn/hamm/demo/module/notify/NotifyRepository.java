@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.webhook;
+package cn.hamm.demo.module.notify;
 
 import cn.hamm.demo.base.BaseRepository;
 import org.springframework.stereotype.Repository;
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * @author Hamm.cn
  */
 @Repository
-public interface WebHookRepository extends BaseRepository<WebHookEntity> {
+public interface NotifyRepository extends BaseRepository<NotifyEntity> {
 }

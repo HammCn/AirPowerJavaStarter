@@ -1,6 +1,8 @@
 package cn.hamm.demo.base;
 
+import cn.hamm.airpower.annotation.Extends;
 import cn.hamm.airpower.annotation.Permission;
+import cn.hamm.airpower.enums.Api;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.model.query.QueryListRequest;
 import cn.hamm.airpower.model.query.QueryPageRequest;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author Hamm.cn
  */
 @Permission
+@Extends(exclude = {Api.Export, Api.QueryExport})
 public class BaseController<E extends BaseEntity<E>, S extends BaseService<E, R>, R extends BaseRepository<E>> extends RootEntityController<E, S, R> {
     @DisableLog
     @Override

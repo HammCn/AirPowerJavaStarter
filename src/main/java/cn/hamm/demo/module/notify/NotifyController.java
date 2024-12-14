@@ -1,13 +1,15 @@
-package cn.hamm.demo.module.webhook;
+package cn.hamm.demo.module.notify;
 
 import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.annotation.Extends;
 import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.config.Constant;
+import cn.hamm.airpower.enums.Api;
 import cn.hamm.airpower.interfaces.IEntityAction;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.demo.base.BaseController;
-import cn.hamm.demo.module.webhook.enums.WebHookScene;
+import cn.hamm.demo.module.notify.enums.NotifyScene;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Arrays;
@@ -18,14 +20,15 @@ import java.util.Map;
  *
  * @author Hamm.cn
  */
-@ApiController("webhook")
+@ApiController("notify")
 @Description("通知钩子")
-public class WebHookController extends BaseController<WebHookEntity, WebHookService, WebHookRepository> implements IEntityAction {
+@Extends(exclude = {Api.Export, Api.QueryExport})
+public class NotifyController extends BaseController<NotifyEntity, NotifyService, NotifyRepository> implements IEntityAction {
     @Description("获取支持通知的场景列表")
     @PostMapping("getSceneList")
     @Permission(authorize = false)
     public Json getSceneList() {
-        return Json.data(Arrays.stream(WebHookScene.values())
+        return Json.data(Arrays.stream(NotifyScene.values())
                 .map(item -> Map.of(
                         Constant.KEY, item.getKey(),
                         Constant.LABEL, item.getLabel()

@@ -43,43 +43,4 @@ public class AppWebSocketHandler extends WebSocketHandler {
             default:
         }
     }
-
-    /**
-     * <h1>订阅</h1>
-     *
-     * @param channel 频道
-     * @param session WebSocket会话
-     */
-    private void subscribe(String channel, WebSocketSession session) {
-        switch (webSocketConfig.getSupport()) {
-            case REDIS:
-                redisSubscribe(channel, session);
-                break;
-            case MQTT:
-                mqttSubscribe(channel, session);
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * <h1>取消订阅</h1>
-     *
-     * @param channel 频道
-     * @param session WebSocket会话
-     */
-    private void unsubscribe(String channel, WebSocketSession session) {
-        switch (webSocketConfig.getSupport()) {
-            case REDIS:
-                redisUnSubscribe(channel, session);
-                break;
-            case MQTT:
-                mqttUnSubscribe(channel, session);
-                break;
-            default:
-                break;
-        }
-    }
-
 }

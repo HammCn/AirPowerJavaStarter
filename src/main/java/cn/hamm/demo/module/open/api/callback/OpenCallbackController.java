@@ -10,7 +10,7 @@ import cn.hamm.airpower.root.RootController;
  *
  * @author Hamm.cn
  */
-@ApiController("open/callback")
+@ApiController("openApi/callback")
 @Description("回调通知")
 @Permission(login = false)
 public class OpenCallbackController extends RootController {
