@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" src="src/main/resources/assets/airpower.svg"/> <b>JavaStarter</b>
+  <img width="300" src="src/main/resources/assets/logo.png"/> <b>JavaStarter</b>
 </p>
 
 <p align="center">
