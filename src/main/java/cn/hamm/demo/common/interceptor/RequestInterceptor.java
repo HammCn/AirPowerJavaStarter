@@ -56,12 +56,15 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
      */
     @Override
     protected void checkUserPermission(long userId, String permissionIdentity, HttpServletRequest request) {
-        UserEntity existUser = userService.get(userId);
-        if (existUser.isRootUser()) {
+        UserEntity user = userService.get(userId);
+        if (user.isRootUser()) {
             return;
         }
+        ServiceError.FORBIDDEN_DISABLED.when(user.getIsDisabled(), "请求失败，你的账号已被禁用");
         PermissionEntity needPermission = permissionService.getPermissionByIdentity(permissionIdentity);
-        if (existUser.getRoleList().stream()
+        if (user.getRoleList().stream()
+                // 过滤被禁用的角色
+                .filter(role -> !role.getIsDisabled())
                 .flatMap(role -> role.getPermissionList().stream())
                 .anyMatch(permission -> Objects.equals(needPermission.getId(), permission.getId()))
         ) {

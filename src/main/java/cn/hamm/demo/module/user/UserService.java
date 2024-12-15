@@ -242,9 +242,9 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * <h2>ID+密码 账号+密码</h2>
      *
      * @param user 用户实体
-     * @return AccessToken
+     * @return 登录成功的用户
      */
-    public String login(@NotNull UserEntity user) {
+    public UserEntity login(@NotNull UserEntity user) {
         UserEntity existUser = null;
         if (Objects.nonNull(user.getId())) {
             // ID登录
@@ -259,21 +259,21 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         // 将用户传入的密码加密与数据库存储匹配
         String encodePassword = PasswordUtil.encode(user.getPassword(), existUser.getSalt());
         CustomError.USER_LOGIN_ACCOUNT_OR_PASSWORD_INVALID.whenNotEqualsIgnoreCase(encodePassword, existUser.getPassword());
-        return createAccessToken(existUser);
+        return existUser;
     }
 
     /**
      * <h2>邮箱验证码登录</h2>
      *
      * @param userEntity 用户实体
-     * @return AccessToken
+     * @return 登录成功的用户
      */
-    public String loginViaEmail(@NotNull UserEntity userEntity) {
+    public UserEntity loginViaEmail(@NotNull UserEntity userEntity) {
         String code = getEmailCode(userEntity.getEmail());
         ServiceError.PARAM_INVALID.whenNotEquals(code, userEntity.getCode(), "邮箱验证码不正确");
         UserEntity existUser = repository.getByEmail(userEntity.getEmail());
         ServiceError.PARAM_INVALID.whenNull("邮箱或验证码不正确");
-        return createAccessToken(existUser);
+        return existUser;
     }
 
     /**
@@ -282,7 +282,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param existUser 用户实体
      * @return AccessToken
      */
-    private String createAccessToken(@NotNull UserEntity existUser) {
+    public String createAccessToken(@NotNull UserEntity existUser) {
         return AccessTokenUtil.create().setPayloadId(existUser.getId(), serviceConfig.getAuthorizeExpireSecond()).build(serviceConfig.getAccessTokenSecret());
     }
 
@@ -357,5 +357,11 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             user.setSalt(salt);
         }
         return user;
+    }
+
+    @Override
+    protected void beforeDisable(long id) {
+        UserEntity existUser = get(id);
+        ServiceError.FORBIDDEN_DISABLED_NOT_ALLOWED.when(existUser.isRootUser(), "系统内置用户无法被禁用!");
     }
 }

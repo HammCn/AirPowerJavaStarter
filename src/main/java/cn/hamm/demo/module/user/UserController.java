@@ -7,7 +7,6 @@ import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.helper.CookieHelper;
 import cn.hamm.airpower.model.Json;
-import cn.hamm.airpower.util.AccessTokenUtil;
 import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
@@ -116,41 +115,41 @@ public class UserController extends BaseController<UserEntity, UserService, User
      * <h1>处理用户登录</h1>
      *
      * @param userLoginType 登录方式
-     * @param user          登录数据
+     * @param login         登录数据
      * @param response      响应的请求
      * @return JsonData
      */
-    private Json doLogin(@NotNull UserLoginType userLoginType, UserEntity user, HttpServletResponse response) {
-        String accessToken = "";
-        switch (userLoginType) {
-            case VIA_ACCOUNT_PASSWORD -> accessToken = service.login(user);
-            case VIA_EMAIL_CODE -> accessToken = service.loginViaEmail(user);
-            default -> ServiceError.SERVICE_ERROR.show("暂不支持的登录方式");
-        }
+    private Json doLogin(@NotNull UserLoginType userLoginType, UserEntity login, HttpServletResponse response) {
+        UserEntity user = switch (userLoginType) {
+            case VIA_ACCOUNT_PASSWORD -> service.login(login);
+            case VIA_EMAIL_CODE -> service.loginViaEmail(login);
+        };
+        ServiceError.FORBIDDEN_DISABLED.when(user.getIsDisabled(), "登录失败，你的账号已被禁用");
 
-        // 开始处理Oauth2登录逻辑
-        Long userId = AccessTokenUtil.create().getPayloadId(accessToken, serviceConfig.getAccessTokenSecret());
+        // 创建AccessToken
+        String accessToken = service.createAccessToken(login);
 
         // 存储Cookies
         String cookieString = RandomUtil.randomString();
-        service.saveCookie(userId, cookieString);
+        service.saveCookie(user.getId(), cookieString);
         response.addCookie(cookieHelper.getAuthorizeCookie(cookieString));
 
-        String appKey = user.getAppKey();
+        String appKey = login.getAppKey();
         if (!StringUtils.hasText(appKey)) {
+            // 没有传入 AppKey 则为普通登录 直接返回 AccessToken
             return Json.data(accessToken, "登录成功,请存储你的访问凭证");
         }
 
         // 验证应用信息
-        OpenAppEntity openAppEntity = openAppService.getByAppKey(appKey);
-        ServiceError.PARAM_INVALID.whenNull(openAppEntity, "登录失败,错误的应用ID");
+        OpenAppEntity openApp = openAppService.getByAppKey(appKey);
+        ServiceError.PARAM_INVALID.whenNull(openApp, "登录失败,错误的应用ID");
 
         // 生成临时身份令牌code
         String code = RandomUtil.randomString();
-        openAppEntity.setCode(code);
+        openApp.setCode(code);
 
         // 缓存临时身份令牌code
-        service.saveOauthCode(userId, openAppEntity);
+        service.saveOauthCode(user.getId(), openApp);
         return Json.data(code, "登录成功,请重定向此Code");
     }
 }
