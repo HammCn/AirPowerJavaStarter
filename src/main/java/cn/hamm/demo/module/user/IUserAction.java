@@ -20,12 +20,6 @@ public interface IUserAction {
     }
 
     /**
-     * <h2>注册</h2>
-     */
-    interface WhenRegister {
-    }
-
-    /**
      * <h2>密码重置</h2>
      */
     interface WhenResetMyPassword {
@@ -47,6 +41,12 @@ public interface IUserAction {
      * <h2>发送邮件</h2>
      */
     interface WhenSendEmail {
+    }
+
+    /**
+     * <h2>发送短信</h2>
+     */
+    interface WhenSendSms {
     }
 
     /**

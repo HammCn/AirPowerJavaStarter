@@ -35,34 +35,32 @@ import java.util.Set;
 @Table(name = "user")
 @Description("用户")
 public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
+    @Description("用户昵称")
+    @Column(columnDefinition = "varchar(255) default '' comment '昵称'")
+    @NotBlank(groups = {WhenUpdate.class, WhenAdd.class, WhenUpdateMyInfo.class}, message = "昵称不能为空")
+    @Search()
+    private String nickname;
+
     @Description("邮箱")
     @Column(columnDefinition = "varchar(255) default '' comment '邮箱'", unique = true)
-    @NotBlank(groups = {WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class, WhenAdd.class}, message = "邮箱不能为空")
-    @Email(groups = {WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class}, message = "邮箱格式不正确")
-    @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入email字段")
+    @NotBlank(groups = {WhenSendEmail.class}, message = "邮箱不能为空")
+    @Email(groups = {WhenResetMyPassword.class, WhenSendEmail.class}, message = "邮箱格式不正确")
     @Search()
     private String email;
 
     @Description("手机号")
     @Column(columnDefinition = "varchar(255) default '' comment '手机号'", unique = true)
-    @Phone(groups = {WhenRegister.class, WhenResetMyPassword.class, WhenSendEmail.class}, message = "手机格式不正确")
-    @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入phone字段")
+    @Phone(groups = {WhenResetMyPassword.class, WhenSendSms.class}, message = "手机格式不正确")
     @Search()
     private String phone;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Description("密码")
     @Column(columnDefinition = "varchar(255) default '' comment '密码'")
-    @NotBlank(groups = {WhenLogin.class, WhenRegister.class, WhenResetMyPassword.class}, message = "密码不能为空")
+    @NotBlank(groups = {WhenLogin.class, WhenResetMyPassword.class}, message = "密码不能为空")
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入password字段")
     @Length(min = 6, message = "密码至少6位长度")
     private String password;
-
-    @Description("用户昵称")
-    @Column(columnDefinition = "varchar(255) default '' comment '昵称'")
-    @NotBlank(groups = {WhenUpdate.class, WhenAdd.class, WhenUpdateMyInfo.class}, message = "昵称不能为空")
-    @Search()
-    private String nickname;
 
     @Description("密码盐")
     @JsonIgnore
@@ -78,7 +76,7 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     private String appKey;
 
     @Description("邮箱验证码")
-    @NotBlank(groups = {WhenRegister.class, WhenUpdateMyPassword.class, WhenResetMyPassword.class}, message = "邮箱验证码不能为空")
+    @NotBlank(groups = {WhenResetMyPassword.class}, message = "邮箱验证码不能为空")
     @Transient
     private String code;
 

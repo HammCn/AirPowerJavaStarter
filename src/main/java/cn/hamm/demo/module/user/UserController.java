@@ -12,6 +12,7 @@ import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.open.app.OpenAppService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @PostMapping("updateMyInfo")
     public Json updateMyInfo(@RequestBody @Validated(WhenUpdateMyInfo.class) UserEntity user) {
         user.setId(getCurrentUserId());
-        user.setRoleList(null);
+        user.setRoleList(null).setPhone(null).setEmail(null);
         service.update(user);
         return Json.success("资料修改成功");
     }
@@ -77,7 +78,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @PostMapping("updateMyPassword")
     public Json updateMyPassword(@RequestBody @Validated(WhenUpdateMyPassword.class) UserEntity user) {
         user.setId(getCurrentUserId());
-        service.modifyUserPassword(user);
+        service.modifyMyPassword(user);
         return Json.success("密码修改成功");
     }
 
@@ -87,14 +88,6 @@ public class UserController extends BaseController<UserEntity, UserService, User
     public Json resetMyPassword(@RequestBody @Validated(WhenResetMyPassword.class) UserEntity user) {
         service.resetMyPassword(user);
         return Json.success("密码重置成功");
-    }
-
-    @Description("注册账号")
-    @Permission(login = false)
-    @PostMapping("register")
-    public Json register(@RequestBody @Validated(WhenRegister.class) UserEntity user) {
-        service.register(user);
-        return Json.success("注册成功");
     }
 
     @Description("账号密码登录")
@@ -109,6 +102,22 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @PostMapping("loginViaEmail")
     public Json loginViaEmail(@RequestBody @Validated(WhenLoginViaEmail.class) UserEntity user, HttpServletResponse httpServletResponse) {
         return doLogin(UserLoginType.VIA_EMAIL_CODE, user, httpServletResponse);
+    }
+
+    @Description("发送邮件")
+    @Permission(login = false)
+    @PostMapping("sendEmail")
+    public Json sendEmail(@RequestBody @Validated(WhenSendEmail.class) UserEntity user) throws MessagingException {
+        service.sendMail(user.getEmail());
+        return Json.success("发送成功");
+    }
+
+    @Description("发送短信")
+    @Permission(login = false)
+    @PostMapping("sendSms")
+    public Json sendSms(@RequestBody @Validated(WhenSendSms.class) UserEntity user) {
+        service.sendSms(user.getPhone());
+        return Json.success("发送成功");
     }
 
     /**

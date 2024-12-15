@@ -15,6 +15,8 @@ import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ import java.util.Objects;
  * @author Hamm.cn
  */
 @Service
+@Slf4j
 public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
      * <h2>密码盐的长度</h2>
@@ -37,32 +40,55 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     public static final int PASSWORD_SALT_LENGTH = 4;
 
     /**
-     * <h2>邮箱验证码key</h2>
-     */
-    private static final String REDIS_EMAIL_CODE_KEY = "email_code_";
-
-    /**
-     * <h2>OAUTH存储的key前缀</h2>
-     */
-    private static final String OAUTH_CODE_KEY = "oauth_code_";
-
-    /**
-     * <h2>COOKIE前缀</h2>
-     */
-    private static final String COOKIE_CODE_KEY = "cookie_code_";
-
-    /**
-     * <h2>Code缓存 包含了 Oauth2的 Code 和 验证码的 Code</h2>
+     * <h2>Code缓存秒数</h2>
+     * 验证码时长和Oauth2的缓存时间一致
      */
     private static final int CACHE_CODE_EXPIRE_SECOND = Constant.SECOND_PER_MINUTE * 5;
 
-    /**
-     * <h2>Cookie缓存</h2>
-     */
-    private static final int CACHE_COOKIE_EXPIRE_SECOND = Constant.SECOND_PER_DAY;
-
     @Autowired
     private EmailHelper emailHelper;
+
+    /**
+     * <h2>获取新的密码盐</h2>
+     *
+     * @return 密码盐
+     */
+    private static @NotNull String getNewSalt() {
+        return RandomUtil.randomNumbers(6);
+    }
+
+    /**
+     * <h2>获取短信验证码的缓存key</h2>
+     *
+     * @param phone 手机号
+     * @return 缓存Key
+     */
+    @Contract(pure = true)
+    private static @NotNull String getPhoneCodeCacheKey(String phone) {
+        return "sms_code_" + phone;
+    }
+
+    /**
+     * <h2>获取邮箱验证码的缓存key</h2>
+     *
+     * @param email 邮箱
+     * @return 缓存Key
+     */
+    @Contract(pure = true)
+    private static @NotNull String getEmailCacheKey(String email) {
+        return "email_code_" + email;
+    }
+
+    /**
+     * <h2>获取Cookie的缓存key</h2>
+     *
+     * @param cookie Cookie
+     * @return 缓存Key
+     */
+    @Contract(pure = true)
+    private static @NotNull String getCookieCodeKey(String cookie) {
+        return "cookie_code_" + cookie;
+    }
 
     /**
      * <h2>获取登录用户的菜单列表</h2>
@@ -115,30 +141,20 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      *
      * @param user 用户信息
      */
-    public void modifyUserPassword(@NotNull UserEntity user) {
+    public void modifyMyPassword(@NotNull UserEntity user) {
         UserEntity existUser = get(user.getId());
-        String code = getEmailCode(existUser.getEmail());
-        ServiceError.PARAM_INVALID.whenNotEquals(code, user.getCode(), "验证码输入错误");
-        String oldPassword = user.getOldPassword();
+
+        // 判断原始密码
+        String oldPassword = existUser.getOldPassword();
         ServiceError.PARAM_INVALID.whenNotEqualsIgnoreCase(
                 PasswordUtil.encode(oldPassword, existUser.getSalt()),
                 existUser.getPassword(),
                 "原密码输入错误，修改密码失败"
         );
         String salt = RandomUtil.randomString();
-        user.setSalt(salt);
-        user.setPassword(PasswordUtil.encode(user.getPassword(), salt));
-        removeEmailCodeCache(existUser.getEmail());
-        update(user);
-    }
-
-    /**
-     * <h2>删除指定邮箱的验证码缓存</h2>
-     *
-     * @param email 邮箱
-     */
-    public void removeEmailCodeCache(String email) {
-        redisHelper.del(REDIS_EMAIL_CODE_KEY + email);
+        existUser.setSalt(salt);
+        existUser.setPassword(PasswordUtil.encode(user.getPassword(), salt));
+        update(existUser);
     }
 
     /**
@@ -147,14 +163,30 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param user 用户实体
      */
     public void resetMyPassword(@NotNull UserEntity user) {
-        String code = getEmailCode(user.getEmail());
-        ServiceError.PARAM_INVALID.whenNotEqualsIgnoreCase(code, user.getCode(), "邮箱验证码不一致");
-        UserEntity existUser = repository.getByEmail(user.getEmail());
+        String code = null;
+        UserEntity existUser = null;
+        if (StringUtils.hasText(user.getPhone())) {
+            existUser = repository.getByPhone(user.getPhone());
+            code = getSmsCode(user.getPhone());
+        } else if (StringUtils.hasText(user.getEmail())) {
+            existUser = repository.getByEmail(user.getEmail());
+            code = getEmailCode(user.getEmail());
+        } else {
+            ServiceError.PARAM_MISSING.show("请传入邮箱或手机号");
+        }
+        ServiceError.PARAM_INVALID.whenNotEqualsIgnoreCase(code, user.getCode(), "验证码不正确，请重新获取");
         ServiceError.PARAM_INVALID.whenNull(existUser, "重置密码失败，用户信息异常");
+
+        // 验证通过 开始重置密码和盐
         String salt = RandomUtil.randomString(PASSWORD_SALT_LENGTH);
         existUser.setSalt(salt);
         existUser.setPassword(PasswordUtil.encode(user.getPassword(), salt));
-        removeEmailCodeCache(existUser.getEmail());
+        if (StringUtils.hasText(user.getEmail())) {
+            redisHelper.del(getEmailCacheKey(user.getEmail()));
+        }
+        if (StringUtils.hasText(user.getPhone())) {
+            redisHelper.del(getPhoneCodeCacheKey(user.getPhone()));
+        }
         update(existUser);
     }
 
@@ -164,10 +196,21 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param email 邮箱
      */
     public void sendMail(String email) throws MessagingException {
-        CustomError.EMAIL_SEND_BUSY.when(hasEmailCodeInRedis(email));
-        String code = RandomUtil.randomNumbers(6);
-        setCodeToRedis(email, code);
+        CustomError.EMAIL_SEND_BUSY.when(redisHelper.hasKey(getEmailCacheKey(email)));
+        String code = getNewSalt();
+        redisHelper.set(getEmailCacheKey(email), code, CACHE_CODE_EXPIRE_SECOND);
         emailHelper.sendCode(email, "你收到一个邮箱验证码", code, "DEMO");
+    }
+
+    /**
+     * <h2>发送短信验证码</h2>
+     */
+    public void sendSms(String phone) {
+        CustomError.SMS_SEND_BUSY.when(redisHelper.hasKey(getPhoneCodeCacheKey(phone)));
+        String code = getNewSalt();
+        redisHelper.set(getPhoneCodeCacheKey(phone), code, CACHE_CODE_EXPIRE_SECOND);
+        log.info("短信验证码：{}", code);
+        //todo 发送验证码
     }
 
     /**
@@ -188,7 +231,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return 缓存的Key
      */
     protected String getAppCodeKey(String appKey, String code) {
-        return OAUTH_CODE_KEY + appKey + "_" + code;
+        return "oauth_code_" + appKey + "_" + code;
     }
 
     /**
@@ -221,7 +264,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @param cookie Cookie
      */
     public void saveCookie(Long userId, String cookie) {
-        redisHelper.set(COOKIE_CODE_KEY + cookie, userId, CACHE_COOKIE_EXPIRE_SECOND);
+        redisHelper.set(getCookieCodeKey(cookie), userId, Constant.SECOND_PER_DAY);
     }
 
     /**
@@ -231,7 +274,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
      * @return UserId
      */
     public Long getUserIdByCookie(String cookie) {
-        Object userId = redisHelper.get(COOKIE_CODE_KEY + cookie);
+        Object userId = redisHelper.get(getCookieCodeKey(cookie));
         if (Objects.isNull(userId)) {
             return null;
         }
@@ -287,57 +330,25 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>用户注册</h2>
-     *
-     * @param user 用户实体
-     */
-    public void register(@NotNull UserEntity user) {
-        // 获取发送的验证码
-        String code = getEmailCode(user.getEmail());
-        ServiceError.PARAM_INVALID.whenNotEquals(code, user.getCode(), "邮箱验证码不正确");
-        // 验证邮箱是否已经注册过
-        UserEntity existUser = repository.getByEmail(user.getEmail());
-        CustomError.USER_REGISTER_ERROR_EXIST.whenNotNull(existUser, "账号已存在,无法重复注册");
-        // 获取一个随机盐
-        String salt = RandomUtil.randomString(PASSWORD_SALT_LENGTH);
-        UserEntity newUser = new UserEntity();
-        newUser.setEmail(user.getEmail());
-        newUser.setSalt(salt);
-        newUser.setPassword(PasswordUtil.encode(user.getPassword(), salt));
-        add(newUser);
-        //删掉使用过的邮箱验证码
-        removeEmailCodeCache(user.getEmail());
-    }
-
-    /**
-     * <h2>将验证码暂存到Redis</h2>
-     *
-     * @param email 邮箱
-     * @param code  验证码
-     */
-    private void setCodeToRedis(String email, String code) {
-        redisHelper.set(REDIS_EMAIL_CODE_KEY + email, code, CACHE_CODE_EXPIRE_SECOND);
-    }
-
-    /**
-     * <h2>获取指定邮箱发送的验证码</h2>
+     * <h2>获取指定邮箱缓存的验证码</h2>
      *
      * @param email 邮箱
      * @return 验证码
      */
     private String getEmailCode(String email) {
-        Object code = redisHelper.get(REDIS_EMAIL_CODE_KEY + email);
+        Object code = redisHelper.get(getEmailCacheKey(email));
         return Objects.isNull(code) ? Constant.EMPTY_STRING : code.toString();
     }
 
     /**
-     * <h2>指定邮箱验证码是否还在缓存内</h2>
+     * <h2>获取指定手机缓存的验证码</h2>
      *
-     * @param email 邮箱
-     * @return 是否在缓存内
+     * @param phone 手机
+     * @return 验证码
      */
-    private boolean hasEmailCodeInRedis(String email) {
-        return redisHelper.hasKey(REDIS_EMAIL_CODE_KEY + email);
+    private String getSmsCode(String phone) {
+        Object code = redisHelper.get(getPhoneCodeCacheKey(phone));
+        return Objects.isNull(code) ? Constant.EMPTY_STRING : code.toString();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.system.oauth2;
+package cn.hamm.demo.module.open.oauth2;
 
 import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
@@ -45,7 +45,7 @@ import java.util.Objects;
  */
 @ApiController("oauth2")
 @Slf4j
-public class Oauth2Controller extends RootController implements IOpenAppAction {
+public class OauthController extends RootController implements IOpenAppAction {
     private static final String APP_NOT_FOUND = "App(%s) not found!";
     private static final String REDIRECT_URI = "redirectUri";
     private static final String REDIRECT_URI_MISSING = "RedirectUri missing!";
