@@ -4,16 +4,16 @@ import cn.hamm.airpower.annotation.ApiController;
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.annotation.Filter;
 import cn.hamm.airpower.annotation.Permission;
+import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.helper.CookieHelper;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.base.BaseController;
-import cn.hamm.demo.module.open.app.OpenAppService;
-import cn.hamm.demo.module.open.oauth.OauthService;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.user.enums.UserLoginType;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +34,6 @@ import java.util.List;
 public class UserController extends BaseController<UserEntity, UserService, UserRepository> implements IUserAction {
     @Autowired
     private CookieHelper cookieHelper;
-
-    @Autowired
-    private OpenAppService openAppService;
-    @Autowired
-    private OauthService oauthService;
 
     @Description("获取我的信息")
     @Permission(authorize = false)
@@ -99,6 +94,20 @@ public class UserController extends BaseController<UserEntity, UserService, User
         return doLogin(UserLoginType.VIA_ACCOUNT_PASSWORD, user, httpServletResponse);
     }
 
+
+    @Description("退出登录")
+    @Permission(login = false)
+    @PostMapping("logout")
+    public Json logout(HttpServletResponse httpServletResponse) {
+        Cookie cookie = cookieHelper.getAuthorizeCookie("");
+        cookie.setHttpOnly(false);
+        cookie.setPath(Constant.SLASH);
+        // 清除cookie
+        cookie.setMaxAge(0);
+        httpServletResponse.addCookie(cookie);
+        return Json.success("退出登录成功");
+    }
+
     @Description("邮箱验证码登录")
     @Permission(login = false)
     @PostMapping("loginViaEmail")
@@ -143,7 +152,10 @@ public class UserController extends BaseController<UserEntity, UserService, User
         // 存储Cookies
         String cookieString = RandomUtil.randomString();
         service.saveCookie(user.getId(), cookieString);
-        response.addCookie(cookieHelper.getAuthorizeCookie(cookieString));
+        Cookie cookie = cookieHelper.getAuthorizeCookie(cookieString);
+        cookie.setHttpOnly(false);
+        cookie.setPath(Constant.SLASH);
+        response.addCookie(cookie);
         return Json.data(accessToken, "登录成功,请存储你的访问凭证");
     }
 }

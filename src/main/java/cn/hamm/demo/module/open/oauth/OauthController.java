@@ -114,6 +114,14 @@ public class OauthController extends RootController implements IOauthAction {
             // cookie没有找到用户
             return redirectLogin(response, appKey, redirectUri, scope);
         }
+        if (openApp.getIsInternal()) {
+            String code = RandomUtil.randomString();
+            service.saveOauthUserCache(openApp.getAppKey(), code, userId);
+            service.saveOauthScopeCache(openApp.getAppKey(), code, scope);
+            String url = redirectUri + Constant.QUESTION + Constant.CODE + Constant.EQUAL + code;
+            redirect(response, url);
+            return null;
+        }
         String url = appConfig.getAuthorizeUrl() +
                 Constant.QUESTION +
                 APP_KEY +
@@ -203,7 +211,7 @@ public class OauthController extends RootController implements IOauthAction {
                 user.setPhone(null).setEmail(null);
             }
             if (OauthScope.PRIVACY.equals(oauthScope)) {
-                user.setGender(null).setCreateTime(null).setUpdateTime(null);
+                user.setGender(null).setCreateTime(null).setUpdateTime(null).setIsDisabled(null);
             }
             if (OauthScope.REAL_NAME.equals(oauthScope)) {
                 user.setIdCard(null).setRealName(null);

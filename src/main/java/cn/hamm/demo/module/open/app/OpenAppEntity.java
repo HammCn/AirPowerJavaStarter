@@ -1,9 +1,6 @@
 package cn.hamm.demo.module.open.app;
 
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Exclude;
-import cn.hamm.airpower.annotation.ReadOnly;
-import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.annotation.*;
 import cn.hamm.airpower.open.IOpenApp;
 import cn.hamm.airpower.open.OpenArithmeticType;
 import cn.hamm.airpower.validate.dictionary.Dictionary;
@@ -75,4 +72,10 @@ public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenApp
     @Column(columnDefinition = "varchar(255) default '' comment '应用地址'")
     @NotBlank(groups = {WhenAdd.class, WhenUpdate.class}, message = "应用地址必须填写")
     private String url;
+
+    @Description("是否内部应用")
+    @Search(Search.Mode.EQUALS)
+    @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '是否内部应用'")
+    @ExcelColumn(ExcelColumn.Type.BOOLEAN)
+    private Boolean isInternal;
 }
