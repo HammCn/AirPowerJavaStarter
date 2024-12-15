@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.open.oauth2;
+package cn.hamm.demo.module.open.oauth.enums;
 
 import cn.hamm.airpower.interfaces.IDictionary;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public enum OauthScope implements IDictionary {
     /**
      * <h3>隐私信息</h3>
      */
-    PRIVACY(2, "隐私信息", false, "生日/性别等隐私信息"),
+    PRIVACY(2, "隐私信息", false, "生日/性别/注册时间等隐私信息"),
 
     /**
      * <h3>联系方式</h3>

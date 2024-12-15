@@ -40,7 +40,6 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
 
     /**
      * <h3>Code缓存秒数</h3>
-     * 验证码时长和Oauth2的缓存时间一致
      */
     private static final int CACHE_CODE_EXPIRE_SECOND = Constant.SECOND_PER_MINUTE * 5;
 
@@ -87,18 +86,6 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     @Contract(pure = true)
     private static @NotNull String getCookieCodeKey(String cookie) {
         return "cookie_code_" + cookie;
-    }
-
-    /**
-     * <h3>获取指定应用的OauthCode缓存Key</h3>
-     *
-     * @param appKey 应用Key
-     * @param code   Code
-     * @return 缓存的Key
-     */
-    @Contract(pure = true)
-    public static @NotNull String getAppCodeKey(String appKey, String code) {
-        return "oauth_code_" + appKey + "_" + code;
     }
 
     /**
@@ -222,40 +209,6 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         redisHelper.set(getPhoneCodeCacheKey(phone), code, CACHE_CODE_EXPIRE_SECOND);
         log.info("短信验证码：{}", code);
         //todo 发送验证码
-    }
-
-    /**
-     * <h3>存储Oauth的一次性Code</h3>
-     *
-     * @param appKey AppKey
-     * @param code   Code
-     * @param userId 用户ID
-     */
-    public void saveOauthCode(String appKey, String code, long userId) {
-        redisHelper.set(getAppCodeKey(appKey, code), userId, CACHE_CODE_EXPIRE_SECOND);
-    }
-
-    /**
-     * <h3>通过AppKey和Code获取用户ID</h3>
-     *
-     * @param appKey AppKey
-     * @param code   Code
-     * @return UserId
-     */
-    public Long getUserIdByOauthAppKeyAndCode(String appKey, String code) {
-        Object userId = redisHelper.get(getAppCodeKey(appKey, code));
-        ServiceError.FORBIDDEN.whenNull(userId, "你的AppKey或Code错误，请重新获取");
-        return Long.valueOf(userId.toString());
-    }
-
-    /**
-     * <h3>删除AppOauthCode缓存</h3>
-     *
-     * @param appKey AppKey
-     * @param code   Code
-     */
-    public void removeOauthCode(String appKey, String code) {
-        redisHelper.del(getAppCodeKey(appKey, code));
     }
 
     /**

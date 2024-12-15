@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.user;
+package cn.hamm.demo.module.user.enums;
 
 /**
  * <h1>用户登录方式</h1>

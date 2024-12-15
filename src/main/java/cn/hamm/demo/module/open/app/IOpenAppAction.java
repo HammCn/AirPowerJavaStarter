@@ -6,12 +6,6 @@ package cn.hamm.demo.module.open.app;
  * @author Hamm.cn
  */
 public interface IOpenAppAction {
-    /**
-     * <h3>Code换AccessToken</h3>
-     */
-
-    interface WhenCode2AccessToken {
-    }
 
     /**
      * <h3>应用Key查询应用</h3>

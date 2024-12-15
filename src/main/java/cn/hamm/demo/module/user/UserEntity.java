@@ -1,10 +1,13 @@
 package cn.hamm.demo.module.user;
 
 import cn.hamm.airpower.annotation.Description;
+import cn.hamm.airpower.annotation.Desensitize;
 import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.validate.dictionary.Dictionary;
 import cn.hamm.airpower.validate.phone.Phone;
 import cn.hamm.demo.base.BaseEntity;
 import cn.hamm.demo.module.role.RoleEntity;
+import cn.hamm.demo.module.user.enums.UserGender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -41,6 +44,16 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @Search()
     private String nickname;
 
+    @Description("真实姓名")
+    @Desensitize(Desensitize.Type.CHINESE_NAME)
+    @Column(columnDefinition = "varchar(255) default '' comment '真实姓名'")
+    private String realName;
+
+    @Description("身份证号")
+    @Desensitize(Desensitize.Type.ID_CARD)
+    @Column(columnDefinition = "varchar(255) default '' comment '身份证号'")
+    private String idCard;
+
     @Description("邮箱")
     @Column(columnDefinition = "varchar(255) default '' comment '邮箱'", unique = true)
     @NotBlank(groups = {WhenSendEmail.class}, message = "邮箱不能为空")
@@ -53,6 +66,12 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @Phone(groups = {WhenResetMyPassword.class, WhenSendSms.class}, message = "手机格式不正确")
     @Search()
     private String phone;
+
+    @Description("性别")
+    @Dictionary(value = UserGender.class, groups = {WhenAdd.class, WhenUpdate.class})
+    @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '性别'")
+    @Search(Search.Mode.EQUALS)
+    private Integer gender;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Description("密码")
@@ -71,9 +90,7 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roleList;
 
-    @Description("登录使用的AppKey")
-    @Transient
-    private String appKey;
+    ///////////////////////
 
     @Description("邮箱验证码")
     @NotBlank(groups = {WhenResetMyPassword.class}, message = "邮箱验证码不能为空")
@@ -94,5 +111,11 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @JsonIgnore
     public final boolean isRootUser() {
         return Objects.nonNull(getId()) && getId() == 1L;
+    }
+
+    @Override
+    public void excludeBaseData() {
+        super.excludeBaseData();
+        this.setRealName(null).setIdCard(null).setEmail(null).setPhone(null);
     }
 }
