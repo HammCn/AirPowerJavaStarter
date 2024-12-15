@@ -7,12 +7,12 @@ package cn.hamm.demo.module.user;
  */
 public enum UserLoginType {
     /**
-     * <h2>ID+密码 邮箱+密码</h2>
+     * <h3>ID+密码 邮箱+密码</h3>
      */
     VIA_ACCOUNT_PASSWORD,
 
     /**
-     * <h2>邮箱+验证码</h2>
+     * <h3>邮箱+验证码</h3>
      */
     VIA_EMAIL_CODE,
 }

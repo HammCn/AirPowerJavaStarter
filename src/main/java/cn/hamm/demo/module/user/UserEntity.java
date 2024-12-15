@@ -86,7 +86,7 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     private String oldPassword;
 
     /**
-     * <h2>获取是否超级管理员</h2>
+     * <h3>获取是否超级管理员</h3>
      *
      * @return 结果
      */

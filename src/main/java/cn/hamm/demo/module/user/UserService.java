@@ -35,12 +35,12 @@ import java.util.Objects;
 @Slf4j
 public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
-     * <h2>密码盐的长度</h2>
+     * <h3>密码盐的长度</h3>
      */
     public static final int PASSWORD_SALT_LENGTH = 4;
 
     /**
-     * <h2>Code缓存秒数</h2>
+     * <h3>Code缓存秒数</h3>
      * 验证码时长和Oauth2的缓存时间一致
      */
     private static final int CACHE_CODE_EXPIRE_SECOND = Constant.SECOND_PER_MINUTE * 5;
@@ -49,7 +49,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     private EmailHelper emailHelper;
 
     /**
-     * <h2>获取新的密码盐</h2>
+     * <h3>获取新的密码盐</h3>
      *
      * @return 密码盐
      */
@@ -58,7 +58,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取短信验证码的缓存key</h2>
+     * <h3>获取短信验证码的缓存key</h3>
      *
      * @param phone 手机号
      * @return 缓存Key
@@ -69,7 +69,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取邮箱验证码的缓存key</h2>
+     * <h3>获取邮箱验证码的缓存key</h3>
      *
      * @param email 邮箱
      * @return 缓存Key
@@ -80,7 +80,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取Cookie的缓存key</h2>
+     * <h3>获取Cookie的缓存key</h3>
      *
      * @param cookie Cookie
      * @return 缓存Key
@@ -91,7 +91,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取登录用户的菜单列表</h2>
+     * <h3>获取登录用户的菜单列表</h3>
      *
      * @param userId 用户id
      * @return 菜单树列表
@@ -115,7 +115,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取登录用户的权限列表</h2>
+     * <h3>获取登录用户的权限列表</h3>
      *
      * @param userId 用户ID
      * @return 权限列表
@@ -137,7 +137,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>修改密码</h2>
+     * <h3>修改密码</h3>
      *
      * @param user 用户信息
      */
@@ -158,7 +158,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>重置密码</h2>
+     * <h3>重置密码</h3>
      *
      * @param user 用户实体
      */
@@ -191,7 +191,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>发送邮箱验证码</h2>
+     * <h3>发送邮箱验证码</h3>
      *
      * @param email 邮箱
      */
@@ -203,7 +203,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>发送短信验证码</h2>
+     * <h3>发送短信验证码</h3>
      */
     public void sendSms(String phone) {
         CustomError.SMS_SEND_BUSY.when(redisHelper.hasKey(getPhoneCodeCacheKey(phone)));
@@ -214,7 +214,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>存储Oauth的一次性Code</h2>
+     * <h3>存储Oauth的一次性Code</h3>
      *
      * @param userId  用户ID
      * @param openApp 保存的应用信息
@@ -224,7 +224,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取指定应用的OauthCode缓存Key</h2>
+     * <h3>获取指定应用的OauthCode缓存Key</h3>
      *
      * @param appKey 应用Key
      * @param code   Code
@@ -235,7 +235,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>通过AppKey和Code获取用户ID</h2>
+     * <h3>通过AppKey和Code获取用户ID</h3>
      *
      * @param appKey AppKey
      * @param code   Code
@@ -248,7 +248,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>删除AppOauthCode缓存</h2>
+     * <h3>删除AppOauthCode缓存</h3>
      *
      * @param appKey AppKey
      * @param code   Code
@@ -258,7 +258,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>存储Cookie</h2>
+     * <h3>存储Cookie</h3>
      *
      * @param userId UserId
      * @param cookie Cookie
@@ -268,7 +268,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>通过Cookie获取一个用户</h2>
+     * <h3>通过Cookie获取一个用户</h3>
      *
      * @param cookie Cookie
      * @return UserId
@@ -282,7 +282,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>ID+密码 账号+密码</h2>
+     * <h3>ID+密码 账号+密码</h3>
      *
      * @param user 用户实体
      * @return 登录成功的用户
@@ -306,7 +306,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>邮箱验证码登录</h2>
+     * <h3>邮箱验证码登录</h3>
      *
      * @param userEntity 用户实体
      * @return 登录成功的用户
@@ -320,7 +320,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>创建AccessToken</h2>
+     * <h3>创建AccessToken</h3>
      *
      * @param existUser 用户实体
      * @return AccessToken
@@ -330,7 +330,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取指定邮箱缓存的验证码</h2>
+     * <h3>获取指定邮箱缓存的验证码</h3>
      *
      * @param email 邮箱
      * @return 验证码
@@ -341,7 +341,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     /**
-     * <h2>获取指定手机缓存的验证码</h2>
+     * <h3>获取指定手机缓存的验证码</h3>
      *
      * @param phone 手机
      * @return 验证码

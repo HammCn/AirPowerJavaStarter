@@ -128,7 +128,7 @@ public class OauthController extends RootController implements IOpenAppAction {
     }
 
     /**
-     * <h2>重定向到登录页面</h2>
+     * <h3>重定向到登录页面</h3>
      *
      * @param response    响应对象
      * @param appKey      AppKey
@@ -146,7 +146,7 @@ public class OauthController extends RootController implements IOpenAppAction {
     }
 
     /**
-     * <h2>显示一个错误页面</h2>
+     * <h3>显示一个错误页面</h3>
      *
      * @param error 错误信息
      * @return 错误页面
@@ -158,7 +158,7 @@ public class OauthController extends RootController implements IOpenAppAction {
     }
 
     /**
-     * <h2>重定向到指定的URL</h2>
+     * <h3>重定向到指定的URL</h3>
      *
      * @param response 响应体
      * @param url      目标URL

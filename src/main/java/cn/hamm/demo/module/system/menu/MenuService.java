@@ -19,7 +19,7 @@ import java.util.Objects;
 @Service
 public class MenuService extends BaseService<MenuEntity, MenuRepository> {
     /**
-     * <h2>排序字段</h2>
+     * <h3>排序字段</h3>
      */
     private static final String ORDER_FIELD_NAME = "orderNo";
 
@@ -46,7 +46,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
     }
 
     /**
-     * <h2>加载菜单</h2>
+     * <h3>加载菜单</h3>
      */
     public final void loadMenu() {
         MenuEntity exist = getMaybeNull(1L);
