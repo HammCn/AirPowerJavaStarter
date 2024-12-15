@@ -1,19 +1,13 @@
 package cn.hamm.demo.module.open.app;
 
-import cn.hamm.airpower.annotation.ApiController;
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Filter;
-import cn.hamm.airpower.annotation.Permission;
+import cn.hamm.airpower.annotation.*;
+import cn.hamm.airpower.enums.Api;
 import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.model.Json;
-import cn.hamm.airpower.model.query.QueryListRequest;
-import cn.hamm.airpower.model.query.QueryPageRequest;
 import cn.hamm.airpower.root.RootEntity;
 import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.base.BaseController;
-import cn.hamm.demo.module.user.UserService;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,12 +19,10 @@ import java.util.Base64;
  *
  * @author Hamm.cn
  */
-@ApiController("open/app")
+@ApiController("openApp")
 @Description("开放应用")
+@Extends(exclude = {Api.Export, Api.QueryExport})
 public class OpenAppController extends BaseController<OpenAppEntity, OpenAppService, OpenAppRepository> implements IOpenAppAction {
-    @Autowired
-    private UserService userService;
-
     @Description("通过AppKey获取应用信息")
     @PostMapping("getByAppKey")
     @Permission(login = false)
@@ -43,14 +35,8 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
 
     @Override
     public Json add(@RequestBody @Validated(WhenAdd.class) @NotNull OpenAppEntity openApp) {
-        openApp.setOwner(userService.get(getCurrentUserId()));
         openApp = service.get(service.add(openApp));
         return Json.data(String.format("应用名称: %s\n\nAppKey:\n%s\n\nAppSecret:\n%s\n\n公钥:\n%s", openApp.getAppName(), openApp.getAppKey(), openApp.getAppSecret(), openApp.getPublicKey()));
-    }
-
-    @Override
-    protected void afterAdd(long id, OpenAppEntity source) {
-        super.afterAdd(id, source);
     }
 
     @Description("重置密钥")
@@ -70,47 +56,5 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
         service.resetKeyPare(exist);
         service.update(exist);
         return Json.data(exist.getPublicKey());
-    }
-
-    @Override
-    protected void beforeDelete(long id) {
-        OpenAppEntity openApp = service.get(id);
-        ServiceError.FORBIDDEN_DELETE.whenNotEquals(openApp.getOwner().getId(), getCurrentUserId(), "你无权删除该应用");
-    }
-
-    @Override
-    protected void beforeDisable(long id) {
-        OpenAppEntity openApp = service.get(id);
-        ServiceError.FORBIDDEN_DELETE.whenNotEquals(openApp.getOwner().getId(), getCurrentUserId(), "你无权禁用该应用");
-    }
-
-    @Override
-    protected void beforeEnable(long id) {
-        OpenAppEntity openApp = service.get(id);
-        ServiceError.FORBIDDEN_DELETE.whenNotEquals(openApp.getOwner().getId(), getCurrentUserId(), "你无权启用该应用");
-    }
-
-    @Override
-    protected QueryListRequest<OpenAppEntity> beforeGetList(@NotNull QueryListRequest<OpenAppEntity> queryListRequest) {
-        queryListRequest.setFilter(queryListRequest.getFilter().setOwner(userService.get(getCurrentUserId())));
-        return queryListRequest;
-    }
-
-    @Override
-    protected QueryPageRequest<OpenAppEntity> beforeGetPage(@NotNull QueryPageRequest<OpenAppEntity> queryPageRequest) {
-        queryPageRequest.setFilter(queryPageRequest.getFilter().setOwner(userService.get(getCurrentUserId())));
-        return queryPageRequest;
-    }
-
-    @Override
-    protected OpenAppEntity beforeAdd(@NotNull OpenAppEntity openApp) {
-        openApp.setOwner(userService.get(getCurrentUserId()));
-        return openApp.setAppKey(null).setAppSecret(null).setPublicKey(null).setPrivateKey(null);
-    }
-
-    @Override
-    protected OpenAppEntity beforeUpdate(@NotNull OpenAppEntity openApp) {
-        openApp.setOwner(userService.get(getCurrentUserId()));
-        return openApp.setAppKey(null).setAppSecret(null).setPublicKey(null).setPrivateKey(null);
     }
 }

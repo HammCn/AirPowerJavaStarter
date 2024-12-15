@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.webhook.enums;
+package cn.hamm.demo.module.notify.enums;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.interfaces.IDictionary;
@@ -6,36 +6,36 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * <h1>通知类型</h1>
+ * <h1>通知渠道</h1>
  *
  * @author Hamm.cn
  */
 @Getter
 @AllArgsConstructor
-@Description("WebHook的通知类型")
-public enum WebHookType implements IDictionary {
+@Description("通知渠道")
+public enum NotifyChannel implements IDictionary {
     /**
-     * <h2>企业微信</h2>
+     * <h3>企业微信</h3>
      */
     WORK_WECHAT(1, "企业微信"),
 
     /**
-     * <h2>飞书</h2>
+     * <h3>飞书</h3>
      */
     FEI_SHU(2, "飞书"),
 
     /**
-     * <h2>钉钉</h2>
+     * <h3>钉钉</h3>
      */
     DING_TALK(3, "钉钉"),
 
     /**
-     * <h2>邮件</h2>
+     * <h3>邮件</h3>
      */
     EMAIL(4, "邮件"),
 
     /**
-     * <h2>WebHook</h2>
+     * <h3>WebHook</h3>
      */
     WEB_HOOK(5, "WebHook");
 

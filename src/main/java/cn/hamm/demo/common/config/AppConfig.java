@@ -18,7 +18,12 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("app")
 public class AppConfig {
     /**
-     * <h2>登录地址 用于Oauth2</h2>
+     * <h3>登录地址 用于 {@code OAuth2}</h3>
      */
     private String loginUrl;
+
+    /**
+     * <h3>授权地址 用于 {@code OAuth2}</h3>
+     */
+    private String authorizeUrl;
 }

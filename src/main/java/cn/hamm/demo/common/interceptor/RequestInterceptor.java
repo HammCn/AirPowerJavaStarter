@@ -33,7 +33,7 @@ import java.util.Objects;
 @Component
 public class RequestInterceptor extends AbstractRequestInterceptor {
     /**
-     * <h2>普通请求日志ID</h2>
+     * <h3>普通请求日志ID</h3>
      */
     static final String LOG_ID = "logId";
 
@@ -47,7 +47,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
     private LogService logService;
 
     /**
-     * <h2>验证指定的用户是否有指定权限标识的权限</h2>
+     * <h3>验证指定的用户是否有指定权限标识的权限</h3>
      *
      * @param userId             用户ID
      * @param permissionIdentity 权限标识
@@ -56,12 +56,15 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
      */
     @Override
     protected void checkUserPermission(long userId, String permissionIdentity, HttpServletRequest request) {
-        UserEntity existUser = userService.get(userId);
-        if (existUser.isRootUser()) {
+        UserEntity user = userService.get(userId);
+        if (user.isRootUser()) {
             return;
         }
+        ServiceError.FORBIDDEN_DISABLED.when(user.getIsDisabled(), "请求失败，你的账号已被禁用");
         PermissionEntity needPermission = permissionService.getPermissionByIdentity(permissionIdentity);
-        if (existUser.getRoleList().stream()
+        if (user.getRoleList().stream()
+                // 过滤被禁用的角色
+                .filter(role -> !role.getIsDisabled())
                 .flatMap(role -> role.getPermissionList().stream())
                 .anyMatch(permission -> Objects.equals(needPermission.getId(), permission.getId()))
         ) {
@@ -75,7 +78,7 @@ public class RequestInterceptor extends AbstractRequestInterceptor {
     }
 
     /**
-     * <h2>拦截请求</h2>
+     * <h3>拦截请求</h3>
      *
      * @param request  请求对象
      * @param response 响应对象

@@ -16,17 +16,17 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class AppWebSocketHandler extends WebSocketHandler {
     /**
-     * <h2>订阅分组前缀</h2>
+     * <h3>订阅分组前缀</h3>
      */
     public static final String GROUP_PREFIX = "group_";
 
     /**
-     * <h2>加入房间</h2>
+     * <h3>加入房间</h3>
      */
     private static final String EVENT_JOIN = "join";
 
     /**
-     * <h2>离开房间</h2>
+     * <h3>离开房间</h3>
      */
     private static final String EVENT_LEAVE = "leave";
 
@@ -43,43 +43,4 @@ public class AppWebSocketHandler extends WebSocketHandler {
             default:
         }
     }
-
-    /**
-     * <h1>订阅</h1>
-     *
-     * @param channel 频道
-     * @param session WebSocket会话
-     */
-    private void subscribe(String channel, WebSocketSession session) {
-        switch (webSocketConfig.getSupport()) {
-            case REDIS:
-                redisSubscribe(channel, session);
-                break;
-            case MQTT:
-                mqttSubscribe(channel, session);
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * <h1>取消订阅</h1>
-     *
-     * @param channel 频道
-     * @param session WebSocket会话
-     */
-    private void unsubscribe(String channel, WebSocketSession session) {
-        switch (webSocketConfig.getSupport()) {
-            case REDIS:
-                redisUnSubscribe(channel, session);
-                break;
-            case MQTT:
-                mqttUnSubscribe(channel, session);
-                break;
-            default:
-                break;
-        }
-    }
-
 }

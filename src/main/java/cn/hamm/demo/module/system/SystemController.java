@@ -10,8 +10,8 @@ import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.DictionaryUtil;
 import cn.hamm.airpower.util.ReflectUtil;
 import cn.hamm.demo.common.exception.CustomError;
-import cn.hamm.demo.module.webhook.enums.WebHookScene;
-import cn.hamm.demo.module.webhook.enums.WebHookType;
+import cn.hamm.demo.module.notify.enums.NotifyScene;
+import cn.hamm.demo.module.notify.enums.NotifyChannel;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -39,8 +39,8 @@ public class SystemController extends RootController {
     public Json getDictionary() {
         List<Class<? extends IDictionary>> classList = new ArrayList<>();
         classList.add(OpenArithmeticType.class);
-        classList.add(WebHookScene.class);
-        classList.add(WebHookType.class);
+        classList.add(NotifyScene.class);
+        classList.add(NotifyChannel.class);
         List<Map<String, Object>> list = new ArrayList<>(classList.size());
         for (var clazz : classList) {
             list.add(Map.of(

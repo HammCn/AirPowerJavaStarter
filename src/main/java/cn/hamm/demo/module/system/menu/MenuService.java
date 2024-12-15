@@ -19,7 +19,7 @@ import java.util.Objects;
 @Service
 public class MenuService extends BaseService<MenuEntity, MenuRepository> {
     /**
-     * <h2>排序字段</h2>
+     * <h3>排序字段</h3>
      */
     private static final String ORDER_FIELD_NAME = "orderNo";
 
@@ -46,7 +46,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
     }
 
     /**
-     * <h2>加载菜单</h2>
+     * <h3>加载菜单</h3>
      */
     public final void loadMenu() {
         MenuEntity exist = getMaybeNull(1L);
@@ -82,7 +82,7 @@ public class MenuService extends BaseService<MenuEntity, MenuRepository> {
         secondMenu = new MenuEntity().setName("我的应用").setPath("/console/open/app/list").setParentId(firstMenu.getId());
         add(secondMenu);
 
-        secondMenu = new MenuEntity().setName("WebHooks").setPath("/console/open/webhook/list").setParentId(firstMenu.getId());
+        secondMenu = new MenuEntity().setName("通知管理").setPath("/console/open/notify/list").setParentId(firstMenu.getId());
         add(secondMenu);
 
         // 系统设置

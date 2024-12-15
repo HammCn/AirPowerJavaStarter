@@ -1,8 +1,8 @@
 package cn.hamm.demo.module.supplier;
 
 import cn.hamm.demo.base.BaseService;
-import cn.hamm.demo.module.webhook.WebHookService;
-import cn.hamm.demo.module.webhook.enums.WebHookScene;
+import cn.hamm.demo.module.notify.NotifyService;
+import cn.hamm.demo.module.notify.enums.NotifyScene;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class SupplierService extends BaseService<SupplierEntity, SupplierRepository> {
     @Autowired
-    private WebHookService webHookService;
+    private NotifyService notifyService;
 
     @Override
-    protected void afterAdd(long id, @NotNull SupplierEntity supplierEntity) {
-        webHookService.sendHook(WebHookScene.SUPPLIER_ADD, get(id));
+    protected void afterAdd(long id, @NotNull SupplierEntity supplier) {
+        notifyService.sendNotification(NotifyScene.SUPPLIER_ADD, get(id), String.format("创建了供应商 (%s)",
+                supplier.getName()
+        ));
     }
 
     @Override
-    protected void afterUpdate(long id, @NotNull SupplierEntity supplierEntity) {
-        webHookService.sendHook(WebHookScene.SUPPLIER_UPDATE, get(id));
+    protected void afterUpdate(long id, @NotNull SupplierEntity supplier) {
+        notifyService.sendNotification(NotifyScene.SUPPLIER_UPDATE, get(id), String.format("修改了供应商 (%s)",
+                supplier.getName()
+        ));
     }
 }

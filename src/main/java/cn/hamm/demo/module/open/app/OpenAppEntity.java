@@ -1,16 +1,15 @@
 package cn.hamm.demo.module.open.app;
 
-import cn.hamm.airpower.annotation.Description;
-import cn.hamm.airpower.annotation.Exclude;
-import cn.hamm.airpower.annotation.ReadOnly;
-import cn.hamm.airpower.annotation.Search;
+import cn.hamm.airpower.annotation.*;
 import cn.hamm.airpower.open.IOpenApp;
 import cn.hamm.airpower.open.OpenArithmeticType;
 import cn.hamm.airpower.validate.dictionary.Dictionary;
 import cn.hamm.demo.base.BaseEntity;
-import cn.hamm.demo.module.user.UserEntity;
+import cn.hamm.demo.module.open.oauth.IOauthAction;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,7 +30,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Table(name = "open_app")
 @Description("开放应用")
-public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenAppAction, IOpenApp {
+public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenAppAction, IOpenApp, IOauthAction {
     @Description("应用Key")
     @Column(columnDefinition = "varchar(255) default '' comment 'AppKey'", unique = true)
     private String appKey;
@@ -39,7 +38,6 @@ public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenApp
     @Description("应用密钥")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(columnDefinition = "varchar(255) default '' comment 'AppSecret'")
-    @NotBlank(groups = {WhenCode2AccessToken.class})
     @Exclude(filters = {WhenGetDetail.class})
     private String appSecret;
 
@@ -70,23 +68,14 @@ public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenApp
     @Column(columnDefinition = "text comment '私钥'")
     private String privateKey;
 
-    @Description("应用所有者")
-    @ManyToOne
-    @Search(Search.Mode.JOIN)
-    @ReadOnly
-    private UserEntity owner;
-
     @Description("应用地址")
     @Column(columnDefinition = "varchar(255) default '' comment '应用地址'")
     @NotBlank(groups = {WhenAdd.class, WhenUpdate.class}, message = "应用地址必须填写")
     private String url;
 
-    @Description("临时码")
-    @NotBlank(groups = {WhenCode2AccessToken.class}, message = "Code不能为空")
-    @Transient
-    private String code;
-
-    @Description("Cookie")
-    @Transient
-    private String cookie;
+    @Description("是否内部应用")
+    @Search(Search.Mode.EQUALS)
+    @Column(columnDefinition = "tinyint UNSIGNED default 0 comment '是否内部应用'")
+    @ExcelColumn(ExcelColumn.Type.BOOLEAN)
+    private Boolean isInternal;
 }
