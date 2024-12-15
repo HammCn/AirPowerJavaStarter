@@ -136,7 +136,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         ServiceError.FORBIDDEN_DISABLED.when(user.getIsDisabled(), "登录失败，你的账号已被禁用");
 
         // 创建AccessToken
-        String accessToken = service.createAccessToken(login);
+        String accessToken = service.createAccessToken(user.getId());
 
         // 存储Cookies
         String cookieString = RandomUtil.randomString();
@@ -158,7 +158,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         openApp.setCode(code);
 
         // 缓存临时身份令牌code
-        service.saveOauthCode(user.getId(), openApp);
+        service.saveOauthCode(appKey, code, user.getId());
         return Json.data(code, "登录成功,请重定向此Code");
     }
 }

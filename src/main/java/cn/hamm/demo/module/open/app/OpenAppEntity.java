@@ -32,6 +32,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Description("开放应用")
 public class OpenAppEntity extends BaseEntity<OpenAppEntity> implements IOpenAppAction, IOpenApp {
     @Description("应用Key")
+    @NotBlank(groups = {WhenCode2AccessToken.class})
     @Column(columnDefinition = "varchar(255) default '' comment 'AppKey'", unique = true)
     private String appKey;
 

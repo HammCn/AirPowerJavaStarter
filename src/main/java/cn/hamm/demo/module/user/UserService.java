@@ -11,7 +11,6 @@ import cn.hamm.airpower.util.TreeUtil;
 import cn.hamm.demo.base.BaseService;
 import cn.hamm.demo.common.Services;
 import cn.hamm.demo.common.exception.CustomError;
-import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.mail.MessagingException;
@@ -88,6 +87,18 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     @Contract(pure = true)
     private static @NotNull String getCookieCodeKey(String cookie) {
         return "cookie_code_" + cookie;
+    }
+
+    /**
+     * <h3>获取指定应用的OauthCode缓存Key</h3>
+     *
+     * @param appKey 应用Key
+     * @param code   Code
+     * @return 缓存的Key
+     */
+    @Contract(pure = true)
+    public static @NotNull String getAppCodeKey(String appKey, String code) {
+        return "oauth_code_" + appKey + "_" + code;
     }
 
     /**
@@ -216,22 +227,12 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
      * <h3>存储Oauth的一次性Code</h3>
      *
-     * @param userId  用户ID
-     * @param openApp 保存的应用信息
-     */
-    public void saveOauthCode(Long userId, @NotNull OpenAppEntity openApp) {
-        redisHelper.set(getAppCodeKey(openApp.getAppKey(), openApp.getCode()), userId, CACHE_CODE_EXPIRE_SECOND);
-    }
-
-    /**
-     * <h3>获取指定应用的OauthCode缓存Key</h3>
-     *
-     * @param appKey 应用Key
+     * @param appKey AppKey
      * @param code   Code
-     * @return 缓存的Key
+     * @param userId 用户ID
      */
-    protected String getAppCodeKey(String appKey, String code) {
-        return "oauth_code_" + appKey + "_" + code;
+    public void saveOauthCode(String appKey, String code, long userId) {
+        redisHelper.set(getAppCodeKey(appKey, code), userId, CACHE_CODE_EXPIRE_SECOND);
     }
 
     /**
@@ -322,11 +323,11 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     /**
      * <h3>创建AccessToken</h3>
      *
-     * @param existUser 用户实体
+     * @param userId 用户ID
      * @return AccessToken
      */
-    public String createAccessToken(@NotNull UserEntity existUser) {
-        return AccessTokenUtil.create().setPayloadId(existUser.getId(), serviceConfig.getAuthorizeExpireSecond()).build(serviceConfig.getAccessTokenSecret());
+    public String createAccessToken(long userId) {
+        return AccessTokenUtil.create().setPayloadId(userId, serviceConfig.getAuthorizeExpireSecond()).build(serviceConfig.getAccessTokenSecret());
     }
 
     /**

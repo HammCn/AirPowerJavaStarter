@@ -14,7 +14,6 @@ import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.module.open.app.IOpenAppAction;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.open.app.OpenAppService;
-import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -99,10 +98,8 @@ public class OauthController extends RootController implements IOpenAppAction {
             // cookie没有找到用户
             return redirectLogin(response, appKey, redirectUri);
         }
-        UserEntity userEntity = userService.get(userId);
         String code = RandomUtil.randomString();
-        openApp.setCode(code).setAppKey(appKey);
-        userService.saveOauthCode(userEntity.getId(), openApp);
+        userService.saveOauthCode(appKey, code, userId);
         String redirectTarget = URLDecoder.decode(redirectUri, Charset.defaultCharset());
         String querySplit = "?";
         if (redirectTarget.contains(querySplit)) {
@@ -123,6 +120,7 @@ public class OauthController extends RootController implements IOpenAppAction {
         OpenAppEntity existApp = openAppService.getByAppKey(openApp.getAppKey());
         ServiceError.FORBIDDEN.whenNotEquals(existApp.getAppSecret(), openApp.getAppSecret(), "应用秘钥错误");
         userService.removeOauthCode(existApp.getAppKey(), code);
+        // 生成 accessToken refreshToken
         String accessToken = AccessTokenUtil.create().setPayloadId(userId, serviceConfig.getAuthorizeExpireSecond()).build(serviceConfig.getAccessTokenSecret());
         return Json.data(accessToken);
     }
