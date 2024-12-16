@@ -3,11 +3,23 @@ package cn.hamm.demo.module.open.oauth;
 import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.helper.RedisHelper;
+import cn.hamm.demo.module.open.oauth.model.base.AbstractOauthCallback;
+import cn.hamm.demo.module.open.oauth.model.base.OauthUserInfo;
+import cn.hamm.demo.module.open.oauth.model.enums.OauthPlatform;
+import cn.hamm.demo.module.user.UserEntity;
+import cn.hamm.demo.module.user.enums.UserGender;
+import cn.hamm.demo.module.user.thirdlogin.UserThirdLoginEntity;
+import cn.hamm.demo.module.user.thirdlogin.UserThirdLoginService;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,6 +27,7 @@ import java.util.Objects;
  *
  * @author Hamm.cn
  */
+@Slf4j
 @Service
 public class OauthService {
     /**
@@ -24,6 +37,9 @@ public class OauthService {
 
     @Autowired
     private RedisHelper redisHelper;
+
+    @Autowired
+    private UserThirdLoginService userThirdLoginService;
 
     /**
      * <h3>用户ID的缓存Key</h3>
@@ -47,6 +63,22 @@ public class OauthService {
     @Contract(pure = true)
     public static @NotNull String getScopeCacheKey(String appKey, String code) {
         return "oauth_scope_" + appKey + "_" + code;
+    }
+
+    private static OauthPlatform getOauthPlatform(String platform) {
+        OauthPlatform[] platforms = OauthPlatform.values();
+        OauthPlatform oauthPlatform = Arrays.stream(platforms).filter(item -> item.getFlag().equals(platform)).findFirst().orElse(null);
+        ServiceError.DATA_NOT_FOUND.whenNull(oauthPlatform, "暂不支持的第三方平台");
+        return oauthPlatform;
+    }
+
+    private static @NotNull AbstractOauthCallback getOauthCallbackInstance(@NotNull OauthPlatform oauthPlatform) {
+        try {
+            return oauthPlatform.getClazz().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -117,5 +149,53 @@ public class OauthService {
             return Constant.EMPTY_STRING;
         }
         return object.toString();
+    }
+
+    /**
+     * <h3>第三方登录</h3>
+     *
+     * @param platform 平台
+     * @param code     Code
+     * @return 登录成功的用户
+     */
+    public UserEntity thirdLogin(String platform, String code) {
+        OauthPlatform oauthPlatform = getOauthPlatform(platform);
+        AbstractOauthCallback oauthCallback = getOauthCallbackInstance(oauthPlatform);
+        OauthUserInfo userInfo = oauthCallback.getUserInfo(code);
+        List<UserThirdLoginEntity> exists = userThirdLoginService.filter(new UserThirdLoginEntity()
+                .setPlatform(oauthPlatform.getKey())
+                .setThirdUserId(userInfo.getUserId())
+        );
+        ServiceError.FORBIDDEN.when(exists.isEmpty(), "该第三方账号暂未绑定，无法登录");
+        return exists.get(0).getUser();
+    }
+
+    /**
+     * <h3>第三方绑定</h3>
+     *
+     * @param platform 平台
+     * @param code     Code
+     * @param user     绑定用户
+     */
+    public void thirdBind(String platform, String code, UserEntity user) {
+        OauthPlatform oauthPlatform = getOauthPlatform(platform);
+        AbstractOauthCallback oauthCallback = getOauthCallbackInstance(oauthPlatform);
+        OauthUserInfo userInfo = oauthCallback.getUserInfo(code);
+        List<UserThirdLoginEntity> exists = userThirdLoginService.filter(new UserThirdLoginEntity()
+                .setPlatform(oauthPlatform.getKey())
+                .setThirdUserId(userInfo.getUserId())
+        );
+        exists.forEach(item -> userThirdLoginService.delete(item.getId()));
+        int gender = UserGender.FEMALE.getKey();
+        if (Objects.nonNull(userInfo.getGender())) {
+            gender = userInfo.getGender().getKey();
+        }
+        userThirdLoginService.add(new UserThirdLoginEntity().setThirdUserId(userInfo.getUserId())
+                .setUser(user)
+                .setNickName(StringUtils.hasText(userInfo.getNickName()) ? userInfo.getNickName() : "")
+                .setAvatar(StringUtils.hasText(userInfo.getAvatar()) ? userInfo.getAvatar() : "")
+                .setPlatform(oauthPlatform.getKey())
+                .setGender(gender)
+        );
     }
 }

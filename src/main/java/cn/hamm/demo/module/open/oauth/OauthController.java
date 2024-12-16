@@ -7,6 +7,7 @@ import cn.hamm.airpower.annotation.Permission;
 import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.config.CookieConfig;
 import cn.hamm.airpower.exception.ServiceError;
+import cn.hamm.airpower.interfaces.IEntityAction;
 import cn.hamm.airpower.model.Json;
 import cn.hamm.airpower.root.RootController;
 import cn.hamm.airpower.util.AccessTokenUtil;
@@ -14,14 +15,16 @@ import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.common.config.AppConfig;
 import cn.hamm.demo.module.open.app.OpenAppEntity;
 import cn.hamm.demo.module.open.app.OpenAppService;
-import cn.hamm.demo.module.open.oauth.enums.OauthScope;
-import cn.hamm.demo.module.open.oauth.request.OauthCreateCodeRequest;
-import cn.hamm.demo.module.open.oauth.request.OauthGetAccessTokenRequest;
-import cn.hamm.demo.module.open.oauth.request.OauthGetUserInfoRequest;
-import cn.hamm.demo.module.open.oauth.response.OauthGetAccessTokenResponse;
-import cn.hamm.demo.module.user.UserController;
+import cn.hamm.demo.module.open.oauth.model.enums.OauthScope;
+import cn.hamm.demo.module.open.oauth.model.request.OauthCallbackRequest;
+import cn.hamm.demo.module.open.oauth.model.request.OauthCreateCodeRequest;
+import cn.hamm.demo.module.open.oauth.model.request.OauthGetAccessTokenRequest;
+import cn.hamm.demo.module.open.oauth.model.request.OauthGetUserInfoRequest;
+import cn.hamm.demo.module.open.oauth.model.response.OauthGetAccessTokenResponse;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
+import cn.hamm.demo.module.user.thirdlogin.UserThirdLoginEntity;
+import cn.hamm.demo.module.user.thirdlogin.UserThirdLoginService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -72,8 +75,9 @@ public class OauthController extends RootController implements IOauthAction {
 
     @Autowired
     private OauthService service;
+
     @Autowired
-    private UserController user;
+    private UserThirdLoginService userThirdLoginService;
 
     @GetMapping("authorize")
     public ModelAndView index(
@@ -169,6 +173,28 @@ public class OauthController extends RootController implements IOauthAction {
                 .setExpiresIn((long) expiresIn);
         return Json.data(response);
     }
+
+    @PostMapping("callback")
+    @Permission(login = false)
+    public Json callback(@RequestBody @Validated(OauthCallbackRequest.WhenOauthCallback.class) OauthCallbackRequest request, HttpServletResponse response) {
+        UserEntity user = service.thirdLogin(request.getPlatform(), request.getCode());
+
+        return Json.data(userService.loginWithCookieAndResponse(response, user), "登录成功");
+    }
+
+    @PostMapping("thirdBind")
+    public Json thirdBind(@RequestBody @Validated(OauthCallbackRequest.WhenOauthCallback.class) OauthCallbackRequest request) {
+        UserEntity user = userService.get(getCurrentUserId());
+        service.thirdBind(request.getPlatform(), request.getCode(), user);
+        return Json.success("绑定成功");
+    }
+
+    @PostMapping("unBindThird")
+    public Json unBindThird(@RequestBody @Validated(IEntityAction.WhenIdRequired.class) UserThirdLoginEntity userThirdLogin) {
+        userThirdLoginService.delete(userThirdLogin.getId());
+        return Json.success("解绑成功");
+    }
+
 
     /**
      * <h3>生成Token</h3>

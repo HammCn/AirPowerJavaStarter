@@ -76,7 +76,7 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Description("密码")
     @Column(columnDefinition = "varchar(255) default '' comment '密码'")
-    @NotBlank(groups = {WhenLogin.class, WhenResetMyPassword.class}, message = "密码不能为空")
+    @NotBlank(groups = {WhenLogin.class, WhenResetMyPassword.class, WhenUpdateMyPassword.class}, message = "密码不能为空")
     @Null(groups = {WhenUpdateMyInfo.class}, message = "请勿传入password字段")
     @Length(min = 6, message = "密码至少6位长度")
     private String password;
@@ -90,7 +90,7 @@ public class UserEntity extends BaseEntity<UserEntity> implements IUserAction {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<RoleEntity> roleList;
 
-    ///////////////////////
+    /// ////////////////////
 
     @Description("邮箱验证码")
     @NotBlank(groups = {WhenResetMyPassword.class}, message = "邮箱验证码不能为空")
