@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ConfigurationProperties("app.oauth.wecom")
 public class WecomConfig {
-    private String corpid;
+    private String corpId;
 
-    private String corpsecret;
+    private String corpSecret;
 
-    private String agentid;
+    private String agentId;
 }

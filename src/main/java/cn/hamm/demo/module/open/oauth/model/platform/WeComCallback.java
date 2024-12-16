@@ -44,7 +44,7 @@ public class WeComCallback extends AbstractOauthCallback {
         if (Objects.nonNull(object)) {
             return object.toString();
         }
-        String url = String.format(ACCESS_TOKEN_URL, OauthConfig.getWecomConfig().getCorpid(), OauthConfig.getWecomConfig().getCorpsecret());
+        String url = String.format(ACCESS_TOKEN_URL, OauthConfig.getWecomConfig().getCorpId(), OauthConfig.getWecomConfig().getCorpSecret());
         HttpResponse<String> httpResponse = HttpUtil.create().setUrl(url).get();
         Map<String, Object> map = Json.parse2Map(httpResponse.body());
         Object accessToken = Objects.requireNonNull(map.get("access_token"), "AccessToken获取失败");
