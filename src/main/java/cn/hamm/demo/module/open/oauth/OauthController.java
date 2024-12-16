@@ -98,7 +98,10 @@ public class OauthController extends RootController implements IOauthAction {
         }
         String scope = request.getParameter(SCOPE);
         if (!StringUtils.hasText(scope)) {
-            scope = OauthScope.BASIC_INFO.name();
+            scope = Arrays.stream(OauthScope.values())
+                    .filter(OauthScope::getIsDefault)
+                    .map(Enum::name)
+                    .collect(Collectors.joining(Constant.COMMA));
         }
         Cookie[] cookies = request.getCookies();
         if (Objects.isNull(cookies)) {
