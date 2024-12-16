@@ -57,6 +57,7 @@ public class Initialization implements CommandLineRunner {
             OpenAppService openAppService = Services.getOpenAppService();
             openApp.setAppSecret("8bQfc5ddy4LkZb4TMgM4UwMfVkbIHiXiaHCXyqANAAc=")
                     .setAppKey("sy3ktITp0SZG5CXxzbJRomouyVH5oaOY")
+                    .setUrl("https://demo.hamm.cn/app")
             ;
             openAppService.resetKeyPare(openApp);
             openAppService.add(openApp);
