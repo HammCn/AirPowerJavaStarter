@@ -2,6 +2,7 @@ package cn.hamm.demo.module.user;
 
 import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.exception.ServiceError;
+import cn.hamm.airpower.helper.CookieHelper;
 import cn.hamm.airpower.helper.EmailHelper;
 import cn.hamm.airpower.model.Sort;
 import cn.hamm.airpower.util.AccessTokenUtil;
@@ -14,6 +15,8 @@ import cn.hamm.demo.common.exception.CustomError;
 import cn.hamm.demo.module.system.menu.MenuEntity;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +48,8 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
 
     @Autowired
     private EmailHelper emailHelper;
+    @Autowired
+    private CookieHelper cookieHelper;
 
     /**
      * <h3>获取新的密码盐</h3>
@@ -143,7 +148,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         UserEntity existUser = get(user.getId());
 
         // 判断原始密码
-        String oldPassword = existUser.getOldPassword();
+        String oldPassword = user.getOldPassword();
         ServiceError.PARAM_INVALID.whenNotEqualsIgnoreCase(
                 PasswordUtil.encode(oldPassword, existUser.getSalt()),
                 existUser.getPassword(),
@@ -209,6 +214,27 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         redisHelper.set(getPhoneCodeCacheKey(phone), code, CACHE_CODE_EXPIRE_SECOND);
         log.info("短信验证码：{}", code);
         //todo 发送验证码
+    }
+
+    /**
+     * <h3>登录并设置Cookie</h3>
+     *
+     * @param response 响应
+     * @param user     用户
+     * @return AccessToken
+     */
+    public final String loginWithCookieAndResponse(@NotNull HttpServletResponse response, @NotNull UserEntity user) {
+        // 创建AccessToken
+        String accessToken = createAccessToken(user.getId());
+
+        // 存储Cookies
+        String cookieString = RandomUtil.randomString();
+        saveCookie(user.getId(), cookieString);
+        Cookie cookie = cookieHelper.getAuthorizeCookie(cookieString);
+        cookie.setHttpOnly(false);
+        cookie.setPath(Constant.SLASH);
+        response.addCookie(cookie);
+        return accessToken;
     }
 
     /**

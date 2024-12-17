@@ -1,7 +1,8 @@
-package cn.hamm.demo.module.open.oauth;
+package cn.hamm.demo.module.open.oauth.model.base;
 
 import cn.hamm.airpower.annotation.Description;
 import cn.hamm.airpower.root.RootModel;
+import cn.hamm.demo.module.open.oauth.IOauthAction;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

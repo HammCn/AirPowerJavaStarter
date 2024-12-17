@@ -7,6 +7,7 @@ import cn.hamm.airpower.util.RsaUtil;
 import cn.hamm.demo.base.BaseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -34,10 +35,25 @@ public class OpenAppService extends BaseService<OpenAppEntity, OpenAppRepository
 
     @Override
     protected @NotNull OpenAppEntity beforeAdd(@NotNull OpenAppEntity openApp) {
-        openApp.setAppKey(createAppKey());
-        openApp.setAppSecret(Base64.getEncoder().encodeToString(RandomUtil.randomBytes()));
-        resetKeyPare(openApp);
+        if (!StringUtils.hasText(openApp.getAppKey())) {
+            openApp.setAppKey(createAppKey());
+        }
+        if (!StringUtils.hasText(openApp.getAppSecret())) {
+            openApp.setAppSecret(createAppSecret());
+        }
+        if (!StringUtils.hasText(openApp.getPrivateKey()) || !StringUtils.hasText(openApp.getPublicKey())) {
+            resetKeyPare(openApp);
+        }
         return openApp;
+    }
+
+    /**
+     * <h3>创建AppSecret</h3>
+     *
+     * @return AppSecret
+     */
+    public final String createAppSecret() {
+        return Base64.getEncoder().encodeToString(RandomUtil.randomBytes());
     }
 
     /**
@@ -60,7 +76,7 @@ public class OpenAppService extends BaseService<OpenAppEntity, OpenAppRepository
      *
      * @return AppKey
      */
-    private String createAppKey() {
+    public final String createAppKey() {
         String appKey = RandomUtil.randomString();
         OpenAppEntity openApp = getByAppKey(appKey);
         if (Objects.isNull(openApp)) {
