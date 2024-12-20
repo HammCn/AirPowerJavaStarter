@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 @ApiController("oauth2")
 @Slf4j
 public class OauthController extends RootController implements IOauthAction {
-    public static final String USER_ID = "userId";
+    private static final String USER_ID = "userId";
     private static final String APP_NOT_FOUND = "App(%s) not found!";
     private static final String REDIRECT_URI = "redirectUri";
     private static final String REDIRECT_URI_MISSING = "RedirectUri missing!";
@@ -78,23 +78,6 @@ public class OauthController extends RootController implements IOauthAction {
 
     @Autowired
     private UserThirdLoginService userThirdLoginService;
-
-    /**
-     * <h3>获取scope</h3>
-     *
-     * @param request 请求
-     * @return scope字符串
-     */
-    private @NotNull String getScopeFromRequest(@NotNull HttpServletRequest request) {
-        String scope = request.getParameter(SCOPE);
-        if (!StringUtils.hasText(scope)) {
-            scope = Arrays.stream(OauthScope.values())
-                    .filter(OauthScope::getIsDefault)
-                    .map(Enum::name)
-                    .collect(Collectors.joining(Constant.COMMA));
-        }
-        return scope;
-    }
 
     @GetMapping("authorize")
     public ModelAndView index(
@@ -140,49 +123,6 @@ public class OauthController extends RootController implements IOauthAction {
 
         redirect(response, url);
         return null;
-    }
-
-    /**
-     * <h3>重定向回第三方页面</h3>
-     *
-     * @param response    响应
-     * @param appKey      appKey
-     * @param userId      用户ID
-     * @param scope       权限列表
-     * @param redirectUri 第三方回调地址
-     */
-    private void redirectToThirdPlatform(HttpServletResponse response, String appKey, Long userId, String scope, String redirectUri) {
-        String code = RandomUtil.randomString();
-        service.saveOauthUserCache(appKey, code, userId);
-        service.saveOauthScopeCache(appKey, code, scope);
-        String url = redirectUri + Constant.QUESTION + Constant.CODE + Constant.EQUAL + code;
-        redirect(response, url);
-    }
-
-    /**
-     * <h3>从Cookie获取用户ID</h3>
-     *
-     * @return Cookie字符串
-     */
-    private @Nullable Long getUserIdFromCookie() {
-        Cookie[] cookies = request.getCookies();
-        if (Objects.isNull(cookies)) {
-            // 没有cookie
-            return null;
-        }
-        String cookieString = Arrays.stream(cookies)
-                .filter(c -> Objects.equals(cookieConfig.getAuthCookieName(), c.getName()))
-                .findFirst().map(Cookie::getValue)
-                .orElse(null);
-        if (!StringUtils.hasText(cookieString)) {
-            return null;
-        }
-        Long userId = userService.getUserIdByCookie(cookieString);
-        if (Objects.isNull(userId)) {
-            // cookie没有找到用户
-            return null;
-        }
-        return userId;
     }
 
     @Description("获取AccessToken")
@@ -234,25 +174,6 @@ public class OauthController extends RootController implements IOauthAction {
     public Json unBindThird(@RequestBody @Validated(IEntityAction.WhenIdRequired.class) UserThirdLoginEntity userThirdLogin) {
         userThirdLoginService.delete(userThirdLogin.getId());
         return Json.success("解绑成功");
-    }
-
-
-    /**
-     * <h3>生成Token</h3>
-     *
-     * @param userId    用户ID
-     * @param scope     权限
-     * @param appKey    App Key
-     * @param expiresIn 过期时间
-     * @return Token
-     */
-    private String buildToken(long userId, String scope, String appKey, long expiresIn) {
-        return AccessTokenUtil.create()
-                .addPayload(USER_ID, userId)
-                .addPayload(SCOPE, scope)
-                .addPayload(APP_KEY, appKey)
-                .setExpireMillisecond(expiresIn)
-                .build(serviceConfig.getAccessTokenSecret());
     }
 
     @Description("获取当前用户的信息")
@@ -323,6 +244,24 @@ public class OauthController extends RootController implements IOauthAction {
     }
 
     /**
+     * <h3>生成Token</h3>
+     *
+     * @param userId    用户ID
+     * @param scope     权限
+     * @param appKey    App Key
+     * @param expiresIn 过期时间
+     * @return Token
+     */
+    private String buildToken(long userId, String scope, String appKey, long expiresIn) {
+        return AccessTokenUtil.create()
+                .addPayload(USER_ID, userId)
+                .addPayload(SCOPE, scope)
+                .addPayload(APP_KEY, appKey)
+                .setExpireMillisecond(expiresIn)
+                .build(serviceConfig.getAccessTokenSecret());
+    }
+
+    /**
      * <h3>重定向到登录页面</h3>
      *
      * @param response    响应对象
@@ -366,5 +305,65 @@ public class OauthController extends RootController implements IOauthAction {
         } catch (IOException e) {
             log.error(e.getMessage());
         }
+    }
+
+    /**
+     * <h3>从Cookie获取用户ID</h3>
+     *
+     * @return Cookie字符串
+     */
+    private @Nullable Long getUserIdFromCookie() {
+        Cookie[] cookies = request.getCookies();
+        if (Objects.isNull(cookies)) {
+            // 没有cookie
+            return null;
+        }
+        String cookieString = Arrays.stream(cookies)
+                .filter(c -> Objects.equals(cookieConfig.getAuthCookieName(), c.getName()))
+                .findFirst().map(Cookie::getValue)
+                .orElse(null);
+        if (!StringUtils.hasText(cookieString)) {
+            return null;
+        }
+        Long userId = userService.getUserIdByCookie(cookieString);
+        if (Objects.isNull(userId)) {
+            // cookie没有找到用户
+            return null;
+        }
+        return userId;
+    }
+
+    /**
+     * <h3>获取scope</h3>
+     *
+     * @param request 请求
+     * @return scope字符串
+     */
+    private @NotNull String getScopeFromRequest(@NotNull HttpServletRequest request) {
+        String scope = request.getParameter(SCOPE);
+        if (!StringUtils.hasText(scope)) {
+            scope = Arrays.stream(OauthScope.values())
+                    .filter(OauthScope::getIsDefault)
+                    .map(Enum::name)
+                    .collect(Collectors.joining(Constant.COMMA));
+        }
+        return scope;
+    }
+
+    /**
+     * <h3>重定向回第三方页面</h3>
+     *
+     * @param response    响应
+     * @param appKey      appKey
+     * @param userId      用户ID
+     * @param scope       权限列表
+     * @param redirectUri 第三方回调地址
+     */
+    private void redirectToThirdPlatform(HttpServletResponse response, String appKey, Long userId, String scope, String redirectUri) {
+        String code = RandomUtil.randomString();
+        service.saveOauthUserCache(appKey, code, userId);
+        service.saveOauthScopeCache(appKey, code, scope);
+        String url = redirectUri + Constant.QUESTION + Constant.CODE + Constant.EQUAL + code;
+        redirect(response, url);
     }
 }
