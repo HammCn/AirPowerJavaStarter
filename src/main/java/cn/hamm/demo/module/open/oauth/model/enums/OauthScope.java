@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.open.oauth.enums;
+package cn.hamm.demo.module.open.oauth.model.enums;
 
 import cn.hamm.airpower.interfaces.IDictionary;
 import lombok.AllArgsConstructor;

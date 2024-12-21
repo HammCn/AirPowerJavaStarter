@@ -5,7 +5,7 @@ spring:
     password: airpower
   jpa:
     hibernate:
-      ddl-auto: create-drop # 生产环境改为 validate
+      ddl-auto: validate
   data:
     redis:
       host: 127.0.0.1

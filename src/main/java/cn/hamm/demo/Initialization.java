@@ -4,6 +4,8 @@ import cn.hamm.airpower.helper.AirHelper;
 import cn.hamm.airpower.util.PasswordUtil;
 import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.common.Services;
+import cn.hamm.demo.module.open.app.OpenAppEntity;
+import cn.hamm.demo.module.open.app.OpenAppService;
 import cn.hamm.demo.module.user.UserEntity;
 import cn.hamm.demo.module.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +51,16 @@ public class Initialization implements CommandLineRunner {
         Services.getMenuService().loadMenu();
         // 所有数据检查完毕
         String[] localEnvList = {"local-hamm"};
-        //noinspection StatementWithEmptyBody
         if (Arrays.stream(localEnvList).toList().contains(AirHelper.getCurrentEnvironment())) {
             // 其他需要在本地初始化的数据
+            OpenAppEntity openApp = new OpenAppEntity().setAppName("人力资源管理系统");
+            OpenAppService openAppService = Services.getOpenAppService();
+            openApp.setAppSecret("8bQfc5ddy4LkZb4TMgM4UwMfVkbIHiXiaHCXyqANAAc=")
+                    .setAppKey("sy3ktITp0SZG5CXxzbJRomouyVH5oaOY")
+                    .setUrl("https://demo.hamm.cn/app")
+            ;
+            openAppService.resetKeyPare(openApp);
+            openAppService.add(openApp);
         }
     }
 }

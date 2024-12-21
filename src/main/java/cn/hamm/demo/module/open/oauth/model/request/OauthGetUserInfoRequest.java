@@ -1,6 +1,6 @@
-package cn.hamm.demo.module.open.oauth.request;
+package cn.hamm.demo.module.open.oauth.model.request;
 
-import cn.hamm.demo.module.open.oauth.OauthAccessTokenRequest;
+import cn.hamm.demo.module.open.oauth.model.base.OauthAccessTokenRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
