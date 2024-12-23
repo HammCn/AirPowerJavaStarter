@@ -35,6 +35,10 @@ public class OpenAppController extends BaseController<OpenAppEntity, OpenAppServ
 
     @Override
     public Json add(@RequestBody @Validated(WhenAdd.class) @NotNull OpenAppEntity openApp) {
+        openApp.setAppKey(service.createAppKey())
+                .setAppSecret(service.createAppSecret())
+        ;
+        service.resetKeyPare(openApp);
         openApp = service.get(service.add(openApp));
         return Json.data(String.format("应用名称: %s\n\nAppKey:\n%s\n\nAppSecret:\n%s\n\n公钥:\n%s", openApp.getAppName(), openApp.getAppKey(), openApp.getAppSecret(), openApp.getPublicKey()));
     }

@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.open.oauth.response;
+package cn.hamm.demo.module.open.oauth.model.response;
 
 import cn.hamm.airpower.root.RootModel;
 import lombok.Data;

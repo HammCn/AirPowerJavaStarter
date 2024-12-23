@@ -1,4 +1,4 @@
-package cn.hamm.demo.module.customer;
+package cn.hamm.demo.module.user.thirdlogin;
 
 import cn.hamm.demo.base.BaseRepository;
 import org.springframework.stereotype.Repository;
@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * @author Hamm.cn
  */
 @Repository
-public interface CustomerRepository extends BaseRepository<CustomerEntity> {
+public interface UserThirdLoginRepository extends BaseRepository<UserThirdLoginEntity> {
 }

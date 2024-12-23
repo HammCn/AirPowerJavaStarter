@@ -8,10 +8,11 @@ import cn.hamm.airpower.config.Constant;
 import cn.hamm.airpower.exception.ServiceError;
 import cn.hamm.airpower.helper.CookieHelper;
 import cn.hamm.airpower.model.Json;
-import cn.hamm.airpower.util.RandomUtil;
 import cn.hamm.demo.base.BaseController;
 import cn.hamm.demo.module.system.permission.PermissionEntity;
 import cn.hamm.demo.module.user.enums.UserLoginType;
+import cn.hamm.demo.module.user.thirdlogin.UserThirdLoginEntity;
+import cn.hamm.demo.module.user.thirdlogin.UserThirdLoginService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +35,10 @@ import java.util.List;
 public class UserController extends BaseController<UserEntity, UserService, UserRepository> implements IUserAction {
     @Autowired
     private CookieHelper cookieHelper;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserThirdLoginService userThirdLoginService;
 
     @Description("获取我的信息")
     @Permission(authorize = false)
@@ -48,7 +53,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
     @PostMapping("updateMyInfo")
     public Json updateMyInfo(@RequestBody @Validated(WhenUpdateMyInfo.class) UserEntity user) {
         user.setId(getCurrentUserId());
-        user.setRoleList(null).setPhone(null).setEmail(null);
+        user.setRoleList(null).setPhone(null).setEmail(null).setRealName(null).setIdCard(null);
         service.update(user);
         return Json.success("资料修改成功");
     }
@@ -68,6 +73,15 @@ public class UserController extends BaseController<UserEntity, UserService, User
         List<String> permissions = new ArrayList<>();
         permissionList.forEach(permission -> permissions.add(permission.getIdentity()));
         return Json.data(permissions);
+    }
+
+    @Description("获取我绑定的社交账号")
+    @Permission(authorize = false)
+    @PostMapping("getMyThirdList")
+    public Json getMyThirdList() {
+        UserEntity user = service.get(getCurrentUserId());
+        List<UserThirdLoginEntity> list = userThirdLoginService.filter(new UserThirdLoginEntity().setUser(user));
+        return Json.data(list.stream().map(item -> item.setUser(null)));
     }
 
     @Description("修改我的密码")
@@ -146,16 +160,7 @@ public class UserController extends BaseController<UserEntity, UserService, User
         };
         ServiceError.FORBIDDEN_DISABLED.when(user.getIsDisabled(), "登录失败，你的账号已被禁用");
 
-        // 创建AccessToken
-        String accessToken = service.createAccessToken(user.getId());
-
-        // 存储Cookies
-        String cookieString = RandomUtil.randomString();
-        service.saveCookie(user.getId(), cookieString);
-        Cookie cookie = cookieHelper.getAuthorizeCookie(cookieString);
-        cookie.setHttpOnly(false);
-        cookie.setPath(Constant.SLASH);
-        response.addCookie(cookie);
-        return Json.data(accessToken, "登录成功,请存储你的访问凭证");
+        return Json.data(userService.loginWithCookieAndResponse(response, user), "登录成功");
     }
+
 }
