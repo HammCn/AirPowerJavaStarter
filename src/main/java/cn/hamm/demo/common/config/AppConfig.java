@@ -40,11 +40,6 @@ public class AppConfig {
     private String uploadDirectory = "upload";
 
     /**
-     * <h2>上传文件临时目录</h2>
-     */
-    private String uploadDirectoryTemp = "upload-temp";
-
-    /**
      * <h2>上传文件最大大小</h2>
      */
     private long uploadMaxSize = Constant.FILE_SCALE * Constant.FILE_SCALE * 10;
